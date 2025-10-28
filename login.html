@@ -1,8 +1,57 @@
-<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>管理員登入｜貓狗送養平台</title>
-<style>:root{--green:#497f54;--mint:#9ed2a3;--bg:#f8f9f7;}body{margin:0;font-family:'Noto Sans TC',system-ui;background:var(--bg);color:#333}header{background:var(--mint);color:#fff}.nav{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:1rem}.nav a{color:#fff;text-decoration:none;margin-left:1rem;font-weight:600}.wrap{max-width:420px;margin:3rem auto;background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.08);padding:1.5rem}label{display:block;margin:.6rem 0 .3rem}input{width:100%;padding:.7rem;border:1px solid #ccc;border-radius:8px}button{margin-top:1rem;width:100%;padding:.7rem;border:0;border-radius:8px;background:var(--green);color:#fff;cursor:pointer}.err{color:#b00020;margin-top:.6rem;display:none}footer{background:var(--green);color:#fff;text-align:center;padding:1rem;margin-top:2rem}</style>
-</head><body>
-<header><div class="nav"><div style="font-weight:800">貓狗送養平台</div><nav><a href="index.html#cats">待認養</a><a href="about.html">關於簡媽媽</a></nav></div></header>
-<main class="wrap"><h2 style="margin:0 0 .5rem;color:#497f54">管理員登入</h2><label>帳號</label><input id="acc" type="text" placeholder="請輸入帳號" autocomplete="username"><label>密碼</label><input id="pwd" type="password" placeholder="請輸入密碼" autocomplete="current-password"><button id="loginBtn">登入</button><div id="err" class="err">帳號或密碼錯誤</div></main>
-<footer>© 2025 貓狗送養平台</footer>
-<script>document.getElementById('loginBtn').addEventListener('click',()=>{const a=document.getElementById('acc').value.trim();const p=document.getElementById('pwd').value.trim();if(a==='chienma'&&p==='6732'){sessionStorage.setItem('loggedIn','1');location.href='admin.html';}else{document.getElementById('err').style.display='block';}});</script>
-</body></html>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理員登入｜貓狗送養平台</title>
+  <style>
+    :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+    body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
+    header{ background:var(--mint); color:#fff }
+    .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
+    .nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
+    .wrap{ max-width:420px; margin:3rem auto; background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.08); padding:1.5rem }
+    label{ display:block; margin:.6rem 0 .3rem }
+    input{ width:100%; padding:.7rem; border:1px solid #ccc; border-radius:8px }
+    button{ margin-top:1rem; width:100%; padding:.7rem; border:0; border-radius:8px; background:var(--green); color:#fff; cursor:pointer }
+    .err{ color:#b00020; margin-top:.6rem; display:none }
+    footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div style="font-weight:800">貓狗送養平台</div>
+      <nav>
+        <a href="index.html#cats">待認養</a>
+        <a href="about.html">關於簡媽媽</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <h2 style="margin:0 0 .5rem;color:#497f54">管理員登入</h2>
+    <label>帳號</label>
+    <input id="acc" type="text" placeholder="請輸入帳號" autocomplete="username">
+    <label>密碼</label>
+    <input id="pwd" type="password" placeholder="請輸入密碼" autocomplete="current-password">
+    <button id="loginBtn">登入</button>
+    <div id="err" class="err">帳號或密碼錯誤</div>
+  </main>
+
+  <footer>© 2025 貓狗送養平台</footer>
+
+  <script>
+    document.getElementById('loginBtn').addEventListener('click', ()=>{
+      const a = document.getElementById('acc').value.trim();
+      const p = document.getElementById('pwd').value.trim();
+      if(a==='chienma' && p==='6732'){
+        sessionStorage.setItem('loggedIn','1');
+        location.href='admin.html';
+      }else{
+        document.getElementById('err').style.display='block';
+      }
+    });
+  </script>
+</body>
+</html>

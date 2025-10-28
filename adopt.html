@@ -1,35 +1,167 @@
-<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>我要領養｜貓狗送養平台</title>
-<style>:root{--green:#497f54;--mint:#9ed2a3;--bg:#f8f9f7;}body{margin:0;font-family:'Noto Sans TC',system-ui;background:var(--bg);color:#333}header{background:var(--mint);color:#fff}.nav{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:1rem}.nav a{color:#fff;text-decoration:none;margin-left:1rem;font-weight:600}.wrap{max-width:900px;margin:1.2rem auto;padding:0 1rem}.card{background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.08);padding:1rem 1.2rem;margin-bottom:1rem}label{display:block;margin:.4rem 0 .2rem}input,textarea,select{width:100%;padding:.6rem;border:1px solid #ccc;border-radius:8px}textarea{min-height:110px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}@media (max-width:800px){.row{grid-template-columns:1fr}}button{background:var(--green);color:#fff;border:0;border-radius:8px;padding:.7rem 1rem;cursor:pointer;margin-top:1rem}.hint{color:#555;font-size:.9rem;line-height:1.8;white-space:pre-wrap}footer{background:var(--green);color:#fff;text-align:center;padding:1rem;margin-top:2rem}</style>
-</head><body>
-<header><div class="nav"><div style="font-weight:800">貓狗送養平台</div><nav><a href="index.html#cats">待認養</a><a href="about.html">關於簡媽媽</a></nav></div></header>
-<main class="wrap">
-<div class="card"><h2 style="margin:.2rem 0;color:#497f54">我要領養</h2><p id="petHint" class="hint"></p>
-<form id="adoptForm">
-<div class="row"><div><label>姓名</label><input name="name" required></div><div><label>年齡</label><input name="age" required></div></div>
-<div class="row"><div><label>居住地（縣市／區域）</label><input name="location" required></div><div><label>居住環境（租屋或自宅／透天或公寓）</label><input name="houseType" required></div></div>
-<div class="row"><div><label>職業</label><input name="job" required></div><div><label>月收入（大約即可）</label><input name="income" required></div></div>
-<div class="row"><div><label>家庭成員</label><input name="familyMembers" required></div><div><label>家庭成員總人數</label><input name="familyCount" required></div></div>
-<div class="row"><div><label>現居住狀況（與家人同住或獨居）</label><input name="livingWith" required></div><div><label>同居成員（例如：伴侶、配偶、父母等）</label><input name="roommates" required></div></div>
-<div class="card" style="margin:.8rem 0;padding-top:.6rem"><h3 style="margin:.2rem 0;color:#497f54">飼養寵物經驗</h3><label>是否曾經飼養過寵物？</label><input name="hadPets" required><label>若有，飼養過什麼寵物？</label><input name="hadWhich"></div>
-<div class="card" style="margin:.8rem 0;padding-top:.6rem"><h3 style="margin:.2rem 0;color:#497f54">現有寵物狀況</h3><label>目前家中是否有寵物？</label><input name="hasNow"><label>若有，請提供寵物種類、是否已結紮、性別等資訊：</label><textarea name="hasNowInfo"></textarea></div>
-<label>認養動機 — 為什麼想認養這隻毛孩呢？</label><textarea name="motivation" required></textarea>
-<label>飼養方式 — 您會如何照顧這隻毛孩？（例如：飲食安排、居住空間、教育方式等）</label><textarea name="carePlan" required></textarea>
-<label>飼養花費認知 — 您認為飼養寵物需要哪些支出？（請舉例說明）</label><textarea name="costAwareness" required></textarea>
-<label>環境參考 — 請拍攝或錄製毛孩未來的生活區域，供我們審核參考～謝謝！</label><input type="file" id="envFiles" accept="image/*,video/*" multiple />
-<button type="submit">送出申請</button>
-</form>
-<p id="result" class="hint" style="display:none;margin-top:.8rem"></p></div>
-<div class="card"><div class="hint">✅ 感謝您，我們已收到您的認養申請！
-🔖 因每日訊息量過多，小編可能無法逐一回覆每一位登記者審核結果，最終僅會通知最合適的認養人，以上若有不周敬請見諒 🙏</div></div>
-</main>
-<footer>© 2025 貓狗送養平台</footer>
-<script>
-const LINE_TOKEN='YOUR_LINE_ACCESS_TOKEN'; const LINE_USER='YOUR_USER_ID';
-const params=new URLSearchParams(location.search); const petId=params.get('pet')||'';
-try{const pets=JSON.parse(localStorage.getItem('pets')||'[]'); const p=pets.find(x=>x.id===petId); if(p){document.getElementById('petHint').textContent=`認養對象：${p.name}（${p.species==='cat'?'貓咪':'狗狗'}）`;}}catch{}
-document.getElementById('adoptForm').addEventListener('submit',async(e)=>{e.preventDefault(); const fd=new FormData(e.target); const env=document.getElementById('envFiles'); const envNames=[...env.files].map(f=>f.name).join(', ');
-const message=`[認養申請]
-對象ID：${petId}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我要領養｜貓狗送養平台</title>
+  <style>
+    :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+    body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
+    header{ background:var(--mint); color:#fff }
+    .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
+    .nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
+    .wrap{ max-width:900px; margin:1.2rem auto; padding:0 1rem }
+    .card{ background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.08); padding:1rem 1.2rem; margin-bottom:1rem }
+    label{ display:block; margin:.4rem 0 .2rem }
+    input, textarea{ width:100%; padding:.6rem; border:1px solid #ccc; border-radius:8px }
+    textarea{ min-height:110px; resize:vertical }
+    .row{ display:grid; grid-template-columns:1fr 1fr; gap:.8rem }
+    @media (max-width: 800px){ .row{ grid-template-columns:1fr } }
+    button{ background:var(--green); color:#fff; border:0; border-radius:8px; padding:.7rem 1rem; cursor:pointer; margin-top:1rem; transition:opacity .2s }
+    button.loading{ opacity:.7; cursor:wait }
+    .hint{ color:#555; font-size:.9rem; line-height:1.8; white-space:pre-wrap }
+    #countdown { font-weight:bold; color:#497f54; display:inline-block; animation:pop 0.6s ease; }
+    @keyframes pop {
+      0% { transform:scale(0.3); opacity:0; }
+      60% { transform:scale(1.2); opacity:1; }
+      100% { transform:scale(1); opacity:1; }
+    }
+    footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div style="font-weight:800">貓狗送養平台</div>
+      <nav>
+        <a href="index.html#cats">待認養</a>
+        <a href="about.html">關於簡媽媽</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="card">
+      <h2 style="margin:.2rem 0;color:#497f54">我要領養</h2>
+      <p id="petHint" class="hint"></p>
+      <form id="adoptForm">
+        <div class="row">
+          <div><label>姓名</label><input name="name" required></div>
+          <div><label>年齡</label><input name="age" required></div>
+        </div>
+
+        <div class="row">
+          <div><label>居住地（縣市／區域）</label><input name="location" required></div>
+          <div><label>居住環境（租屋或自宅／透天或公寓）</label><input name="houseType" required></div>
+        </div>
+
+        <div class="row">
+          <div><label>職業</label><input name="job" required></div>
+          <div><label>月收入（大約即可）</label><input name="income" required></div>
+        </div>
+
+        <div class="row">
+          <div><label>家庭成員</label><input name="familyMembers" required></div>
+          <div><label>家庭成員總人數</label><input name="familyCount" required></div>
+        </div>
+
+        <div class="row">
+          <div><label>現居住狀況（與家人同住或獨居）</label><input name="livingWith" required></div>
+          <div><label>同居成員（例如：伴侶、配偶、父母等）</label><input name="roommates" required></div>
+        </div>
+
+        <div class="card" style="margin:.8rem 0;padding-top:.6rem">
+          <h3 style="margin:.2rem 0;color:#497f54">飼養寵物經驗</h3>
+          <label>是否曾經飼養過寵物？</label><input name="hadPets" required>
+          <label>若有，飼養過什麼寵物？</label><input name="hadWhich">
+        </div>
+
+        <div class="card" style="margin:.8rem 0;padding-top:.6rem">
+          <h3 style="margin:.2rem 0;color:#497f54">現有寵物狀況</h3>
+          <label>目前家中是否有寵物？</label><input name="hasNow">
+          <label>若有，請提供寵物種類、是否已結紮、性別等資訊：</label>
+          <textarea name="hasNowInfo"></textarea>
+        </div>
+
+        <label>認養動機 — 為什麼想認養這隻毛孩呢？</label>
+        <textarea name="motivation" required></textarea>
+
+        <label>飼養方式 — 您會如何照顧這隻毛孩？（例如：飲食安排、居住空間、教育方式等）</label>
+        <textarea name="carePlan" required></textarea>
+
+        <label>飼養花費認知 — 您認為飼養寵物需要哪些支出？（請舉例說明）</label>
+        <textarea name="costAwareness" required></textarea>
+
+        <label>環境參考 — 請拍攝或錄製毛孩未來的生活區域，供我們審核參考～謝謝！</label>
+        <input type="file" id="envFiles" accept="image/*,video/*" multiple />
+
+        <button type="submit" id="submitBtn">送出申請</button>
+      </form>
+      <p id="result" class="hint" style="display:none;margin-top:.8rem"></p>
+    </div>
+
+    <div class="card">
+      <div class="hint">
+✅ 感謝您，我們已收到您的認養申請！
+🔖 因每日訊息量過多，小編可能無法逐一回覆每一位登記者審核結果，
+最終僅會通知最合適的認養人，以上若有不周敬請見諒 🙏
+      </div>
+    </div>
+  </main>
+
+  <footer>© 2025 貓狗送養平台</footer>
+
+  <!-- Firebase：抓 pet 名稱 -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
+      authDomain: "pet-adoption-32294.firebaseapp.com",
+      projectId: "pet-adoption-32294",
+      storageBucket: "pet-adoption-32294.firebasestorage.app",
+      messagingSenderId: "102978803311",
+      appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const params = new URLSearchParams(location.search);
+    const petId = params.get('pet') || '';
+    const hint = document.getElementById('petHint');
+
+    (async ()=>{
+      if(!petId) return;
+      try{
+        const snap = await getDoc(doc(db,'pets',petId));
+        if(snap.exists()){ const p=snap.data(); hint.textContent = `認養對象：${p.name}（${p.species==='cat'?'貓咪':'狗狗'}）`; }
+      }catch(e){ console.warn(e); }
+    })();
+  </script>
+
+  <!-- LINE 傳送（含動畫倒數） -->
+  <script>
+    const LINE_TOKEN = 'YOUR_LINE_ACCESS_TOKEN';
+    const LINE_USER  = 'YOUR_USER_ID';
+    const petId2 = new URLSearchParams(location.search).get('pet') || '';
+    const btn = document.getElementById('submitBtn');
+    const result = document.getElementById('result');
+
+    document.getElementById('adoptForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.textContent = '正在傳送中...';
+
+      const fd = new FormData(e.target);
+      const env = document.getElementById('envFiles');
+      const envNames = [...env.files].map(f=>f.name).join(', ');
+
+      const message =
+`[認養申請]
+對象ID：${petId2}
 姓名：${fd.get('name')}
 年齡：${fd.get('age')}
 居住地：${fd.get('location')}
@@ -40,25 +172,64 @@ const message=`[認養申請]
 家庭成員總人數：${fd.get('familyCount')}
 現居住狀況：${fd.get('livingWith')}
 同居成員：${fd.get('roommates')}
-
 飼養寵物經驗：${fd.get('hadPets')}
 曾飼養：${fd.get('hadWhich')}
-
 現有寵物狀況：${fd.get('hasNow')}
 現有寵物詳情：${fd.get('hasNowInfo')}
-
 認養動機：
 ${fd.get('motivation')}
-
 飼養方式：
 ${fd.get('carePlan')}
-
 飼養花費認知：
 ${fd.get('costAwareness')}
+環境參考檔案：${envNames || '（未附檔）'}`;
 
-環境參考檔案：${envNames || '（申請人未附檔）'}
-`;
-let ok=false, err=''; try{const res=await fetch('https://api.line.me/v2/bot/message/push',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+LINE_TOKEN},body:JSON.stringify({to:LINE_USER,messages:[{type:'text',text:message}]})}); ok=res.ok; if(!ok){err='LINE API 回應狀態：'+res.status;}}catch(e){err=e.message;}
-const result=document.getElementById('result'); if(ok){ result.style.display='block'; result.textContent='✅ 申請已送出，已透過 LINE 傳送給管理員。非常感謝！'; e.target.reset(); }else{ try{await navigator.clipboard.writeText(message); result.style.display='block'; result.textContent='已複製申請內容到剪貼簿，請手動貼到 LINE。原因：'+err; }catch{ result.style.display='block'; result.textContent='送出失敗，請截圖或複製內容後私訊管理員（可能因 CORS 或 Token 未設定）。原因：'+err; }} window.scrollTo({top:0,behavior:'smooth'});});
-</script>
-</body></html>
+      try {
+        const res = await fetch('https://api.line.me/v2/bot/message/push', {
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json',
+            'Authorization':'Bearer '+LINE_TOKEN
+          },
+          body: JSON.stringify({
+            to: LINE_USER,
+            messages:[{ type:'text', text: message }]
+          })
+        });
+
+        result.style.display='block';
+        if(res.ok){
+          let countdown = 3;
+          result.innerHTML = `✅ 申請已送出，已透過 LINE 傳送給管理員。<br>將在 <span id="countdown">${countdown}</span> 秒後返回首頁。`;
+          e.target.reset();
+
+          const timer = setInterval(()=>{
+            countdown--;
+            const cd = document.getElementById('countdown');
+            if(cd){
+              cd.textContent = countdown;
+              cd.style.animation = 'none';
+              cd.offsetHeight; // reflow
+              cd.style.animation = 'pop 0.6s ease';
+            }
+            if(countdown <= 0){
+              clearInterval(timer);
+              location.href='index.html';
+            }
+          },1000);
+        }else{
+          result.textContent='❌ 傳送失敗，請稍後再試或聯絡管理員。';
+        }
+      } catch(err) {
+        result.style.display='block';
+        result.textContent='❌ 傳送失敗，請稍後再試或聯絡管理員。';
+      }
+
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      btn.textContent = '送出申請';
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  </script>
+</body>
+</html>
