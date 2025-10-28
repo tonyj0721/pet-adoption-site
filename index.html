@@ -1,220 +1,202 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>貓狗送養平台</title>
-  <style>
-    :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
-    *{ box-sizing:border-box }
-    body{ margin:0; font-family:'Noto Sans TC',system-ui,Segoe UI,Arial; background:var(--bg); color:#333; }
-    header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
-    .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem; }
-    .nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
-    .nav a:hover{ text-decoration:underline }
-    .hero{ background:url('images/hero-bg.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:6rem 1rem; position:relative }
-    .hero::after{ content:""; position:absolute; inset:0; background:rgba(0,0,0,.25) }
-    .hero > div{ position:relative; z-index:1 }
-    .hero h1{ font-size:2.4rem; margin:0 0 .5rem }
-    .hero p{ margin:0; font-size:1.1rem }
-    .container{ max-width:1100px; margin:2rem auto; padding:0 1rem }
-    h2.section{ color:var(--green); display:flex; align-items:center; justify-content:space-between; margin:1.5rem 0 .8rem }
-    .see-more{ border:0; background:var(--green); color:#fff; padding:.5rem .8rem; border-radius:8px; cursor:pointer }
-    .see-more:hover{ filter:brightness(.95) }
-    .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem }
-    .card{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; transition:box-shadow .2s }
-    .card:hover{ box-shadow:0 3px 10px rgba(0,0,0,.09) } /* 不浮動，只加陰影 */
-    .card img{ width:100%; height:160px; object-fit:cover; display:block }
-    .card .info{ padding:.8rem }
-    .pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem; margin-right:.4rem }
-    /* Modal */
-    .modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:1rem; z-index:50 }
-    .modal.open{ display:flex }
-    .modal-panel{ background:#fff; border-radius:12px; max-width:900px; width:100%; max-height:90vh; overflow:auto }
-    .modal-head{ display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; border-bottom:1px solid #eee }
-    .close{ background:transparent; border:0; font-size:1.5rem; cursor:pointer }
-    .modal-body{ display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem }
-    .main-img{ width:100%; height:360px; object-fit:cover; border-radius:8px }
-    .thumbs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem }
-    .thumbs img{ width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent }
-    .thumbs img.active{ border-color:var(--mint) }
-    .meta p{ margin:.25rem 0 }
-    .adopt{ margin-top:1rem; background:var(--green); color:#fff; border:0; border-radius:8px; padding:.6rem .9rem; cursor:pointer }
-    @media (max-width: 800px){
-      .modal-body{ grid-template-columns:1fr }
-      .main-img{ height:260px }
-    }
-    footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>貓狗送養平台</title>
+<style>
+  :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+  *{ box-sizing:border-box }
+  body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
+  header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
+  .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem; }
+  .nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
+  .nav a:hover{ text-decoration:underline }
+  .hero{ background:url('images/hero-bg.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:6rem 1rem; position:relative }
+  .hero::after{ content:""; position:absolute; inset:0; background:rgba(0,0,0,.25) }
+  .hero > div{ position:relative; z-index:1 }
+  .hero h1{ font-size:2.4rem; margin:0 0 .5rem }
+  .container{ max-width:1100px; margin:2rem auto; padding:0 1rem }
+  h2.section{ color:var(--green); display:flex; align-items:center; justify-content:space-between; margin:1.5rem 0 .8rem }
+  .see-more{ border:0; background:var(--green); color:#fff; padding:.5rem .8rem; border-radius:8px; cursor:pointer }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem }
+  .card{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; }
+  .card img{ width:100%; height:160px; object-fit:cover; display:block }
+  .card .info{ padding:.8rem }
+  .pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem; margin-right:.4rem }
+  /* Modal */
+  .modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:1rem; z-index:50 }
+  .modal.open{ display:flex }
+  .panel{ background:#fff; border-radius:12px; max-width:900px; width:100%; max-height:90vh; overflow:auto }
+  .head{ display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; border-bottom:1px solid #eee }
+  .close{ background:transparent; border:0; font-size:1.5rem; cursor:pointer }
+  .body{ display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem }
+  .main-img{ width:100%; height:360px; object-fit:cover; border-radius:8px }
+  .thumbs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem }
+  .thumbs img{ width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent }
+  .thumbs img.active{ border-color:var(--mint) }
+  footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
+</style>
 </head>
 <body>
-  <header>
-    <div class="nav">
-      <div style="font-weight:800">貓狗送養平台</div>
-      <nav>
-        <a href="#cats">待認養</a>
-        <a href="about.html">關於簡媽媽</a>
-        <a href="login.html">管理員登入</a>
-      </nav>
-    </div>
-  </header>
+<header>
+  <div class="nav">
+    <div style="font-weight:800">貓狗送養平台</div>
+    <nav>
+      <a href="adoptlist.html">待認養</a>
+      <a href="about.html">關於簡媽媽</a>
+      <a href="login.html">管理員登入</a>
+    </nav>
+  </div>
+</header>
 
-  <section class="hero">
-    <div>
-      <h1>給牠一個溫暖的家</h1>
-      <p>用領養，改變一條生命的軌跡。</p>
-    </div>
+<section class="hero">
+  <div>
+    <h1>給牠一個溫暖的家</h1>
+    <p>用領養，改變一條生命的軌跡。</p>
+  </div>
+</section>
+
+<main class="container">
+  <section id="cats">
+    <h2 class="section">貓咪 
+      <a class="see-more" href="cats.html">查看全部</a>
+    </h2>
+    <div id="catGrid" class="grid"></div>
   </section>
 
-  <main class="container">
-    <section id="cats">
-      <h2 class="section">貓咪 <button class="see-more" data-target="cat">看更多</button></h2>
-      <div id="catGrid" class="grid"></div>
-    </section>
+  <section id="dogs">
+    <h2 class="section">狗狗 
+      <a class="see-more" href="dogs.html">查看全部</a>
+    </h2>
+    <div id="dogGrid" class="grid"></div>
+  </section>
+</main>
 
-    <section id="dogs">
-      <h2 class="section">狗狗 <button class="see-more" data-target="dog">看更多</button></h2>
-      <div id="dogGrid" class="grid"></div>
-    </section>
-  </main>
-
-  <!-- 詳細視窗 Modal -->
-  <div id="detailModal" class="modal" aria-hidden="true">
-    <div class="modal-panel">
-      <div class="modal-head">
-        <strong id="mTitle">動物資料</strong>
-        <button class="close" aria-label="關閉" onclick="closeModal()">✕</button>
+<!-- 詳細視窗 Modal -->
+<div id="detailModal" class="modal" aria-hidden="true">
+  <div class="panel">
+    <div class="head">
+      <strong id="mTitle">動物資料</strong>
+      <button class="close" aria-label="關閉" id="closeBtn">✕</button>
+    </div>
+    <div class="body">
+      <div>
+        <img id="mMain" class="main-img" src="" alt="">
+        <div id="mThumbs" class="thumbs"></div>
       </div>
-      <div class="modal-body">
-        <div>
-          <img id="mMain" class="main-img" src="" alt="">
-          <div id="mThumbs" class="thumbs"></div>
+      <div>
+        <div class="meta">
+          <p><span class="pill" id="mSpecies"></span></p>
+          <p>毛色：<span id="mColor"></span></p>
+          <p>年齡：<span id="mAge"></span></p>
+          <p>性別：<span id="mGender"></span></p>
+          <p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p>
         </div>
-        <div>
-          <div class="meta">
-            <p><span class="pill" id="mSpecies"></span></p>
-            <p>年齡：<span id="mAge"></span></p>
-            <p>性別：<span id="mGender"></span></p>
-            <p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p>
-          </div>
-          <button class="adopt" id="adoptBtn">我要領養</button>
-        </div>
+        <button class="see-more" id="adoptBtn">我要領養</button>
       </div>
     </div>
   </div>
+</div>
 
-  <footer>© 2025 貓狗送養平台｜讓愛延續每一個生命</footer>
+<footer>© 2025 貓狗送養平台｜讓愛延續每一個生命</footer>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
-      authDomain: "pet-adoption-32294.firebaseapp.com",
-      projectId: "pet-adoption-32294",
-      storageBucket: "pet-adoption-32294.firebasestorage.app",
-      messagingSenderId: "102978803311",
-      appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
+    authDomain: "pet-adoption-32294.firebaseapp.com",
+    projectId: "pet-adoption-32294",
+    storageBucket: "pet-adoption-32294.firebasestorage.app",
+    messagingSenderId: "102978803311",
+    appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    const qSel=(s,el=document)=>el.querySelector(s);
-    const qAll=(s,el=document)=>[...el.querySelectorAll(s)];
+  const q=(s,el=document)=>el.querySelector(s);
 
-    function card(pet){
-      const el=document.createElement('div');
-      el.className='card';
-      const cover=(pet.images && pet.images[0]) ? pet.images[0].url : 'https://placehold.co/600x400?text=No+Image';
-      el.innerHTML = `
-        <img src="${cover}" alt="${pet.name}">
-        <div class="info">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <strong>${pet.name||''}</strong>
-            <span class="pill">${pet.species==='cat'?'貓咪':'狗狗'}</span>
-          </div>
-          <div style="font-size:.92rem;margin-top:.25rem">
-            <span>品種：${pet.breed||'—'}</span><br>
-            <span>年齡：${pet.age||'—'}</span>　
-            <span>性別：${pet.gender||'—'}</span>
-          </div>
-        </div>`;
-      el.addEventListener('click',()=>openModal(pet));
-      return el;
-    }
+  function card(pet){
+    const el=document.createElement('div');
+    el.className='card';
+    const cover = pet.images?.[0]?.url || 'https://placehold.co/600x400?text=No+Image';
+    el.innerHTML = `
+      <img src="${cover}" alt="${pet.name||''}">
+      <div class="info">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <strong>${pet.name||''}</strong>
+          <span class="pill">${pet.species==='cat'?'貓咪':'狗狗'}</span>
+        </div>
+        <div style="font-size:.92rem;margin-top:.25rem">
+          <div>毛色：${pet.color||'—'}</div>
+          <div>年齡：${pet.age||'—'}　性別：${pet.gender||'—'}</div>
+        </div>
+      </div>`;
+    el.addEventListener('click',()=>openModal(pet));
+    return el;
+  }
 
-    function openModal(p){
-      qSel('#mTitle').textContent = p.name || '動物資料';
-      qSel('#mSpecies').textContent = p.species==='cat'?'貓咪':'狗狗';
-      qSel('#mAge').textContent = p.age || '—';
-      qSel('#mGender').textContent = p.gender || '—';
-      qSel('#mIntro').textContent = p.intro || '';
-      const thumbs = qSel('#mThumbs'); thumbs.innerHTML='';
-      const imgs = (p.images && p.images.length)? p.images.map(x=>x.url) : ['https://placehold.co/800x500?text=No+Image'];
-      let current = 0;
-      const main = qSel('#mMain'); main.src = imgs[0];
-      imgs.forEach((src,i)=>{
-        const im = new Image(); im.src=src; im.alt='thumb';
-        im.addEventListener('click',()=>{ current=i; update(); });
-        thumbs.appendChild(im);
-      });
-      function update(){
-        main.src = imgs[current];
-        qAll('.thumbs img').forEach((t,idx)=>t.classList.toggle('active', idx===current));
-      }
-      update();
-      // 左右切換
-      main.addEventListener('click',()=>{ current=(current+1)%imgs.length; update(); });
-      document.onkeydown = (e)=>{
-        if(qSel('#detailModal').classList.contains('open')){
-          if(e.key==='ArrowRight'){ current=(current+1)%imgs.length; update(); }
-          if(e.key==='ArrowLeft'){ current=(current-1+imgs.length)%imgs.length; update(); }
-          if(e.key==='Escape'){ closeModal(); }
-        }
-      };
-      qSel('#adoptBtn').onclick=()=>{
-        const url = new URL('adopt.html', location.href);
-        url.searchParams.set('pet', p.id || '');
-        location.href = url.toString();
-      };
-      qSel('#detailModal').classList.add('open');
-      qSel('#detailModal').setAttribute('aria-hidden','false');
-    }
-    function closeModal(){
-      qSel('#detailModal').classList.remove('open');
-      qSel('#detailModal').setAttribute('aria-hidden','true');
-      document.onkeydown=null;
-    }
-    qSel('#detailModal').addEventListener('click', (e)=>{ if(e.target.id==='detailModal') closeModal(); });
-
-    function render(species,all=false, data=[]){
-      const grid = qSel(species==='cat'?'#catGrid':'#dogGrid');
-      grid.innerHTML='';
-      const items = data.filter(p=>p.species===species);
-      (all?items:items.slice(0,5)).forEach(p=>grid.appendChild(card(p)));
-    }
-
-    // 看更多
-    qAll('.see-more').forEach(btn=>{
-      let open=false;
-      btn.addEventListener('click',()=>{
-        open=!open;
-        btn.textContent = open?'收起':'看更多';
-        render(btn.dataset.target, open, window.__ALL_PETS || []);
-      });
+  function openModal(p){
+    q('#mTitle').textContent = p.name || '動物資料';
+    q('#mSpecies').textContent = p.species==='cat'?'貓咪':'狗狗';
+    q('#mColor').textContent = p.color || '—';
+    q('#mAge').textContent = p.age || '—';
+    q('#mGender').textContent = p.gender || '—';
+    q('#mIntro').textContent = p.intro || '';
+    const imgs = (p.images?.length)? p.images.map(x=>x.url) : ['https://placehold.co/800x500?text=No+Image'];
+    let current = 0;
+    const main = q('#mMain'); const thumbs = q('#mThumbs'); thumbs.innerHTML='';
+    main.src = imgs[0];
+    imgs.forEach((src,i)=>{
+      const im = new Image(); im.src=src; im.alt='thumb';
+      im.addEventListener('click',()=>{ current=i; update(); });
+      thumbs.appendChild(im);
     });
+    function update(){
+      main.src = imgs[current];
+      [...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active', idx===current));
+    }
+    update();
+    main.addEventListener('click',()=>{ current=(current+1)%imgs.length; update(); });
+    document.onkeydown = (e)=>{
+      if(q('#detailModal').classList.contains('open')){
+        if(e.key==='ArrowRight'){ current=(current+1)%imgs.length; update(); }
+        if(e.key==='ArrowLeft'){ current=(current-1+imgs.length)%imgs.length; update(); }
+        if(e.key==='Escape'){ closeModal(); }
+      }
+    };
+    q('#adoptBtn').onclick=()=>{
+      const url = new URL('adopt.html', location.href);
+      url.searchParams.set('pet', p.id || '');
+      location.href = url.toString();
+    };
+    q('#detailModal').classList.add('open');
+    q('#detailModal').setAttribute('aria-hidden','false');
+  }
+  function closeModal(){
+    q('#detailModal').classList.remove('open');
+    q('#detailModal').setAttribute('aria-hidden','true');
+    document.onkeydown=null;
+  }
+  q('#closeBtn').addEventListener('click', closeModal);
+  q('#detailModal').addEventListener('click', (e)=>{ if(e.target.id==='detailModal') closeModal(); });
 
-    // 載入 Firestore
-    (async ()=>{
-      const ref = collection(db, 'pets');
-      const qs = await getDocs(query(ref, orderBy('createdAt','desc')));
-      const list = qs.docs.map(d=>({ id:d.id, ...d.data() }));
-      window.__ALL_PETS = list;
-      render('cat', false, list);
-      render('dog', false, list);
-    })();
-  </script>
+  function render4(species, list){
+    const grid = q(species==='cat'?'#catGrid':'#dogGrid');
+    grid.innerHTML='';
+    list.filter(p=>p.species===species).slice(0,4).forEach(p=>grid.appendChild(card(p)));
+  }
+
+  (async ()=>{
+    const ref = collection(db, 'pets');
+    const qs = await getDocs(query(ref, orderBy('createdAt','desc')));
+    const list = qs.docs.map(d=>({ id:d.id, ...d.data() }));
+    render4('cat', list);
+    render4('dog', list);
+  })();
+</script>
 </body>
 </html>

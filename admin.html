@@ -1,194 +1,260 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>後台管理｜貓狗送養平台</title>
-  <style>
-    :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
-    body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
-    header{ background:var(--mint); color:#fff }
-    .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
-    .nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
-    .wrap{ max-width:1100px; margin:1.2rem auto; padding:0 1rem; display:grid; grid-template-columns:320px 1fr; gap:1rem }
-    .card{ background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.08); padding:1rem }
-    label{ display:block; margin:.5rem 0 .25rem }
-    input,select,textarea{ width:100%; padding:.6rem; border:1px solid #ccc; border-radius:8px }
-    textarea{ min-height:100px; resize:vertical }
-    .hint{ font-size:.85rem; color:#666 }
-    .thumbs{ display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.5rem }
-    .thumbs img{ width:60px; height:60px; object-fit:cover; border-radius:6px }
-    table{ width:100%; border-collapse:collapse }
-    th,td{ border-bottom:1px solid #eee; padding:.6rem; text-align:left }
-    .danger{ background:#b00020; color:#fff; border:0; border-radius:8px; padding:.4rem .6rem; cursor:pointer }
-    .save{ background:var(--green); color:#fff; border:0; border-radius:8px; padding:.6rem .9rem; cursor:pointer; margin-top:.8rem; width:100% }
-    @media (max-width: 900px){ .wrap{ grid-template-columns:1fr } }
-    footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>後台管理｜貓狗送養平台</title>
+<style>
+  :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+  body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
+  header{ background:var(--mint); color:#fff }
+  .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
+  .nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
+  .wrap{ max-width:1100px; margin:1.2rem auto; padding:0 1rem; display:grid; grid-template-columns:360px 1fr; gap:1rem }
+  .card{ background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.08); padding:1rem }
+  .grid2{ display:grid; grid-template-columns:1fr; gap:.6rem } /* 統一寬度 */
+  label{ display:block; margin:.2rem 0 .1rem; font-size:.92rem; color:#333 }
+  input,select,textarea{ width:100%; padding:.55rem; border:1px solid #ccc; border-radius:8px }
+  textarea{ min-height:100px; resize:vertical }
+  .hint{ font-size:.85rem; color:#666 }
+  .thumbs{ display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.5rem }
+  .thumbs img{ width:60px; height:60px; object-fit:cover; border-radius:6px }
+  table{ width:100%; border-collapse:collapse }
+  th,td{ border-bottom:1px solid #eee; padding:.6rem; text-align:left; vertical-align:top }
+  .danger{ background:#b00020; color:#fff; border:0; border-radius:8px; padding:.4rem .6rem; cursor:pointer }
+  .save{ background:var(--green); color:#fff; border:0; border-radius:8px; padding:.6rem .9rem; cursor:pointer; margin-top:.6rem; width:100% }
+  .toast{ display:none; margin-top:.6rem; background:#eef6ef; color:#2d5b39; padding:.6rem .8rem; border-radius:8px }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin-bottom:.6rem }
+  .search{ max-width:280px; width:100% }
+  @media (max-width: 900px){ .wrap{ grid-template-columns:1fr } }
+  footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
+</style>
 </head>
 <body>
-  <header>
-    <div class="nav">
-      <div style="font-weight:800">貓狗送養平台</div>
-      <nav><a href="index.html#cats">回到首頁</a></nav>
+<header>
+  <div class="nav">
+    <div style="font-weight:800">貓狗送養平台</div>
+    <nav><a href="index.html">回到首頁</a></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card">
+    <h3 style="margin:.2rem 0;color:#497f54">新增動物（登錄）</h3>
+    <div class="grid2">
+      <div>
+        <label>名字</label><input id="name">
+      </div>
+      <div>
+        <label>品種</label>
+        <select id="species">
+          <option value="cat">貓咪</option>
+          <option value="dog">狗狗</option>
+        </select>
+      </div>
+      <div id="colorWrap" style="display:none">
+        <label>毛色（僅貓咪）</label>
+        <select id="color">
+          <option value="">請選擇</option>
+          <option>橘貓</option><option>虎斑</option><option>白底虎斑</option>
+          <option>賓士</option><option>乳牛</option><option>三花</option>
+          <option>玳瑁</option><option>黑貓</option><option>品種貓</option>
+        </select>
+      </div>
+      <div>
+        <label>年齡</label><input id="age" placeholder="幼年 / 成年 / 高齡 或自訂">
+      </div>
+      <div>
+        <label>性別</label>
+        <select id="gender">
+          <option>男生</option>
+          <option>女生</option>
+        </select>
+      </div>
+      <div>
+        <label>介紹</label><textarea id="intro" placeholder="性格、習慣、備註等"></textarea>
+      </div>
+      <div>
+        <label>上傳圖片（最多 6 張，會自動壓縮）</label>
+        <input id="photos" type="file" accept="image/*" multiple>
+        <div id="previews" class="thumbs"></div>
+      </div>
+      <button class="save" id="saveBtn">登錄</button>
+      <div id="toast" class="toast">✅ 登錄成功！</div>
+      <p class="hint">資料儲存於 Firebase（Firestore + Storage）。</p>
     </div>
-  </header>
+  </section>
 
-  <main class="wrap">
-    <section class="card">
-      <h3 style="margin:.2rem 0;color:#497f54">新增動物</h3>
-      <label>名字</label><input id="name">
-      <label>品種</label><select id="species"><option value="cat">貓咪</option><option value="dog">狗狗</option></select>
-      <label>年齡</label><input id="age" placeholder="例如：2歲 / 幾個月">
-      <label>性別</label><input id="gender" placeholder="公 / 母">
-      <label>介紹</label><textarea id="intro" placeholder="簡單介紹性格、習慣等"></textarea>
-      <label>上傳圖片（最多 5 張，會自動壓縮）</label>
-      <input id="photos" type="file" accept="image/*" multiple>
-      <div id="previews" class="thumbs"></div>
-      <button class="save" id="saveBtn">新增</button>
-      <p class="hint">資料將儲存於 Firebase（Firestore + Storage）。</p>
-    </section>
+  <section class="card">
+    <div class="topbar">
+      <h3 style="margin:.2rem 0;color:#497f54">已登錄動物</h3>
+      <input id="search" class="search" placeholder="搜尋名字…（即時篩選）">
+    </div>
+    <table>
+      <thead><tr><th>名字</th><th>品種</th><th>毛色</th><th>年齡</th><th>性別</th><th>建立時間</th><th>操作</th></tr></thead>
+      <tbody id="list"></tbody>
+    </table>
+    <div id="empty" class="hint" style="display:none;padding:.6rem 0">查無此動物</div>
+  </section>
+</main>
 
-    <section class="card">
-      <h3 style="margin:.2rem 0;color:#497f54">已上架動物</h3>
-      <table>
-        <thead><tr><th>名稱</th><th>品種</th><th>年齡</th><th>性別</th><th>建立時間</th><th>操作</th></tr></thead>
-        <tbody id="list"></tbody>
-      </table>
-    </section>
-  </main>
+<footer>© 2025 貓狗送養平台</footer>
 
-  <footer>© 2025 貓狗送養平台</footer>
-
-  <!-- 簡易登入檢查：chienma / 6732（login.html 會寫入 sessionStorage.loggedIn=1） -->
-  <script>
-    if(sessionStorage.getItem('loggedIn')!=='1'){ location.href='login.html'; }
-    // 縮圖預覽
-    document.addEventListener('DOMContentLoaded', ()=>{
-      const input = document.getElementById('photos');
-      const box = document.getElementById('previews');
-      input.addEventListener('change', (e)=>{
-        const files=[...e.target.files].slice(0,5);
-        box.innerHTML='';
-        files.forEach(f=>{
-          const r=new FileReader();
-          r.onload=()=>{ const im=new Image(); im.src=r.result; im.alt='preview'; box.appendChild(im); };
-          r.readAsDataURL(f);
-        });
+<script>
+  if(sessionStorage.getItem('loggedIn')!=='1'){ location.href='login.html'; }
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const input = document.getElementById('photos');
+    const box = document.getElementById('previews');
+    input.addEventListener('change', (e)=>{
+      const files=[...e.target.files].slice(0,6);
+      box.innerHTML='';
+      files.forEach(f=>{
+        const r=new FileReader();
+        r.onload=()=>{ const im=new Image(); im.src=r.result; im.alt='preview'; box.appendChild(im); };
+        r.readAsDataURL(f);
       });
     });
-  </script>
+    const species=document.getElementById('species');
+    const colorWrap=document.getElementById('colorWrap');
+    species.addEventListener('change', ()=>{ colorWrap.style.display = species.value==='cat' ? '' : 'none'; });
+    colorWrap.style.display = species.value==='cat' ? '' : 'none';
+  });
+</script>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, updateDoc, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
-      authDomain: "pet-adoption-32294.firebaseapp.com",
-      projectId: "pet-adoption-32294",
-      storageBucket: "pet-adoption-32294.firebasestorage.app",
-      messagingSenderId: "102978803311",
-      appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
+    authDomain: "pet-adoption-32294.firebaseapp.com",
+    projectId: "pet-adoption-32294",
+    storageBucket: "pet-adoption-32294.firebasestorage.app",
+    messagingSenderId: "102978803311",
+    appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
 
-    const $=s=>document.querySelector(s);
+  const $=s=>document.querySelector(s);
+  const listEl = $('#list'), emptyEl = $('#empty');
+  let allPets = [];
 
-    // 影像壓縮：最大寬 1280px、品質 0.85
-    async function compressImage(file, maxW=1280, quality=0.85){
-      const bitmap = await createImageBitmap(file);
-      const scale = Math.min(1, maxW / bitmap.width);
-      const w = Math.round(bitmap.width * scale);
-      const h = Math.round(bitmap.height * scale);
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(bitmap, 0, 0, w, h);
-      const blob = await new Promise(res=>canvas.toBlob(res, 'image/jpeg', quality));
-      return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type:'image/jpeg' });
+  // 壓縮圖片：最大寬 1280px、品質 0.85
+  async function compressImage(file, maxW=1280, quality=0.85){
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, maxW / bitmap.width);
+    const w = Math.round(bitmap.width * scale);
+    const h = Math.round(bitmap.height * scale);
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(bitmap, 0, 0, w, h);
+    const blob = await new Promise(res=>canvas.toBlob(res, 'image/jpeg', quality));
+    return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type:'image/jpeg' });
+  }
+
+  async function uploadImages(files, petId){
+    const out = [];
+    let idx = 0;
+    for (const f of files.slice(0,6)){
+      const cf = await compressImage(f, 1280, 0.85);
+      const path = `images/pets/${petId}/${Date.now()}-${idx++}.jpg`;
+      const storageRef = ref(storage, path);
+      await uploadBytes(storageRef, cf);
+      const url = await getDownloadURL(storageRef);
+      out.push({ url, path });
     }
+    return out;
+  }
 
-    async function uploadImages(files, petId){
-      const out = [];
-      let idx = 0;
-      for (const f of files.slice(0,5)){
-        const cf = await compressImage(f, 1280, 0.85);
-        const path = `pets/${petId}/${Date.now()}-${idx++}.jpg`;
-        const storageRef = ref(storage, path);
-        await uploadBytes(storageRef, cf);
-        const url = await getDownloadURL(storageRef);
-        out.push({ url, path });
+  function renderList(items){
+    listEl.innerHTML='';
+    items.forEach(p=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML = `
+        <td>${p.name}</td>
+        <td>${p.species==='cat'?'貓咪':'狗狗'}</td>
+        <td>${p.color||'—'}</td>
+        <td>${p.age||'—'}</td>
+        <td>${p.gender||'—'}</td>
+        <td>${new Date(p.createdAt||Date.now()).toLocaleString()}</td>
+        <td><button class="danger" data-id="${p.id}">刪除</button></td>
+      `;
+      listEl.appendChild(tr);
+    });
+    listEl.querySelectorAll('.danger').forEach(btn=>btn.addEventListener('click',()=>removeItem(btn.dataset.id)));
+    emptyEl.style.display = items.length ? 'none' : '';
+  }
+
+  async function loadList(){
+    const refCol = collection(db, 'pets');
+    const qs = await getDocs(query(refCol, orderBy('createdAt','desc')));
+    allPets = qs.docs.map(d=>({ id:d.id, ...d.data() }));
+    renderList(allPets);
+  }
+
+  // 即時搜尋
+  $('#search').addEventListener('input', e=>{
+    const term = e.target.value.trim().toLowerCase();
+    const shown = allPets.filter(p=> (p.name||'').toLowerCase().includes(term) );
+    renderList(shown);
+    if(!shown.length) { emptyEl.textContent='查無此動物'; emptyEl.style.display=''; }
+  });
+
+  async function removeItem(id){
+    if(!confirm('確定要刪除？')) return;
+    // 抓取該 doc 的 images.path 後刪 Storage
+    const docData = allPets.find(p=>p.id===id);
+    if(docData?.images){
+      for(const im of docData.images){
+        try{ await deleteObject(ref(storage, im.path)); }catch(e){ console.warn('刪除檔案失敗', e); }
       }
-      return out;
     }
+    await deleteDoc(doc(db,'pets',id));
+    await loadList();
+    alert('已刪除');
+  }
 
-    async function loadList(){
-      const refCol = collection(db, 'pets');
-      const qs = await getDocs(query(refCol, orderBy('createdAt','desc')));
-      const pets = qs.docs.map(d=>({ id:d.id, ...d.data() }));
-      const tbody = $('#list'); tbody.innerHTML='';
-      pets.forEach(p=>{
-        const tr=document.createElement('tr');
-        tr.innerHTML = `
-          <td>${p.name}</td>
-          <td>${p.species==='cat'?'貓咪':'狗狗'}</td>
-          <td>${p.age||'—'}</td>
-          <td>${p.gender||'—'}</td>
-          <td>${new Date(p.createdAt||Date.now()).toLocaleString()}</td>
-          <td><button class="danger" data-id="${p.id}">刪除</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-      tbody.querySelectorAll('.danger').forEach(btn=>btn.addEventListener('click',()=>removeItem(btn.dataset.id)));
-    }
+  // 登錄
+  $('#saveBtn').addEventListener('click', async ()=>{
+    const name=$('#name').value.trim();
+    const species=$('#species').value;
+    const color=$('#color')?.value?.trim() || '';
+    const age=$('#age').value.trim();
+    const gender=$('#gender').value.trim();
+    const intro=$('#intro').value.trim();
+    const files=[...$('#photos').files];
 
-    async function removeItem(id){
-      if(!confirm('確定要刪除？')) return;
-      // 先抓一次，拿到 images.path 後刪 Storage
-      const refCol = collection(db, 'pets');
-      const qs = await getDocs(refCol);
-      const docData = qs.docs.find(d=>d.id===id)?.data();
-      if(docData && docData.images){
-        for(const im of docData.images){
-          try{ await deleteObject(ref(storage, im.path)); }catch(e){ console.warn('刪除檔案失敗', e); }
-        }
-      }
-      await deleteDoc(doc(db,'pets',id));
-      await loadList();
-      alert('已刪除');
-    }
+    if(!name){ alert('請輸入名字'); return; }
 
-    $('#saveBtn').addEventListener('click', async ()=>{
-      const name=$('#name').value.trim();
-      const species=$('#species').value;
-      const age=$('#age').value.trim();
-      const gender=$('#gender').value.trim();
-      const intro=$('#intro').value.trim();
-      const files=[...$('#photos').files];
-      if(!name){ alert('請輸入名字'); return; }
+    // 防重複（同名）
+    const refCol = collection(db, 'pets');
+    const exist = await getDocs(query(refCol, where('name','==',name)));
+    if(!exist.empty){ alert('該動物名字已存在，請確認是否重複登錄'); return; }
 
-      // 先建立空 doc 取得 id
-      const docRef = await addDoc(collection(db,'pets'), {
-        name, species, age, gender, intro,
-        images: [],
-        createdAt: Date.now()
-      });
-
-      // 上傳壓縮後圖片並回寫
-      const images = await uploadImages(files, docRef.id);
-      await updateDoc(docRef, { images });
-
-      // 清空表單
-      $('#name').value=''; $('#age').value=''; $('#gender').value=''; $('#intro').value=''; $('#photos').value=''; $('#previews').innerHTML='';
-      alert('新增成功！'); loadList();
+    // 先建立空 doc
+    const docRef = await addDoc(refCol, {
+      name, species, color, age, gender, intro,
+      images: [],
+      createdAt: Date.now()
     });
 
-    loadList();
-  </script>
+    // 上傳圖片並回寫
+    const images = await uploadImages(files, docRef.id);
+    await updateDoc(docRef, { images });
+
+    // 清空 + 提示 + 立即刷新
+    $('#name').value=''; $('#age').value=''; $('#gender').value='男生'; $('#intro').value=''; $('#photos').value=''; $('#previews').innerHTML='';
+    if($('#species').value==='cat'){ $('#color').value=''; }
+    const toast = $('#toast'); toast.style.display='block'; setTimeout(()=>toast.style.display='none', 2000);
+    await loadList();
+  });
+
+  loadList();
+</script>
 </body>
 </html>
