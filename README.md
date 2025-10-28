@@ -1,243 +1,42 @@
-<!DOCTYPE html>
+# 🐾 貓狗送養平台
 
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>貓狗送養平台</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Noto Sans TC', sans-serif;
-      background-color: #f8f9f7;
-      color: #333;
-    }
+一個簡潔清新的靜態網站，讓使用者可以瀏覽待認養的貓狗，並了解簡媽媽的送養理念。
 
+---
+
+## 🌟 功能特色
+- 🐶 **待認養清單**：展示可愛的貓狗卡片。
+- 🔍 **篩選功能**：依品種與年齡篩選。
+- ❤️ **關於簡媽媽**：介紹送養理念與照片。
+- 📱 **RWD 響應式設計**：適用各種裝置。
+
+---
+
+## 🚀 部署教學（GitHub Pages）
+1. 建立公開 Repository，例如 `pet-adoption-site`
+2. 上傳以下檔案：
+   ```
+   index.html
+   README.md
+   images/jan-mama.jpg
+   ```
+3. 前往 **Settings → Pages**
+   - Source：`Deploy from a branch`
+   - Branch：`main / (root)`
+4. 按 **Save**，稍等片刻即可獲得網址：  
+   `https://你的帳號.github.io/pet-adoption-site/`
+
+---
+
+## 📂 專案結構
 ```
-header {
-  background-color: #9ed2a3;
-  color: white;
-  padding: 1rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-header h1 {
-  font-size: 1.5rem;
-  margin: 0;
-}
-
-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 0.5rem;
-}
-
-nav a {
-  color: white;
-  text-decoration: none;
-  margin: 0.3rem 0.8rem;
-  font-weight: 500;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
-.hero {
-  background-image: url('https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=1350&q=80');
-  background-size: cover;
-  background-position: center;
-  color: white;
-  text-align: center;
-  padding: 6rem 1rem;
-}
-
-.hero h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-
-.hero p {
-  font-size: 1.2rem;
-  max-width: 600px;
-  margin: 0 auto;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-.container {
-  padding: 2rem;
-  max-width: 1100px;
-  margin: auto;
-}
-
-.section-title {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: #497f54;
-}
-
-.filter-bar {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-
-select {
-  padding: 0.5rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-.pet-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
-}
-
-.pet-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  overflow: hidden;
-  transition: transform 0.2s ease;
-}
-
-.pet-card:hover {
-  transform: translateY(-5px);
-}
-
-.pet-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.pet-card .info {
-  padding: 1rem;
-}
-
-.pet-card h3 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  color: #497f54;
-}
-
-.about-section img {
-  display: block;
-  margin: 1rem auto;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-}
-
-footer {
-  background-color: #497f54;
-  color: white;
-  text-align: center;
-  padding: 1rem;
-  font-size: 0.9rem;
-}
-
-@media (max-width: 600px) {
-  .hero h2 { font-size: 1.8rem; }
-  .hero p { font-size: 1rem; }
-  .container { padding: 1rem; }
-  .filter-bar { flex-direction: column; align-items: center; }
-}
+pet-adoption-site/
+├── index.html
+├── README.md
+└── images/
+    └── jan-mama.jpg
 ```
 
-  </style>
-</head>
-<body>
-  <header>
-    <h1>貓狗送養平台</h1>
-    <nav>
-      <a href="#pets">待認養</a>
-      <a href="#about">關於簡媽媽</a>
-    </nav>
-  </header>
+---
 
-  <section class="hero">
-    <h2>給牠一個溫暖的家</h2>
-    <p>在這裡，你可以找到可愛的貓咪與狗狗，讓牠們擁有新的幸福生活。</p>
-  </section>
-
-  <main class="container" id="pets">
-    <h2 class="section-title">待認養動物</h2>
-
-```
-<div class="filter-bar">
-  <select id="filterSpecies">
-    <option value="all">所有品種</option>
-    <option value="cat">貓咪</option>
-    <option value="dog">狗狗</option>
-  </select>
-  <select id="filterAge">
-    <option value="all">所有年齡</option>
-    <option value="young">小於1歲</option>
-    <option value="adult">1-5歲</option>
-    <option value="senior">超過5歲</option>
-  </select>
-  <button onclick="applyFilter()">篩選</button>
-</div>
-
-<div class="pet-grid" id="petList">
-  <div class="pet-card" data-species="cat" data-age="adult">
-    <img src="https://images.unsplash.com/photo-1560807707-8cc77767d783?auto=format&fit=crop&w=800&q=80" alt="貓咪" />
-    <div class="info">
-      <h3>小花</h3>
-      <p>品種：米克斯貓<br>年齡：2歲<br>性別：母<br>健康狀況：已結紮、健康良好</p>
-    </div>
-  </div>
-  <div class="pet-card" data-species="dog" data-age="adult">
-    <img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=800&q=80" alt="狗狗" />
-    <div class="info">
-      <h3>阿旺</h3>
-      <p>品種：柴犬<br>年齡：3歲<br>性別：公<br>健康狀況：活潑健康</p>
-    </div>
-  </div>
-</div>
-```
-
-  </main>
-
-  <section class="container about-section" id="about">
-    <h2 class="section-title">關於簡媽媽</h2>
-    <img src="images/jan-mama.jpg" alt="簡媽媽照片" />
-    <p style="max-width:700px; margin:auto; text-align:center; line-height:1.8;">
-      簡媽媽長期致力於流浪動物救援與送養工作，希望透過這個平台，
-      讓更多可愛的貓咪與狗狗能找到屬於自己的家，也希望社會大眾能更重視動物生命，
-      共同推廣領養代替購買的理念。
-    </p>
-  </section>
-
-  <footer>
-    <p>© 2025 貓狗送養平台｜讓愛延續每一個生命</p>
-  </footer>
-
-  <script>
-    function applyFilter() {
-      const species = document.getElementById('filterSpecies').value;
-      const age = document.getElementById('filterAge').value;
-      const pets = document.querySelectorAll('.pet-card');
-
-      pets.forEach(pet => {
-        const matchSpecies = species === 'all' || pet.dataset.species === species;
-        const matchAge = age === 'all' || pet.dataset.age === age;
-        pet.style.display = (matchSpecies && matchAge) ? 'block' : 'none';
-      });
-    }
-  </script>
-
-</body>
-</html>
+> ❤️ 由 ChatGPT 與你共同打造，讓愛延續每一個生命。
