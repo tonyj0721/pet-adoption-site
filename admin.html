@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>後台管理｜貓狗送養平台</title>
+<style>:root{--green:#497f54;--mint:#9ed2a3;--bg:#f8f9f7;}body{margin:0;font-family:'Noto Sans TC',system-ui;background:var(--bg);color:#333}header{background:var(--mint);color:#fff}.nav{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:1rem}.nav a{color:#fff;text-decoration:none;margin-left:1rem;font-weight:600}.wrap{max-width:1100px;margin:1.2rem auto;padding:0 1rem;display:grid;grid-template-columns:320px 1fr;gap:1rem}.card{background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.08);padding:1rem}label{display:block;margin:.5rem 0 .25rem}input,select,textarea{width:100%;padding:.6rem;border:1px solid #ccc;border-radius:8px}textarea{min-height:100px;resize:vertical}.hint{font-size:.85rem;color:#666}.thumbs{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem}.thumbs img{width:60px;height:60px;object-fit:cover;border-radius:6px}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #eee;padding:.6rem;text-align:left}.danger{background:#b00020;color:#fff;border:0;border-radius:8px;padding:.4rem .6rem;cursor:pointer}.save{background:var(--green);color:#fff;border:0;border-radius:8px;padding:.6rem .9rem;cursor:pointer;margin-top:.8rem;width:100%}@media (max-width:900px){.wrap{grid-template-columns:1fr}}footer{background:var(--green);color:#fff;text-align:center;padding:1rem;margin-top:2rem}</style>
+</head><body>
+<header><div class="nav"><div style="font-weight:800">貓狗送養平台</div><nav><a href="index.html#cats">回到首頁</a></nav></div></header>
+<main class="wrap">
+<section class="card"><h3 style="margin:.2rem 0;color:#497f54">新增動物</h3>
+<label>名字</label><input id="name">
+<label>品種</label><select id="species"><option value="cat">貓咪</option><option value="dog">狗狗</option></select>
+<label>年齡</label><input id="age" placeholder="例如：2歲 / 幾個月">
+<label>性別</label><input id="gender" placeholder="公 / 母">
+<label>介紹</label><textarea id="intro" placeholder="簡單介紹性格、習慣、健康狀況等"></textarea>
+<label>上傳圖片（最多 5 張）</label><input id="photos" type="file" accept="image/*" multiple><div id="previews" class="thumbs"></div>
+<button class="save" id="saveBtn">新增</button><p class="hint">提示：資料會永久保存於您的瀏覽器（localStorage）。</p></section>
+<section class="card"><h3 style="margin:.2rem 0;color:#497f54">已上架動物</h3>
+<table><thead><tr><th>名稱</th><th>品種</th><th>年齡</th><th>性別</th><th>建立時間</th><th>操作</th></tr></thead><tbody id="list"></tbody></table></section>
+</main>
+<footer>© 2025 貓狗送養平台</footer>
+<script>
+if(sessionStorage.getItem('loggedIn')!=='1'){location.href='login.html';}
+const key='pets'; const $=s=>document.querySelector(s);
+$('#photos').addEventListener('change',(e)=>{const files=[...e.target.files].slice(0,5);const box=$('#previews');box.innerHTML='';files.forEach(f=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.src=r.result;im.alt='preview';box.appendChild(im);};r.readAsDataURL(f);});});
+function load(){try{return JSON.parse(localStorage.getItem(key))||[]}catch{return[]}}
+function save(arr){localStorage.setItem(key,JSON.stringify(arr));}
+function render(){const tbody=$('#list');tbody.innerHTML='';const pets=(load()||[]).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));pets.forEach(p=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${p.name}</td><td>${p.species==='cat'?'貓咪':'狗狗'}</td><td>${p.age||'—'}</td><td>${p.gender||'—'}</td><td>${new Date(p.createdAt||Date.now()).toLocaleString()}</td><td><button class="danger" data-id="${p.id}">刪除</button></td>`;tbody.appendChild(tr);});tbody.querySelectorAll('.danger').forEach(btn=>{btn.addEventListener('click',()=>{const id=btn.dataset.id;const next=load().filter(x=>x.id!==id);save(next);render();});});}
+$('#saveBtn').addEventListener('click',async()=>{const name=$('#name').value.trim();const species=$('#species').value;const age=$('#age').value.trim();const gender=$('#gender').value.trim();const intro=$('#intro').value.trim();const files=[...$('#photos').files].slice(0,5);if(!name){alert('請輸入名字');return;}const images=await Promise.all(files.map(f=>new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(f);})));const pet={id:'p_'+Math.random().toString(36).slice(2),name,species,age,gender,intro,images,createdAt:Date.now(),breed:''};const arr=load();arr.push(pet);save(arr);$('#name').value='';$('#age').value='';$('#gender').value='';$('#intro').value='';$('#photos').value='';$('#previews').innerHTML='';alert('新增成功！');render();});
+render();
+</script>
+</body></html>

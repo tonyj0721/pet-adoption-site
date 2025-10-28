@@ -1,94 +1,42 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>貓狗送養平台</title>
-  <style>
-    body { margin: 0; font-family: 'Noto Sans TC', sans-serif; background-color: #f8f9f7; color: #333; }
-    header { background-color: #9ed2a3; color: white; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    header h1 { font-size: 1.5rem; margin: 0; }
-    nav { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 0.5rem; }
-    nav a { color: white; text-decoration: none; margin: 0.3rem 0.8rem; font-weight: 500; }
-    nav a:hover { text-decoration: underline; }
-    .hero { background-image: url('https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-position: center; color: white; text-align: center; padding: 6rem 1rem; }
-    .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
-    .hero p { font-size: 1.2rem; max-width: 600px; margin: 0 auto; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-    .container { padding: 2rem; max-width: 1100px; margin: auto; }
-    .section-title { text-align: center; margin-bottom: 1.5rem; color: #497f54; }
-    .filter-bar { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-    select { padding: 0.5rem; border-radius: 8px; border: 1px solid #ccc; }
-    .pet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
-    .pet-card { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; transition: transform 0.2s ease; }
-    .pet-card:hover { transform: translateY(-5px); }
-    .pet-card img { width: 100%; height: 200px; object-fit: cover; }
-    .pet-card .info { padding: 1rem; }
-    .pet-card h3 { margin-top: 0; margin-bottom: 0.5rem; color: #497f54; }
-    .about-section img { display: block; margin: 1rem auto; width: 200px; height: 200px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
-    footer { background-color: #497f54; color: white; text-align: center; padding: 1rem; font-size: 0.9rem; }
-    @media (max-width: 600px) { .hero h2 { font-size: 1.8rem; } .hero p { font-size: 1rem; } .container { padding: 1rem; } .filter-bar { flex-direction: column; align-items: center; } }
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>貓狗送養平台</title>
+<style>
+:root{--green:#497f54;--mint:#9ed2a3;--bg:#f8f9f7;}
+*{box-sizing:border-box}body{margin:0;font-family:'Noto Sans TC',system-ui,Segoe UI,Arial;background:var(--bg);color:#333;}
+header{background:var(--mint);color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.08);} .nav{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:1rem;} .nav a{color:#fff;text-decoration:none;margin-left:1rem;font-weight:600} .nav a:hover{text-decoration:underline}
+.hero{background:url('images/hero-bg.jpg') center/cover no-repeat;color:#fff;text-align:center;padding:6rem 1rem;position:relative}.hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.25)}.hero>div{position:relative;z-index:1}.hero h1{font-size:2.4rem;margin:0 0 .5rem}.hero p{margin:0;font-size:1.1rem}
+.container{max-width:1100px;margin:2rem auto;padding:0 1rem} h2.section{color:var(--green);display:flex;align-items:center;justify-content:space-between;margin:1.5rem 0 .8rem} .see-more{border:0;background:var(--green);color:#fff;padding:.5rem .8rem;border-radius:8px;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+.card{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;transition:box-shadow .2s} .card:hover{box-shadow:0 3px 10px rgba(0,0,0,.09)}
+.card img{width:100%;height:160px;object-fit:cover;display:block}.card .info{padding:.8rem}.pill{display:inline-block;background:#eef6ef;color:#2d5b39;padding:.16rem .5rem;border-radius:999px;font-size:.8rem;margin-right:.4rem}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:1rem;z-index:50}.modal.open{display:flex}.modal-panel{background:#fff;border-radius:12px;max-width:900px;width:100%;max-height:90vh;overflow:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.2rem;border-bottom:1px solid #eee}.close{background:transparent;border:0;font-size:1.5rem;cursor:pointer}
+.modal-body{display:grid;grid-template-columns:1fr 300px;gap:1rem;padding:1rem}.main-img{width:100%;height:360px;object-fit:cover;border-radius:8px}.thumbs{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}.thumbs img{width:64px;height:64px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent}.thumbs img.active{border-color:var(--mint)} .meta p{margin:.25rem 0}.adopt{margin-top:1rem;background:var(--green);color:#fff;border:0;border-radius:8px;padding:.6rem .9rem;cursor:pointer}
+@media (max-width:800px){.modal-body{grid-template-columns:1fr}.main-img{height:260px}} footer{background:var(--green);color:#fff;text-align:center;padding:1rem;margin-top:2rem}
+</style>
 </head>
 <body>
-  <header>
-    <h1>貓狗送養平台</h1>
-    <nav>
-      <a href="#pets">待認養</a>
-      <a href="#about">關於簡媽媽</a>
-    </nav>
-  </header>
-  <section class="hero">
-    <h2>給牠一個溫暖的家</h2>
-    <p>在這裡，你可以找到可愛的貓咪與狗狗，讓牠們擁有新的幸福生活。</p>
-  </section>
-  <main class="container" id="pets">
-    <h2 class="section-title">待認養動物</h2>
-    <div class="filter-bar">
-      <select id="filterSpecies">
-        <option value="all">所有品種</option>
-        <option value="cat">貓咪</option>
-        <option value="dog">狗狗</option>
-      </select>
-      <select id="filterAge">
-        <option value="all">所有年齡</option>
-        <option value="young">小於1歲</option>
-        <option value="adult">1-5歲</option>
-        <option value="senior">超過5歲</option>
-      </select>
-      <button onclick="applyFilter()">篩選</button>
-    </div>
-    <div class="pet-grid" id="petList">
-      <div class="pet-card" data-species="cat" data-age="adult">
-        <img src="https://images.unsplash.com/photo-1560807707-8cc77767d783?auto=format&fit=crop&w=800&q=80" alt="貓咪" />
-        <div class="info"><h3>小花</h3><p>品種：米克斯貓<br>年齡：2歲<br>性別：母<br>健康狀況：已結紮、健康良好</p></div>
-      </div>
-      <div class="pet-card" data-species="dog" data-age="adult">
-        <img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=800&q=80" alt="狗狗" />
-        <div class="info"><h3>阿旺</h3><p>品種：柴犬<br>年齡：3歲<br>性別：公<br>健康狀況：活潑健康</p></div>
-      </div>
-    </div>
-  </main>
-  <section class="container about-section" id="about">
-    <h2 class="section-title">關於簡媽媽</h2>
-    <img src="images/jan-mama.jpg" alt="簡媽媽照片" />
-    <p style="max-width:700px; margin:auto; text-align:center; line-height:1.8;">
-      簡媽媽長期致力於流浪動物救援與送養工作，希望透過這個平台，
-      讓更多可愛的貓咪與狗狗能找到屬於自己的家，也希望社會大眾能更重視動物生命，
-      共同推廣領養代替購買的理念。
-    </p>
-  </section>
-  <footer><p>© 2025 貓狗送養平台｜讓愛延續每一個生命</p></footer>
-  <script>
-    function applyFilter() {
-      const species = document.getElementById('filterSpecies').value;
-      const age = document.getElementById('filterAge').value;
-      const pets = document.querySelectorAll('.pet-card');
-      pets.forEach(pet => {
-        const matchSpecies = species === 'all' || pet.dataset.species === species;
-        const matchAge = age === 'all' || pet.dataset.age === age;
-        pet.style.display = (matchSpecies && matchAge) ? 'block' : 'none';
-      });
-    }
-  </script>
-</body>
-</html>
+<header><div class="nav"><div style="font-weight:800">貓狗送養平台</div><nav><a href="#cats">待認養</a><a href="about.html">關於簡媽媽</a><a href="login.html">管理員登入</a></nav></div></header>
+<section class="hero"><div><h1>給牠一個溫暖的家</h1><p>用領養，改變一條生命的軌跡。</p></div></section>
+<main class="container">
+<section id="cats"><h2 class="section">貓咪 <button class="see-more" data-target="cat">看更多</button></h2><div id="catGrid" class="grid"></div></section>
+<section id="dogs"><h2 class="section">狗狗 <button class="see-more" data-target="dog">看更多</button></h2><div id="dogGrid" class="grid"></div></section>
+</main>
+<div id="detailModal" class="modal" aria-hidden="true"><div class="modal-panel"><div class="modal-head"><strong id="mTitle">動物資料</strong><button class="close" onclick="closeModal()">✕</button></div><div class="modal-body"><div><img id="mMain" class="main-img"><div id="mThumbs" class="thumbs"></div></div><div><div class="meta"><p><span class="pill" id="mSpecies"></span></p><p>年齡：<span id="mAge"></span></p><p>性別：<span id="mGender"></span></p><p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p></div><button class="adopt" id="adoptBtn">我要領養</button></div></div></div></div>
+<footer>© 2025 貓狗送養平台｜讓愛延續每一個生命</footer>
+<script>
+const key='pets'; const q=(s,el=document)=>el.querySelector(s); const qa=(s,el=document)=>[...el.querySelectorAll(s)];
+function loadPets(){ try{return JSON.parse(localStorage.getItem(key))||[]}catch{return[]} }
+function sortNewest(arr){ return arr.slice().sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); }
+function renderSection(species,limitOnly=true){ const grid=q(species==='cat'?'#catGrid':'#dogGrid'); grid.innerHTML=''; let pets=sortNewest(loadPets()).filter(p=>p.species===species); const limit=limitOnly?5:pets.length; pets.slice(0,limit).forEach(p=>grid.appendChild(card(p))); }
+function card(pet){ const el=document.createElement('div'); el.className='card'; const cover=(pet.images&&pet.images[0])||'https://placehold.co/600x400?text=No+Image'; el.innerHTML=`<img src="${cover}" alt="${pet.name}"><div class="info"><div style="display:flex;justify-content:space-between;align-items:center"><strong>${pet.name||''}</strong><span class="pill">${pet.species==='cat'?'貓咪':'狗狗'}</span></div><div style="font-size:.92rem;margin-top:.25rem"><span>品種：${pet.breed||'—'}</span><br><span>年齡：${pet.age||'—'}</span>　<span>性別：${pet.gender||'—'}</span></div></div>`; el.addEventListener('click',()=>openModal(pet)); return el; }
+function openModal(p){ q('#mTitle').textContent=p.name||'動物資料'; q('#mSpecies').textContent=p.species==='cat'?'貓咪':'狗狗'; q('#mAge').textContent=p.age||'—'; q('#mGender').textContent=p.gender||'—'; q('#mIntro').textContent=p.intro||''; const thumbs=q('#mThumbs'); thumbs.innerHTML=''; const imgs=(p.images&&p.images.length)?p.images:['https://placehold.co/800x500?text=No+Image']; let current=0; const main=q('#mMain'); main.src=imgs[0]; imgs.forEach((src,i)=>{ const im=new Image(); im.src=src; im.alt='thumb'; im.addEventListener('click',()=>{current=i;update();}); thumbs.appendChild(im); }); function update(){ main.src=imgs[current]; qa('.thumbs img').forEach((t,idx)=>t.classList.toggle('active',idx===current)); } update(); main.addEventListener('click',()=>{current=(current+1)%imgs.length; update();}); document.onkeydown=(e)=>{ if(q('#detailModal').classList.contains('open')){ if(e.key==='ArrowRight'){current=(current+1)%imgs.length; update();} if(e.key==='ArrowLeft'){current=(current-1+imgs.length)%imgs.length; update();} if(e.key==='Escape'){ closeModal(); } } }; q('#adoptBtn').onclick=()=>{ const url=new URL('adopt.html',location.href); url.searchParams.set('pet',p.id||''); location.href=url.toString(); }; q('#detailModal').classList.add('open'); q('#detailModal').setAttribute('aria-hidden','false'); }
+function closeModal(){ q('#detailModal').classList.remove('open'); q('#detailModal').setAttribute('aria-hidden','true'); document.onkeydown=null; }
+q('#detailModal').addEventListener('click',(e)=>{ if(e.target.id==='detailModal') closeModal(); });
+qa('.see-more').forEach(btn=>{ let open=false; btn.addEventListener('click',()=>{ open=!open; btn.textContent=open?'收起':'看更多'; renderSection(btn.dataset.target,!open); }); });
+renderSection('cat',true); renderSection('dog',true);
+</script>
+</body></html>
