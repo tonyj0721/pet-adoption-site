@@ -1,81 +1,243 @@
-# 🐾 貓狗送養平台
+<!DOCTYPE html>
 
-一個簡潔清新的靜態網站，讓使用者可以瀏覽待認養的貓狗、刊登送養資訊、以及透過表單聯絡送養人。適合個人或小型動保團體展示送養資料。
-
----
-
-## 🌟 功能特色
-
-- 🐶 **待認養清單**：以卡片方式顯示動物圖片與基本資料。
-- 🔍 **篩選功能**：可依照品種（貓/狗）與年齡分類顯示。
-- 📝 **刊登送養表單**：管理員可上傳圖片、填寫基本資訊並即時顯示在清單中。
-- 💬 **聯絡表單**：訪客可留下聯絡方式與訊息。
-- 🖥️ **後台頁面（靜態展示）**：模擬審核與刪除送養資訊的管理介面。
-- 📱 **RWD 響應式設計**：在手機、平板與桌機上皆能完美顯示。
-
----
-
-## 🚀 GitHub Pages 部署教學
-
-以下步驟可以讓你輕鬆把網站上傳並公開在 GitHub Pages：
-
-### 1️⃣ 建立 GitHub Repository
-1. 前往 [GitHub](https://github.com/)。
-2. 登入後點選右上角「+」→ **New repository**。
-3. 輸入 Repository 名稱，例如：`pet-adoption-site`。
-4. 設定成 **Public**（公開）。
-5. 點選 **Create repository**。
-
-### 2️⃣ 上傳網站檔案
-1. 下載你的網站檔案：
-   - `index.html`（主頁面）
-   - 任何圖片資料夾（若有）
-2. 在 GitHub Repository 頁面中，點擊 **Add file → Upload files**。
-3. 上傳上述檔案後，按下 **Commit changes** 儲存。
-
-### 3️⃣ 啟用 GitHub Pages
-1. 進入剛建立的 Repository。
-2. 點選上方的 **Settings（設定）**。
-3. 在左側選單找到 **Pages**。
-4. Source 選項中選擇：
-   - **Deploy from a branch**
-   - **Branch：main / 根目錄 (/）**
-5. 按下 **Save**。
-
-GitHub 會自動幫你部署，幾分鐘後你會看到像這樣的網址：
-```
-https://你的帳號.github.io/pet-adoption-site/
-```
-
-🎉 **恭喜！你的送養網站已經上線！**
-
----
-
-## 🧩 結構說明
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>貓狗送養平台</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #f8f9f7;
+      color: #333;
+    }
 
 ```
-pet-adoption-site/
-│
-├── index.html          # 主頁面（包含所有內容）
-└── images/             # 動物圖片（可選）
+header {
+  background-color: #9ed2a3;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0.3rem 0.8rem;
+  font-weight: 500;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.hero {
+  background-image: url('https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=1350&q=80');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+  padding: 6rem 1rem;
+}
+
+.hero h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.hero p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.container {
+  padding: 2rem;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #497f54;
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+select {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.pet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.pet-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.pet-card:hover {
+  transform: translateY(-5px);
+}
+
+.pet-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.pet-card .info {
+  padding: 1rem;
+}
+
+.pet-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: #497f54;
+}
+
+.about-section img {
+  display: block;
+  margin: 1rem auto;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+footer {
+  background-color: #497f54;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+  .hero h2 { font-size: 1.8rem; }
+  .hero p { font-size: 1rem; }
+  .container { padding: 1rem; }
+  .filter-bar { flex-direction: column; align-items: center; }
+}
 ```
 
-所有功能都包含在單一 `index.html` 中，適合靜態主機或 GitHub Pages 使用。
+  </style>
+</head>
+<body>
+  <header>
+    <h1>貓狗送養平台</h1>
+    <nav>
+      <a href="#pets">待認養</a>
+      <a href="#about">關於簡媽媽</a>
+    </nav>
+  </header>
 
----
+  <section class="hero">
+    <h2>給牠一個溫暖的家</h2>
+    <p>在這裡，你可以找到可愛的貓咪與狗狗，讓牠們擁有新的幸福生活。</p>
+  </section>
 
-## 🧰 未來可擴充方向
+  <main class="container" id="pets">
+    <h2 class="section-title">待認養動物</h2>
 
-- ✉️ 將聯絡表單串接到 Formspree 或 Google Form。
-- 💾 使用 Firebase 或 Airtable 儲存送養資料。
-- 👩‍💻 加入簡易的登入系統供管理員審核。
-- 🐕‍🦺 新增多語系（繁中、英語）。
+```
+<div class="filter-bar">
+  <select id="filterSpecies">
+    <option value="all">所有品種</option>
+    <option value="cat">貓咪</option>
+    <option value="dog">狗狗</option>
+  </select>
+  <select id="filterAge">
+    <option value="all">所有年齡</option>
+    <option value="young">小於1歲</option>
+    <option value="adult">1-5歲</option>
+    <option value="senior">超過5歲</option>
+  </select>
+  <button onclick="applyFilter()">篩選</button>
+</div>
 
----
+<div class="pet-grid" id="petList">
+  <div class="pet-card" data-species="cat" data-age="adult">
+    <img src="https://images.unsplash.com/photo-1560807707-8cc77767d783?auto=format&fit=crop&w=800&q=80" alt="貓咪" />
+    <div class="info">
+      <h3>小花</h3>
+      <p>品種：米克斯貓<br>年齡：2歲<br>性別：母<br>健康狀況：已結紮、健康良好</p>
+    </div>
+  </div>
+  <div class="pet-card" data-species="dog" data-age="adult">
+    <img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=800&q=80" alt="狗狗" />
+    <div class="info">
+      <h3>阿旺</h3>
+      <p>品種：柴犬<br>年齡：3歲<br>性別：公<br>健康狀況：活潑健康</p>
+    </div>
+  </div>
+</div>
+```
 
-## 🐱 授權條款
-本專案可自由修改與使用，請保留原作者註記並勿用於商業詐騙或販售用途。
+  </main>
 
----
+  <section class="container about-section" id="about">
+    <h2 class="section-title">關於簡媽媽</h2>
+    <img src="images/jan-mama.jpg" alt="簡媽媽照片" />
+    <p style="max-width:700px; margin:auto; text-align:center; line-height:1.8;">
+      簡媽媽長期致力於流浪動物救援與送養工作，希望透過這個平台，
+      讓更多可愛的貓咪與狗狗能找到屬於自己的家，也希望社會大眾能更重視動物生命，
+      共同推廣領養代替購買的理念。
+    </p>
+  </section>
 
-> ❤️ 由 ChatGPT 與你共同打造。讓愛延續每一個生命。
+  <footer>
+    <p>© 2025 貓狗送養平台｜讓愛延續每一個生命</p>
+  </footer>
+
+  <script>
+    function applyFilter() {
+      const species = document.getElementById('filterSpecies').value;
+      const age = document.getElementById('filterAge').value;
+      const pets = document.querySelectorAll('.pet-card');
+
+      pets.forEach(pet => {
+        const matchSpecies = species === 'all' || pet.dataset.species === species;
+        const matchAge = age === 'all' || pet.dataset.age === age;
+        pet.style.display = (matchSpecies && matchAge) ? 'block' : 'none';
+      });
+    }
+  </script>
+
+</body>
+</html>
