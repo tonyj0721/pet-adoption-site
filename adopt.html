@@ -288,10 +288,10 @@ ${data.env}
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "r6vaUtn17Ruulvj1e3TFQjEFGmW01tTD3zQ+hUdIAgII+l8orl9w0Z8utPPC4cEtC2XGvz/Xg4lz0iIPSY+MsIKrMJSMjxKzS+0elkzDc10ZPD8CwS8ZdddNVO51tFwJ1bGGwI7GvR+JsWxJHIESOgdB04t89/1O/w1cDnyilFU="
+          "Authorization": "Bearer YOUR_LINE_ACCESS_TOKEN"
         },
         body: JSON.stringify({
-          to: "U2baabfe46d9c3c04c0a3c2d3f86b56e9",
+          to: "YOUR_USER_ID_OR_GROUP_ID",
           messages: [{ type: "text", text: message }]
         })
       });
