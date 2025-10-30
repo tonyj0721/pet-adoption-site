@@ -5,72 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>台中簡媽媽狗園｜首頁</title>
 <style>
-:root {
-  --green:#497f54;
-  --mint:#9ed2a3;
-  --bg:#f8f9f7;
-}
-body {
-  margin:0; font-family:'Noto Sans TC',system-ui;
-  background:var(--bg); color:#333;
-}
-header {
-  background:var(--mint); color:#fff;
-}
-.nav {
-  max-width:1100px; margin:auto;
-  display:flex; justify-content:space-between; align-items:center;
-  padding:1rem;
-}
-.nav a {
-  color:#fff; text-decoration:none; margin-left:1rem; font-weight:600;
-}
-.hero {
-  position:relative; width:100%; height:320px;
-  background:url('images/hero-bg.jpg') center/cover no-repeat;
-  display:flex; justify-content:center; align-items:center;
-  color:#fff; text-shadow:0 0 8px rgba(0,0,0,.5);
-}
-.hero h1 {
-  background:rgba(0,0,0,.4);
-  padding:1rem 2rem; border-radius:12px;
-  font-size:2rem;
-}
-.section {
-  max-width:1100px; margin:2rem auto; padding:0 1rem;
-}
-.section h2 {
-  color:var(--green); margin-bottom:.8rem;
-  display:inline-block;
-}
-.section a.more {
-  text-decoration:none;
-  color:var(--green);
-  font-size:1rem;
-  margin-left:1rem;
-}
-.cards {
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:1rem;
-}
-.card {
-  background:#fff; border-radius:12px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
-  overflow:hidden; text-align:center;
-}
-.card img {
-  width:100%; height:180px; object-fit:contain; background:#fafafa;
-}
-.card h3 {
-  margin:.5rem 0 .2rem; color:#333;
-}
-.card p {
-  margin:.1rem 0; font-size:.95rem;
-}
-footer {
-  background:var(--green); color:#fff; text-align:center;
-  padding:1rem; margin-top:2rem;
-}
+:root { --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+body { margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
+header { background:var(--mint); color:#fff; }
+.nav { max-width:1100px; margin:auto; display:flex; justify-content:space-between; align-items:center; padding:1rem; }
+.nav a { color:#fff; text-decoration:none; margin-left:1rem; font-weight:600; }
+.hero { position:relative; width:100%; height:320px; background:url('images/hero-bg.jpg') center/cover no-repeat; display:flex; justify-content:center; align-items:center; color:#fff; text-shadow:0 0 8px rgba(0,0,0,.5); }
+.hero h1 { background:rgba(0,0,0,.35); padding:1rem 2rem; border-radius:12px; font-size:2rem; }
+.section { max-width:1100px; margin:2rem auto; padding:0 1rem; }
+.section h2 { color:var(--green); margin:.2rem 0 .8rem; display:inline-block; font-size:1.25rem; }
+.section a.more { text-decoration:none; color:var(--green); font-size:1.25rem; margin-left:1rem; }
+.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; }
+.card { background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; text-align:center; cursor:pointer; }
+.card .imgbox{ width:100%; height:180px; background:#f2f3f5; display:flex; align-items:center; justify-content:center; }
+.card img { width:100%; height:100%; object-fit:contain; } /* 圖片不被裁切 */
+.card h3 { margin:.5rem 0 .2rem; color:#333; font-size:1.05rem; }
+.card p  { margin:.1rem 0; font-size:.94rem; }
+footer { background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
+.empty { color:#777; padding:.6rem 0; }
 </style>
 </head>
 <body>
@@ -93,9 +45,11 @@ footer {
 <main class="section">
   <h2>貓咪</h2><a href="cats.html" class="more">查看全部</a>
   <div id="cats" class="cards"></div>
+  <div id="catsEmpty" class="empty" style="display:none">目前尚無貓咪資料</div>
 
   <h2 style="margin-top:2rem;">狗狗</h2><a href="dogs.html" class="more">查看全部</a>
   <div id="dogs" class="cards"></div>
+  <div id="dogsEmpty" class="empty" style="display:none">目前尚無狗狗資料</div>
 </main>
 
 <footer>© 2025 台中簡媽媽狗園</footer>
@@ -114,28 +68,57 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db  = getFirestore(app);
 
-async function load(type, containerId){
-  const q = query(collection(db,"pets"), where("type","==",type), orderBy("createdAt","desc"), limit(4));
-  const snap = await getDocs(q);
-  const list = document.getElementById(containerId);
-  list.innerHTML = "";
-  snap.forEach(doc=>{
-    const data = doc.data();
-    const card = document.createElement("div");
-    card.className="card";
-    card.innerHTML=`
-      <img src="${data.images?.[0] || 'images/default.jpg'}" alt="${data.name}">
-      <h3>${data.name}</h3>
-      <p>${data.breed || ''}</p>
-      <p>${data.age || ''}・${data.gender || ''}</p>`;
-    list.appendChild(card);
+function makeCard(pet){
+  const el = document.createElement('div');
+  el.className = 'card';
+  const cover = pet?.images?.[0]?.url || 'https://placehold.co/600x400?text=No+Image';
+  el.innerHTML = `
+    <div class="imgbox"><img src="${cover}" alt="${pet.name || ''}"></div>
+    <h3>${pet.name || ''}</h3>
+    <p>${pet.breed || ''}</p>
+    <p>${pet.age || ''}・${pet.gender || ''}</p>
+  `;
+  el.addEventListener('click', ()=>{
+    const url = new URL('adopt.html', location.href);
+    url.searchParams.set('pet', pet.id || '');
+    location.href = url.toString();
   });
+  return el;
 }
 
-load("cat","cats");
-load("dog","dogs");
+async function loadSection(species, containerId, emptyId){
+  // 依照你原本的資料結構：species = "cat" / "dog"
+  // 若 createdAt 不是可排序欄位，也能正常顯示（會自動 fallback）
+  try{
+    const ref = collection(db, 'pets');
+    let qy;
+    try {
+      // 優先用建立時間排序（較新在前），取 4 筆
+      qy = query(ref, where('species','==',species), orderBy('createdAt','desc'), limit(4));
+    } catch(e) {
+      // 若 createdAt 欄位型別不支援排序，退而只用 where + limit
+      qy = query(ref, where('species','==',species), limit(4));
+    }
+    const snap = await getDocs(qy);
+    const list = snap.docs.map(d=>({ id:d.id, ...d.data() }));
+    const box  = document.getElementById(containerId);
+    const empty= document.getElementById(emptyId);
+    box.innerHTML = '';
+    if(!list.length){ empty.style.display='block'; return; }
+    empty.style.display='none';
+    list.forEach(p=> box.appendChild(makeCard(p)));
+  }catch(err){
+    console.error('載入失敗', err);
+    const empty= document.getElementById(emptyId);
+    empty.textContent = '資料載入失敗，請稍後再試';
+    empty.style.display='block';
+  }
+}
+
+loadSection('cat','cats','catsEmpty');
+loadSection('dog','dogs','dogsEmpty');
 </script>
 </body>
 </html>
