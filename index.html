@@ -3,57 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>台中簡媽媽狗園｜首頁</title>
+<title>台中簡媽媽狗園</title>
 <style>
 :root { --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
-*{ box-sizing:border-box }
+* { box-sizing:border-box; }
 body { margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
-header { background:var(--mint); color:#fff; }
-.nav { max-width:1100px; margin:auto; display:flex; justify-content:space-between; align-items:center; padding:1rem; }
+header { background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
+.nav { max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem; }
 .nav a { color:#fff; text-decoration:none; margin-left:1rem; font-weight:600; }
-
-.hero {
-  position:relative; width:100%; height:320px;
-  background:url('images/hero-bg.jpg') center/cover no-repeat;
-  display:flex; justify-content:center; align-items:center;
-  color:#fff; text-shadow:0 0 8px rgba(0,0,0,.5);
-}
-.hero h1 { background:rgba(0,0,0,.35); padding:1rem 2rem; border-radius:12px; font-size:2rem; }
-
-.section { max-width:1100px; margin:2rem auto; padding:0 1rem; }
-.section h2 { color:var(--green); margin:.2rem 0 .8rem; display:inline-block; font-size:1.25rem; }
-.section a.more { text-decoration:none; color:var(--green); font-size:1.25rem; margin-left:1rem; }
-
-.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; }
-.card { background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; text-align:center; cursor:pointer; transition:transform .2s; }
-.card:hover { transform:none; } /* 不浮動 */
-.card .imgbox{ width:100%; height:180px; background:#f2f3f5; display:flex; align-items:center; justify-content:center; }
-.card img { width:100%; height:100%; object-fit:contain; }
-.card h3 { margin:.5rem 0 .2rem; color:#333; font-size:1.05rem; }
-.card p  { margin:.1rem 0; font-size:.94rem; }
-
-footer { background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
+.nav a:hover { text-decoration:underline; }
+.hero { background:url('images/hero-bg.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:6rem 1rem; position:relative; }
+.hero::after { content:""; position:absolute; inset:0; background:rgba(0,0,0,.25); }
+.hero > div { position:relative; z-index:1; }
+.hero h1 { font-size:2.4rem; margin:0 0 .5rem; }
+.container { max-width:1100px; margin:2rem auto; padding:0 1rem; }
+h2.section { color:var(--green); display:flex; align-items:center; justify-content:space-between; margin:1.5rem 0 .8rem; font-size:1.5rem; }
+.see-more { border:0; background:var(--green); color:#fff; padding:.5rem .8rem; border-radius:8px; cursor:pointer; font-size:1rem; text-decoration:none; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
+.card { background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; cursor:pointer; transition:transform .15s ease; }
+.card img { width:100%; height:160px; object-fit:cover; display:block; }
+.card .info { padding:.8rem; }
+.pill { display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem; margin-right:.4rem; }
 
 /* Modal */
-.modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:1rem; z-index:50; }
-.modal.open{ display:flex; }
-.panel{ background:#fff; border-radius:12px; max-width:900px; width:100%; max-height:90vh; overflow:auto; }
-.head{ display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; border-bottom:1px solid #eee; }
-.close{ background:transparent; border:0; font-size:1.5rem; cursor:pointer; }
-.body{ display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem; }
-.main-img{ width:100%; height:360px; object-fit:cover; border-radius:8px; }
-.thumbs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem; }
-.thumbs img{ width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent; }
-.thumbs img.active{ border-color:var(--mint); }
-.see-more{ background:var(--green); color:#fff; border:none; padding:.6rem 1rem; border-radius:6px; cursor:pointer; margin-top:.8rem; }
+.modal { position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:1rem; z-index:50; }
+.modal.open { display:flex; }
+.panel { background:#fff; border-radius:12px; max-width:900px; width:100%; max-height:90vh; overflow:auto; }
+.head { display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; border-bottom:1px solid #eee; }
+.close { background:transparent; border:0; font-size:1.5rem; cursor:pointer; }
+.body { display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem; }
+
+/* 修正版主圖：完整顯示、不裁切 */
+.main-img {
+  width:100%;
+  height:auto;
+  max-height:65vh;
+  object-fit:contain;
+  background:#000;
+  border-radius:8px;
+  display:block;
+  margin:0 auto;
+}
+
+.thumbs { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem; }
+.thumbs img { width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent; }
+.thumbs img.active { border-color:var(--mint); }
+footer { background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
 </style>
 </head>
 <body>
 <header>
   <div class="nav">
-    <div style="font-weight:800;">台中簡媽媽狗園</div>
+    <div style="font-weight:800">台中簡媽媽狗園</div>
     <nav>
-      <a href="index.html">首頁</a>
       <a href="adoptlist.html">待認養</a>
       <a href="about.html">關於簡媽媽</a>
       <a href="login.html">管理員登入</a>
@@ -61,19 +63,28 @@ footer { background:var(--green); color:#fff; text-align:center; padding:1rem; m
   </div>
 </header>
 
-<div class="hero">
-  <h1>給牠一個溫暖的家</h1>
-</div>
+<section class="hero">
+  <div>
+    <h1>給牠一個溫暖的家</h1>
+    <p>用領養，改變一條生命的軌跡。</p>
+  </div>
+</section>
 
-<main class="section">
-  <h2>貓咪</h2><a href="cats.html" class="more">查看全部</a>
-  <div id="cats" class="cards"></div>
+<main class="container">
+  <section id="cats">
+    <h2 class="section">貓咪 
+      <a class="see-more" href="cats.html">查看全部</a>
+    </h2>
+    <div id="catGrid" class="grid"></div>
+  </section>
 
-  <h2 style="margin-top:2rem;">狗狗</h2><a href="dogs.html" class="more">查看全部</a>
-  <div id="dogs" class="cards"></div>
+  <section id="dogs">
+    <h2 class="section">狗狗 
+      <a class="see-more" href="dogs.html">查看全部</a>
+    </h2>
+    <div id="dogGrid" class="grid"></div>
+  </section>
 </main>
-
-<footer>© 2025 台中簡媽媽狗園</footer>
 
 <!-- 詳細視窗 Modal -->
 <div id="detailModal" class="modal" aria-hidden="true">
@@ -88,15 +99,20 @@ footer { background:var(--green); color:#fff; text-align:center; padding:1rem; m
         <div id="mThumbs" class="thumbs"></div>
       </div>
       <div>
-        <p><b>品種：</b><span id="mBreed"></span></p>
-        <p><b>年齡：</b><span id="mAge"></span></p>
-        <p><b>性別：</b><span id="mGender"></span></p>
-        <p><b>介紹：</b><span id="mIntro"></span></p>
+        <div class="meta">
+          <p><span class="pill" id="mSpecies"></span></p>
+          <p>毛色：<span id="mColor"></span></p>
+          <p>年齡：<span id="mAge"></span></p>
+          <p>性別：<span id="mGender"></span></p>
+          <p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p>
+        </div>
         <button class="see-more" id="adoptBtn">我要領養</button>
       </div>
     </div>
   </div>
 </div>
+
+<footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
@@ -112,36 +128,39 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
+const db = getFirestore(app);
+const q=(s,el=document)=>el.querySelector(s);
 
-function q(s,el=document){ return el.querySelector(s); }
-
-function makeCard(pet){
-  const el = document.createElement('div');
-  el.className = 'card';
-  const cover = pet?.images?.[0]?.url || 'https://placehold.co/600x400?text=No+Image';
+function card(pet){
+  const el=document.createElement('div');
+  el.className='card';
+  const cover = pet.images?.[0]?.url || 'https://placehold.co/600x400?text=No+Image';
   el.innerHTML = `
-    <div class="imgbox"><img src="${cover}" alt="${pet.name || ''}"></div>
-    <h3>${pet.name || ''}</h3>
-    <p>${pet.breed || ''}</p>
-    <p>${pet.age || ''}・${pet.gender || ''}</p>
-  `;
-  el.addEventListener('click', ()=> openModal(pet));
+    <img src="${cover}" alt="${pet.name||''}">
+    <div class="info">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <strong>${pet.name||''}</strong>
+        <span class="pill">${pet.species==='cat'?'貓咪':'狗狗'}</span>
+      </div>
+      <div style="font-size:.92rem;margin-top:.25rem">
+        <div>毛色：${pet.color||'—'}</div>
+        <div>年齡：${pet.age||'—'}　性別：${pet.gender||'—'}</div>
+      </div>
+    </div>`;
+  el.addEventListener('click',()=>openModal(pet));
   return el;
 }
 
-// 開啟彈窗
 function openModal(p){
   q('#mTitle').textContent = p.name || '動物資料';
-  q('#mBreed').textContent = p.breed || '—';
+  q('#mSpecies').textContent = p.species==='cat'?'貓咪':'狗狗';
+  q('#mColor').textContent = p.color || '—';
   q('#mAge').textContent = p.age || '—';
   q('#mGender').textContent = p.gender || '—';
   q('#mIntro').textContent = p.intro || '';
   const imgs = (p.images?.length)? p.images.map(x=>x.url) : ['https://placehold.co/800x500?text=No+Image'];
   let current = 0;
-  const main = q('#mMain');
-  const thumbs = q('#mThumbs');
-  thumbs.innerHTML='';
+  const main = q('#mMain'); const thumbs = q('#mThumbs'); thumbs.innerHTML='';
   main.src = imgs[0];
   imgs.forEach((src,i)=>{
     const im = new Image(); im.src=src; im.alt='thumb';
@@ -169,19 +188,18 @@ function closeModal(){
 q('#closeBtn').addEventListener('click', closeModal);
 q('#detailModal').addEventListener('click', (e)=>{ if(e.target.id==='detailModal') closeModal(); });
 
-function renderSection(list, species, containerId){
-  const box  = document.getElementById(containerId);
-  const items = list.filter(p=>p.species===species).slice(0,4);
-  box.innerHTML = '';
-  items.forEach(p=> box.appendChild(makeCard(p)));
+function render4(species, list){
+  const grid = q(species==='cat'?'#catGrid':'#dogGrid');
+  grid.innerHTML='';
+  list.filter(p=>p.species===species).slice(0,4).forEach(p=>grid.appendChild(card(p)));
 }
 
 (async ()=>{
   const ref = collection(db, 'pets');
-  const snap = await getDocs(query(ref, orderBy('createdAt','desc')));
-  const list = snap.docs.map(d=>({ id:d.id, ...d.data() }));
-  renderSection(list,'cat','cats');
-  renderSection(list,'dog','dogs');
+  const qs = await getDocs(query(ref, orderBy('createdAt','desc')));
+  const list = qs.docs.map(d=>({ id:d.id, ...d.data() }));
+  render4('cat', list);
+  render4('dog', list);
 })();
 </script>
 </body>
