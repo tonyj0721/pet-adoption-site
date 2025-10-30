@@ -5,244 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>後台管理｜台中簡媽媽狗園</title>
 <style>
-  :root {
-    --green: #497f54;
-    --mint: #9ed2a3;
-    --bg: #f8f9f7;
-    --danger: #b00020;
-  }
-  body {
-    margin: 0;
-    font-family: "Noto Sans TC", system-ui;
-    background: var(--bg);
-    color: #333;
-  }
-  header {
-    background: var(--mint);
-    color: #fff;
-  }
-  .nav {
-    max-width: 1100px;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-  }
-  .nav a {
-    color: #fff;
-    text-decoration: none;
-    margin-left: 1rem;
-    font-weight: 600;
-  }
-
-  /* --- 登錄表單 --- */
-  .wrap {
-    max-width: 1100px;
-    margin: 1.2rem auto;
-    padding: 0 1rem;
-    display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 1rem;
-  }
-  @media (max-width: 900px) {
-    .wrap {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-    padding: 1.5rem 1.2rem;
-  }
-
-  .grid2 {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-
-  label {
-    display: block;
-    margin-bottom: 0.25rem;
-    font-size: 0.95rem;
-    color: #333;
-  }
-
-  input,
-  select,
-  textarea {
-    width: 100%;
-    padding: 0.55rem 0.65rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    box-sizing: border-box;
-  }
-
-  textarea {
-    min-height: 100px;
-    resize: vertical;
-  }
-
-  .thumbs {
-    display: flex;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-    margin-top: 0.5rem;
-  }
-
-  .thumb {
-    width: 70px;
-    height: 70px;
-    border-radius: 8px;
-    overflow: hidden;
-    position: relative;
-    background: #f0f1f3;
-  }
-
-  .thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .thumb b {
-    position: absolute;
-    top: 2px;
-    right: 6px;
-    background: rgba(0, 0, 0, 0.6);
-    color: #fff;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    cursor: pointer;
-  }
-
-  .save {
-    background: var(--green);
-    color: #fff;
-    border: 0;
-    border-radius: 8px;
-    padding: 0.7rem 1rem;
-    cursor: pointer;
-    margin-top: 0.8rem;
-    width: 100%;
-    font-size: 1rem;
-  }
-
-  .save[disabled] {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  .toast {
-    display: none;
-    margin-top: 0.8rem;
-    background: #eef6ef;
-    color: #2d5b39;
-    padding: 0.6rem 0.8rem;
-    border-radius: 8px;
-  }
-
-  /* 表格區 */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  th,
-  td {
-    border-bottom: 1px solid #eee;
-    padding: 0.6rem;
-    text-align: left;
-    vertical-align: top;
-  }
-
-  .danger {
-    background: var(--danger);
-    color: #fff;
-    border: 0;
-    border-radius: 8px;
-    padding: 0.35rem 0.6rem;
-    cursor: pointer;
-  }
-
-  footer {
-    background: var(--green);
-    color: #fff;
-    text-align: center;
-    padding: 1rem;
-    margin-top: 2rem;
-  }
-
-  /* Modal */
-  .modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 99;
-    padding: 1rem;
-  }
-
-  .modal.open {
-    display: flex;
-  }
-
-  .panel {
-    background: #fff;
-    border-radius: 12px;
-    padding: 1rem 1.2rem;
-    width: 100%;
-    max-width: 420px;
-  }
-
-  .rowbtn {
-    display: flex;
-    gap: 0.6rem;
-    justify-content: flex-end;
-  }
-
-  .btn {
-    padding: 0.45rem 0.8rem;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background: #fff;
-    cursor: pointer;
-  }
-
-  .btn.danger {
-    background: var(--danger);
-    color: #fff;
-    border: 0;
-  }
-
-  .spinner {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    vertical-align: middle;
-    margin-left: 0.4rem;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
+  :root { --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; --danger:#b00020; }
+  body { margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
+  header { background:var(--mint); color:#fff }
+  .nav { max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
+  .nav a { color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
+  .wrap { max-width:1100px; margin:1.2rem auto; padding:0 1rem; display:grid; grid-template-columns:380px 1fr; gap:1rem }
+  @media (max-width:900px){ .wrap{ grid-template-columns:1fr } }
+  .card { background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.08); padding:1.5rem 1.2rem }
+  .grid2 { display:flex; flex-direction:column; gap:0.8rem }
+  label { display:block; margin-bottom:0.25rem; font-size:0.95rem; color:#333 }
+  input,select,textarea { width:100%; padding:0.55rem 0.65rem; border:1px solid #ccc; border-radius:8px; font-size:0.95rem; box-sizing:border-box }
+  textarea { min-height:100px; resize:vertical }
+  .thumbs { display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:0.5rem }
+  .thumb { width:70px; height:70px; border-radius:8px; overflow:hidden; position:relative; background:#f0f1f3 }
+  .thumb img { width:100%; height:100%; object-fit:cover }
+  .thumb b { position:absolute; top:2px; right:6px; background:rgba(0,0,0,.6); color:#fff; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer }
+  .save { background:var(--green); color:#fff; border:0; border-radius:8px; padding:0.7rem 1rem; cursor:pointer; margin-top:0.8rem; width:100%; font-size:1rem }
+  .save[disabled]{ opacity:.6; cursor:not-allowed }
+  .toast{ display:none; margin-top:0.8rem; background:#eef6ef; color:#2d5b39; padding:0.6rem 0.8rem; border-radius:8px }
+  footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
 </style>
 </head>
 <body>
@@ -259,7 +41,7 @@
     <div class="grid2">
       <div><label>名字</label><input id="name" /></div>
       <div><label>類別</label><select id="group"><option value="cat">貓</option><option value="dog">狗</option></select></div>
-      <div><label>次類別</label><select id="subGroup"><option value="pure">品種貓</option><option value="mix">米克斯</option></select></div>
+      <div><label>次類別</label><select id="subGroup"><option value="pure">品種</option><option value="mix">米克斯</option></select></div>
       <div><label>品種／毛色</label><select id="breed"></select></div>
       <div><label>年齡</label><input id="age" placeholder="幾歲或幾個月" /></div>
       <div><label>性別</label><select id="gender"><option>男生</option><option>女生</option></select></div>
