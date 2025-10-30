@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>所有狗狗｜台中簡媽媽狗園</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>待認養狗狗｜台中簡媽媽狗園</title>
 <style>
-  :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
-  body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
-  header{ background:var(--mint); color:#fff }
-  .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
-  .nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
-  .container{ max-width:1100px; margin:1.2rem auto; padding:0 1rem }
-  .filters{ display:grid; grid-template-columns:repeat(3,1fr); gap:.8rem; background:#fff; padding:1rem; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06) }
-  select{ width:100%; padding:.6rem; border:1px solid #ccc; border-radius:8px }
-  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; margin-top:1rem }
-  .card{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; cursor:pointer }
-  .imgbox{ width:100%; height:160px; background:#f0f1f3; display:flex; align-items:center; justify-content:center }
-  .card img{ width:100%; height:100%; object-fit:contain }
-  .info{ padding:.8rem }
-  .pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem; margin-right:.4rem }
-  .pager{ display:flex; justify-content:center; align-items:center; gap:.6rem; margin:1rem 0 }
-  .pager button{ padding:.4rem .7rem; border-radius:8px; border:1px solid #ccc; background:#fff; cursor:pointer }
-  .empty{ text-align:center; color:#666; padding:1rem }
+:root{--green:#497f54;--mint:#9ed2a3;--bg:#f8f9f7;}
+body{margin:0;font-family:'Noto Sans TC',system-ui;background:var(--bg);color:#333;}
+header{background:var(--mint);color:#fff;}
+.nav{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;padding:1rem;}
+.nav a{color:#fff;text-decoration:none;margin-left:1rem;font-weight:600;}
+.section{max-width:1100px;margin:2rem auto;padding:0 1rem;}
+h2{color:var(--green);margin-bottom:1rem;}
+.filters{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;}
+select{padding:.5rem;border:1px solid #ccc;border-radius:6px;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;}
+.card{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;text-align:center;}
+.card img{width:100%;height:180px;object-fit:contain;background:#fafafa;}
+.card h3{margin:.5rem 0 .2rem;}
+.card p{margin:.1rem 0;font-size:.95rem;}
+footer{background:var(--green);color:#fff;text-align:center;padding:1rem;margin-top:2rem;}
 </style>
 </head>
 <body>
@@ -30,128 +28,60 @@
     <div style="font-weight:800">台中簡媽媽狗園</div>
     <nav>
       <a href="index.html">首頁</a>
-      <a href="adoptlist.html">待認養</a>
-      <a href="about.html">關於簡媽媽</a>
+      <a href="cats.html">貓咪</a>
     </nav>
   </div>
 </header>
 
-<main class="container">
-  <h2 style="color:#497f54;margin:.2rem 0 1rem">所有狗狗</h2>
+<main class="section">
+  <h2>待認養的狗狗</h2>
   <div class="filters">
-    <select id="fBreed"><option value="">不限品種</option></select>
-    <select id="fAge">
-      <option value="">不限年齡</option>
-      <option>1歲以下</option>
-      <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-      <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-      <option>10歲以上</option>
+    <select id="breedFilter">
+      <option>不限</option>
+      <option>博美</option><option>貴賓</option><option>吉娃娃</option><option>馬爾濟斯</option><option>柯基</option><option>柴犬</option><option>哈士奇</option><option>高山犬</option><option>黃金獵犬</option>
+      <option>黑狗</option><option>黃狗</option><option>白狗</option><option>玳瑁</option><option>米克斯</option>
     </select>
-    <select id="fGender">
-      <option value="">不限性別</option>
-      <option>男生</option><option>女生</option>
+    <select id="ageFilter">
+      <option>不限</option><option>1歲以下</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>10歲以上</option>
     </select>
+    <select id="genderFilter"><option>不限</option><option>男生</option><option>女生</option></select>
   </div>
-
-  <div id="grid" class="grid"></div>
-  <div id="empty" class="empty" style="display:none">目前沒有符合條件的狗狗</div>
-  <div class="pager">
-    <button id="prev">上一頁</button>
-    <span id="pageInfo"></span>
-    <button id="next">下一頁</button>
-  </div>
+  <div id="dogs" class="cards"></div>
 </main>
 
+<footer>© 2025 台中簡媽媽狗園</footer>
+
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getFirestore, collection, getDocs, query, orderBy, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",authDomain:"pet-adoption-32294.firebaseapp.com",projectId:"pet-adoption-32294",storageBucket:"pet-adoption-32294.firebasestorage.app",messagingSenderId:"102978803311",appId:"1:102978803311:web:a7d890096b2b23cad15f9a"};
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
-    authDomain: "pet-adoption-32294.firebaseapp.com",
-    projectId: "pet-adoption-32294",
-    storageBucket: "pet-adoption-32294.firebasestorage.app",
-    messagingSenderId: "102978803311",
-    appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
-  };
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+async function loadDogs(){
+  const q=query(collection(db,"pets"),where("type","==","dog"));
+  const snap=await getDocs(q);
+  let dogs=snap.docs.map(d=>({id:d.id,...d.data()}));
 
-  const breeds = [
-    "博美","貴賓","吉娃娃","馬爾濟斯","柯基","柴犬","哈士奇","高山犬","黃金獵犬",
-    "米克斯/黑狗","米克斯/黃狗","米克斯/白狗","米克斯/玳瑁"
-  ];
-  const fBreed=document.getElementById('fBreed'); breeds.forEach(b=>{ const o=document.createElement('option'); o.textContent=b; fBreed.appendChild(o); });
+  const breed=document.getElementById("breedFilter").value;
+  const age=document.getElementById("ageFilter").value;
+  const gender=document.getElementById("genderFilter").value;
 
-  const q=(s,el=document)=>el.querySelector(s);
-  const grid = q('#grid'), empty=q('#empty');
-  let all=[], filtered=[], page=1, per=12;
+  if(breed!=="不限")dogs=dogs.filter(c=>c.breed===breed);
+  if(age!=="不限")dogs=dogs.filter(c=>c.age===age);
+  if(gender!=="不限")dogs=dogs.filter(c=>c.gender===gender);
 
-  function card(p){
-    const el=document.createElement('div');
-    el.className='card';
-    const cover=p.images?.[0]?.url || 'https://placehold.co/600x400?text=No+Image';
-    el.innerHTML=`
-      <div class="imgbox"><img src="${cover}" alt="${p.name||''}"></div>
-      <div class="info">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <strong>${p.name||''}</strong><span class="pill">狗狗</span>
-        </div>
-        <div style="font-size:.92rem;margin-top:.25rem">
-          <div>品種：${p.breed||'—'}</div>
-          <div>年齡：${p.age||'—'}　性別：${p.gender||'—'}</div>
-        </div>
-      </div>`;
-    el.addEventListener('click',()=>{
-      const url=new URL('adopt.html',location.href);
-      url.searchParams.set('pet', p.id||'');
-      location.href=url.toString();
-    });
-    return el;
-  }
-
-  function applyFilters(){
-    const breed=fBreed.value.trim();
-    const age=q('#fAge').value.trim();
-    const gender=q('#fGender').value.trim();
-    filtered = all.filter(p=>{
-      if(breed && p.breed!==breed) return false;
-      if(age){
-        if(age==='1歲以下' && !/^(\d+月|\d+個?月)$/i.test(p.age||'')) return false;
-        else if(age==='10歲以上' && !/1\d+|[1-9]\d+/.test((p.age||'').replace(/[^0-9]/g,''))) return false;
-        else if(/^\d+$/.test(age)){
-          const n=(p.age||'').replace(/[^0-9]/g,'');
-          if(n!==age) return false;
-        }
-      }
-      if(gender && p.gender!==gender) return false;
-      return true;
-    });
-    page=1; render();
-  }
-
-  function render(){
-    grid.innerHTML='';
-    const total=filtered.length;
-    const pages=Math.max(1, Math.ceil(total/per));
-    page=Math.min(page,pages);
-    const slice=filtered.slice((page-1)*per, page*per);
-    slice.forEach(p=>grid.appendChild(card(p)));
-    q('#pageInfo').textContent=`第 ${page} / ${pages} 頁（共 ${total} 筆）`;
-    empty.style.display = total? 'none':'block';
-  }
-
-  q('#prev').onclick=()=>{ if(page>1){ page--; render(); } };
-  q('#next').onclick=()=>{ const pages=Math.max(1,Math.ceil(filtered.length/per)); if(page<pages){ page++; render(); } };
-  fBreed.onchange=q('#fAge').onchange=q('#fGender').onchange=applyFilters;
-
-  (async ()=>{
-    const ref = collection(db,'pets');
-    const qs = await getDocs(query(ref, where('species','==','dog'), orderBy('createdAt','desc')));
-    all = qs.docs.map(d=>({ id:d.id, ...d.data() }));
-    filtered = all.slice(); // 未篩選時顯示全部
-    render();
-  })();
+  const list=document.getElementById("dogs");
+  list.innerHTML="";
+  dogs.forEach(c=>{
+    const el=document.createElement("div");
+    el.className="card";
+    el.innerHTML=`<img src="${c.images?.[0]||'images/default.jpg'}"><h3>${c.name}</h3><p>${c.breed||''}</p><p>${c.age||''}・${c.gender||''}</p>`;
+    list.appendChild(el);
+  });
+}
+document.querySelectorAll("select").forEach(s=>s.addEventListener("change",loadDogs));
+loadDogs();
 </script>
 </body>
 </html>
