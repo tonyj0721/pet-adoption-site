@@ -3,156 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>我要領養｜貓狗送養平台</title>
+<title>我要領養｜台中簡媽媽狗園</title>
 <style>
-  :root {
-    --green: #497f54;
-    --mint: #9ed2a3;
-    --bg: #f8f9f7;
-  }
-  body {
-    margin: 0;
-    font-family: 'Noto Sans TC', system-ui;
-    background: var(--bg);
-    color: #333;
-  }
-  header {
-    background: var(--mint);
-    color: #fff;
-  }
-  .nav {
-    max-width: 1100px;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-  }
-  .nav a {
-    color: #fff;
-    text-decoration: none;
-    margin-left: 1rem;
-    font-weight: 600;
-  }
-  main {
-    max-width: 900px;
-    margin: 1.5rem auto;
-    padding: 0 1rem;
-  }
-  h1 {
-    color: var(--green);
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  form {
-    display: grid;
-    gap: 1rem;
-  }
-  label {
-    display: block;
-    margin-bottom: .3rem;
-    font-weight: 500;
-  }
-  input, textarea, select {
-    width: 100%;
-    padding: .6rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-  }
-  textarea {
-    resize: vertical;
-    min-height: 80px;
-  }
-  .sectionTitle {
-    color: var(--green);
-    font-weight: 700;
-    font-size: 1.1rem;
-    margin-top: 1.2rem;
-    margin-bottom: .4rem;
-  }
-  .subCard {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.06);
-    padding: 1rem;
-    margin-bottom: 1rem;
-  }
-  button {
-    background: var(--green);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: .8rem 1.2rem;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  button[disabled] {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-  .back-btn {
-    background: #fff;
-    border: 1px solid #ccc;
-    color: #333;
-    border-radius: 8px;
-    padding: .5rem .9rem;
-    cursor: pointer;
-    margin-bottom: 1rem;
-  }
-
-  /* 感謝訊息 Modal */
-  .s-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.5);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    z-index: 999;
-  }
-  .s-modal.open {
-    display: flex;
-  }
-  .s-panel {
-    background: #fff;
-    border-radius: 12px;
-    padding: 1.2rem 1.5rem;
-    max-width: 520px;
-    width: 100%;
-    text-align: center;
-  }
-  .s-panel h3 {
-    color: var(--green);
-    margin-top: 0;
-  }
-  footer {
-    background: var(--green);
-    color: #fff;
-    text-align: center;
-    padding: 1rem;
-    margin-top: 2rem;
-  }
-
-  /* Loading Spinner */
-  .spinner {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    border: 2px solid rgba(255,255,255,0.4);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    vertical-align: middle;
-    margin-left: 0.4rem;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+  body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
+  header{ background:var(--mint); color:#fff; }
+  .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem; }
+  .nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
+  main{ max-width:900px; margin:1.5rem auto; padding:0 1rem; }
+  h1{ color:var(--green); text-align:center; margin-bottom:1rem; }
+  form{ display:grid; gap:1rem; }
+  .subCard{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); padding:1rem; }
+  .sectionTitle{ color:var(--green); font-weight:700; font-size:1.1rem; margin:.2rem 0 1rem }
+  .row{ display:grid; grid-template-columns:1fr 1fr; gap:.8rem }
+  @media (max-width: 800px){ .row{ grid-template-columns:1fr } }
+  label{ display:block; margin:.2rem 0 .15rem; }
+  input, textarea{ width:100%; padding:.6rem; border:1px solid #ccc; border-radius:8px }
+  textarea{ resize:vertical; min-height:80px }
+  .back-btn{ background:#fff; border:1px solid #ccc; color:#333; border-radius:8px; padding:.5rem .9rem; cursor:pointer; margin-bottom:1rem; }
+  button[type=submit]{ background:var(--green); color:#fff; border:0; border-radius:8px; padding:.8rem 1.2rem; cursor:pointer; font-size:1rem }
+  button[disabled]{ opacity:.6; cursor:not-allowed }
+  /* 成功 Modal */
+  .s-modal{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; padding:1rem; z-index:999 }
+  .s-modal.open{ display:flex }
+  .s-panel{ background:#fff; border-radius:12px; padding:1.2rem 1.5rem; max-width:520px; width:100%; text-align:center }
+  .s-panel h3{ color:var(--green); margin-top:0 }
+  /* 預覽 */
+  .previews{ display:flex; gap:.5rem; flex-wrap:wrap }
+  .thumb{ width:84px; height:84px; border-radius:8px; overflow:hidden; background:#f0f1f3; position:relative }
+  .thumb img, .thumb video{ width:100%; height:100%; object-fit:cover }
+  .thumb b{ position:absolute; top:2px; right:6px; background:rgba(0,0,0,.6); color:#fff; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer }
+  /* spinner */
+  .spinner{ display:inline-block; width:1em; height:1em; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite; vertical-align:middle; margin-left:.4rem }
+  @keyframes spin { to{ transform:rotate(360deg) } }
 </style>
 </head>
 <body>
 <header>
   <div class="nav">
-    <div style="font-weight:800">貓狗送養平台</div>
+    <div style="font-weight:800">台中簡媽媽狗園</div>
     <nav>
       <a href="index.html">首頁</a>
       <a href="about.html">關於簡媽媽</a>
@@ -167,28 +56,33 @@
   <form id="adoptForm">
     <div class="subCard">
       <div class="sectionTitle">基本資料</div>
-      <label>姓名：</label><input name="name" required>
-      <label>年齡：</label><input name="age">
-      <label>居住地(縣市/區域)：</label><input name="location">
-      <label>居住環境(租屋或自宅/透天或公寓)：</label><input name="houseType">
-      <label>職業：</label><input name="job">
-      <label>月收入(大約即可)：</label><input name="income">
-      <label>家庭成員：</label><input name="family">
-      <label>家庭成員總人數：</label><input name="members">
-      <label>現居住狀況(與家人同住或獨居)：</label><input name="living">
-      <label>同居成員(例如：伴侶、配偶、父母等)：</label><input name="cohabit">
+      <div class="row">
+        <div><label>姓名</label><input name="name" required></div>
+        <div><label>年齡</label><input name="age"></div>
+        <div><label>居住地（縣市／區域）</label><input name="location"></div>
+        <div><label>居住環境（租屋或自宅／透天或公寓）</label><input name="houseType"></div>
+        <div><label>職業</label><input name="job"></div>
+        <div><label>月收入（大約即可）</label><input name="income"></div>
+        <div><label>家庭成員</label><input name="family"></div>
+        <div><label>家庭成員總人數</label><input name="members"></div>
+        <div><label>現居住狀況（與家人同住或獨居）</label><input name="living"></div>
+        <div><label>同居成員（例如：伴侶、配偶、父母等）</label><input name="cohabit"></div>
+      </div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">飼養寵物經驗</div>
-      <label>是否曾經飼養過寵物？</label><input name="hadPets">
-      <label>若有，飼養過什麼寵物？</label><textarea name="petHistory"></textarea>
+      <div class="row">
+        <div><label>是否曾經飼養過寵物？</label><input name="hadPets"></div>
+        <div><label>飼養過什麼寵物？</label><input name="petHistory"></div>
+      </div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">現有寵物狀況</div>
       <label>目前家中是否有寵物？</label><input name="hasNow">
-      <label>若有，請提供寵物種類、是否已結紮、性別等資訊：</label><textarea name="hasNowInfo"></textarea>
+      <label>若有，請提供寵物種類、是否已結紮、性別等資訊：</label>
+      <textarea name="hasNowInfo"></textarea>
     </div>
 
     <div class="subCard">
@@ -199,20 +93,20 @@
 
     <div class="subCard">
       <div class="sectionTitle">飼養方式</div>
-      <label>您會如何照顧這隻毛孩？(例如：飲食安排、居住空間、教育方式等)</label>
+      <label>您會如何照顧這隻毛孩？（例如：飲食安排、居住空間、教育方式等）</label>
       <textarea name="careMethod"></textarea>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">飼養花費認知</div>
-      <label>您認為飼養寵物需要哪些支出？(請舉例說明)</label>
+      <label>您認為飼養寵物需要哪些支出？（請舉例說明）</label>
       <textarea name="costAwareness"></textarea>
     </div>
 
     <div class="subCard">
-      <div class="sectionTitle">環境參考</div>
-      <label>請拍攝或錄製毛孩未來的生活區域，供我們審核參考～謝謝！</label>
-      <textarea name="env"></textarea>
+      <div class="sectionTitle">環境參考（可上傳最多 10 個檔案：照片或影片）</div>
+      <input id="envFiles" type="file" accept="image/*,video/*" multiple>
+      <div id="envPreview" class="previews" style="margin-top:.6rem"></div>
     </div>
 
     <button type="submit" id="submitBtn">送出申請</button>
@@ -231,56 +125,80 @@
   </div>
 </div>
 
-<footer>© 2025 貓狗送養平台｜讓愛延續每一個生命</footer>
+<footer>© 2025 台中簡媽媽狗園</footer>
 
 <script>
+  // 環境參考預覽（最多 10）
+  const envInput = document.getElementById('envFiles');
+  const envBox = document.getElementById('envPreview');
+  let envSelected = [];
+  envInput.addEventListener('change', (e)=>{
+    const add = [...e.target.files];
+    envSelected = envSelected.concat(add).slice(0,10);
+    envInput.value = '';
+    renderEnv();
+  });
+  function renderEnv(){
+    envBox.innerHTML='';
+    envSelected.forEach((f,i)=>{
+      const div=document.createElement('div'); div.className='thumb';
+      if(f.type.startsWith('image/')){
+        const img=document.createElement('img'); img.src=URL.createObjectURL(f); div.appendChild(img);
+      }else{
+        const v=document.createElement('video'); v.src=URL.createObjectURL(f); v.muted=true; div.appendChild(v);
+      }
+      const del=document.createElement('b'); del.textContent='×';
+      del.onclick=()=>{ envSelected.splice(i,1); renderEnv(); };
+      div.appendChild(del);
+      envBox.appendChild(div);
+    });
+  }
+
   const form = document.getElementById('adoptForm');
   const submitBtn = document.getElementById('submitBtn');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    // 顯示載入中 spinner
     submitBtn.disabled = true;
-    const originalText = submitBtn.textContent;
+    const orig = submitBtn.textContent;
     submitBtn.innerHTML = '送出申請中... <span class="spinner"></span>';
 
     const data = Object.fromEntries(new FormData(form).entries());
     const petId = new URLSearchParams(location.search).get('pet') || 'unknown';
+    const envNames = envSelected.map(f=>f.name).join(', ');
     const message = `
-🐾【新的認養申請】🐾
-
+【新的認養申請】
 動物編號：${petId}
 
-👤 姓名：${data.name}
-🎂 年齡：${data.age}
-🏠 居住地：${data.location}
-🏡 居住環境：${data.houseType}
-💼 職業：${data.job}
-💰 月收入：約 ${data.income}
-👪 家庭成員：${data.family}（共 ${data.members} 人）
-🏘 現居住狀況：${data.living}
-👥 同居成員：${data.cohabit}
+姓名：${data.name}
+年齡：${data.age}
+居住地：${data.location}
+居住環境：${data.houseType}
+職業：${data.job}
+月收入：約 ${data.income}
+家庭成員：${data.family}（共 ${data.members} 人）
+現居住狀況：${data.living}
+同居成員：${data.cohabit}
 
-🐾 飼養寵物經驗：
+飼養寵物經驗：
 ${data.hadPets}
 ${data.petHistory}
 
-🐾 現有寵物狀況：
+現有寵物狀況：
 ${data.hasNow}
 ${data.hasNowInfo}
 
-💚 認養動機：
+認養動機：
 ${data.reason}
 
-🍀 飼養方式：
+飼養方式：
 ${data.careMethod}
 
-💸 飼養花費認知：
+飼養花費認知：
 ${data.costAwareness}
 
-📸 環境參考：
-${data.env}
+環境參考（檔名）：
+${envNames || '（未附檔）'}
     `;
 
     try {
@@ -295,38 +213,17 @@ ${data.env}
           messages: [{ type: "text", text: message }]
         })
       });
-
-      if (res.ok) {
-        showSuccessModal();
-        form.reset();
-      } else {
-        alert("傳送失敗，請稍後再試。");
-      }
-    } catch (err) {
-      alert("發生錯誤，請稍後再試。");
-    } finally {
-      // 還原按鈕
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalText;
-    }
+      if (res.ok) { showSuccessModal(); form.reset(); envSelected=[]; renderEnv(); }
+      else { alert("傳送失敗，請稍後再試。"); }
+    } catch(e){ alert("發生錯誤，請稍後再試。"); }
+    finally { submitBtn.disabled=false; submitBtn.textContent=orig; }
   });
 
-  // 成功訊息 Modal
-  function showSuccessModal() {
-    const m = document.getElementById("successModal");
-    const cd = document.getElementById("cd");
-    let n = 3;
-    cd.textContent = n;
-    m.classList.add("open");
-    m.setAttribute("aria-hidden", "false");
-    const t = setInterval(() => {
-      n--;
-      cd.textContent = n;
-      if (n <= 0) {
-        clearInterval(t);
-        location.href = "index.html";
-      }
-    }, 1000);
+  function showSuccessModal(){
+    const m=document.getElementById("successModal");
+    const cd=document.getElementById("cd");
+    let n=3; cd.textContent=n; m.classList.add("open"); m.setAttribute("aria-hidden","false");
+    const t=setInterval(()=>{ n--; cd.textContent=n; if(n<=0){ clearInterval(t); location.href="index.html"; } },1000);
   }
 </script>
 </body>
