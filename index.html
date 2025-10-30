@@ -25,15 +25,27 @@ header { background:var(--mint); color:#fff; }
 .section a.more { text-decoration:none; color:var(--green); font-size:1.25rem; margin-left:1rem; }
 
 .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; }
-.card { background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; text-align:center; cursor:pointer; }
+.card { background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; text-align:center; cursor:pointer; transition:transform .2s; }
+.card:hover { transform:none; } /* 不浮動 */
 .card .imgbox{ width:100%; height:180px; background:#f2f3f5; display:flex; align-items:center; justify-content:center; }
-.card img { width:100%; height:100%; object-fit:contain; } /* 顯示完整圖、不裁切 */
+.card img { width:100%; height:100%; object-fit:contain; }
 .card h3 { margin:.5rem 0 .2rem; color:#333; font-size:1.05rem; }
 .card p  { margin:.1rem 0; font-size:.94rem; }
 
-.empty { color:#777; padding:.6rem 0; }
-
 footer { background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
+
+/* Modal */
+.modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:1rem; z-index:50; }
+.modal.open{ display:flex; }
+.panel{ background:#fff; border-radius:12px; max-width:900px; width:100%; max-height:90vh; overflow:auto; }
+.head{ display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; border-bottom:1px solid #eee; }
+.close{ background:transparent; border:0; font-size:1.5rem; cursor:pointer; }
+.body{ display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem; }
+.main-img{ width:100%; height:360px; object-fit:cover; border-radius:8px; }
+.thumbs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem; }
+.thumbs img{ width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent; }
+.thumbs img.active{ border-color:var(--mint); }
+.see-more{ background:var(--green); color:#fff; border:none; padding:.6rem 1rem; border-radius:6px; cursor:pointer; margin-top:.8rem; }
 </style>
 </head>
 <body>
@@ -56,14 +68,35 @@ footer { background:var(--green); color:#fff; text-align:center; padding:1rem; m
 <main class="section">
   <h2>貓咪</h2><a href="cats.html" class="more">查看全部</a>
   <div id="cats" class="cards"></div>
-  <div id="catsEmpty" class="empty" style="display:none">目前尚無貓咪資料</div>
 
   <h2 style="margin-top:2rem;">狗狗</h2><a href="dogs.html" class="more">查看全部</a>
   <div id="dogs" class="cards"></div>
-  <div id="dogsEmpty" class="empty" style="display:none">目前尚無狗狗資料</div>
 </main>
 
 <footer>© 2025 台中簡媽媽狗園</footer>
+
+<!-- 詳細視窗 Modal -->
+<div id="detailModal" class="modal" aria-hidden="true">
+  <div class="panel">
+    <div class="head">
+      <strong id="mTitle">動物資料</strong>
+      <button class="close" aria-label="關閉" id="closeBtn">✕</button>
+    </div>
+    <div class="body">
+      <div>
+        <img id="mMain" class="main-img" src="" alt="">
+        <div id="mThumbs" class="thumbs"></div>
+      </div>
+      <div>
+        <p><b>品種：</b><span id="mBreed"></span></p>
+        <p><b>年齡：</b><span id="mAge"></span></p>
+        <p><b>性別：</b><span id="mGender"></span></p>
+        <p><b>介紹：</b><span id="mIntro"></span></p>
+        <button class="see-more" id="adoptBtn">我要領養</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
@@ -81,6 +114,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
 
+function q(s,el=document){ return el.querySelector(s); }
+
 function makeCard(pet){
   const el = document.createElement('div');
   el.className = 'card';
@@ -91,40 +126,62 @@ function makeCard(pet){
     <p>${pet.breed || ''}</p>
     <p>${pet.age || ''}・${pet.gender || ''}</p>
   `;
-  el.addEventListener('click', ()=>{
-    const url = new URL('adopt.html', location.href);
-    url.searchParams.set('pet', pet.id || '');
-    location.href = url.toString();
-  });
+  el.addEventListener('click', ()=> openModal(pet));
   return el;
 }
 
-function renderSection(list, species, containerId, emptyId){
+// 開啟彈窗
+function openModal(p){
+  q('#mTitle').textContent = p.name || '動物資料';
+  q('#mBreed').textContent = p.breed || '—';
+  q('#mAge').textContent = p.age || '—';
+  q('#mGender').textContent = p.gender || '—';
+  q('#mIntro').textContent = p.intro || '';
+  const imgs = (p.images?.length)? p.images.map(x=>x.url) : ['https://placehold.co/800x500?text=No+Image'];
+  let current = 0;
+  const main = q('#mMain');
+  const thumbs = q('#mThumbs');
+  thumbs.innerHTML='';
+  main.src = imgs[0];
+  imgs.forEach((src,i)=>{
+    const im = new Image(); im.src=src; im.alt='thumb';
+    im.addEventListener('click',()=>{ current=i; update(); });
+    thumbs.appendChild(im);
+  });
+  function update(){
+    main.src = imgs[current];
+    [...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active', idx===current));
+  }
+  update();
+  main.addEventListener('click',()=>{ current=(current+1)%imgs.length; update(); });
+  q('#adoptBtn').onclick=()=>{
+    const url = new URL('adopt.html', location.href);
+    url.searchParams.set('pet', p.id || '');
+    location.href = url.toString();
+  };
+  q('#detailModal').classList.add('open');
+  q('#detailModal').setAttribute('aria-hidden','false');
+}
+function closeModal(){
+  q('#detailModal').classList.remove('open');
+  q('#detailModal').setAttribute('aria-hidden','true');
+}
+q('#closeBtn').addEventListener('click', closeModal);
+q('#detailModal').addEventListener('click', (e)=>{ if(e.target.id==='detailModal') closeModal(); });
+
+function renderSection(list, species, containerId){
   const box  = document.getElementById(containerId);
-  const empty= document.getElementById(emptyId);
   const items = list.filter(p=>p.species===species).slice(0,4);
   box.innerHTML = '';
-  if(!items.length){ empty.style.display='block'; return; }
-  empty.style.display='none';
   items.forEach(p=> box.appendChild(makeCard(p)));
 }
 
 (async ()=>{
-  try{
-    // 一次抓回依建立時間排序的所有資料（你提供的寫法）
-    const ref = collection(db, 'pets');
-    const snap = await getDocs(query(ref, orderBy('createdAt','desc')));
-    const list = snap.docs.map(d=>({ id:d.id, ...d.data() }));
-
-    renderSection(list, 'cat', 'cats', 'catsEmpty');
-    renderSection(list, 'dog', 'dogs', 'dogsEmpty');
-  }catch(err){
-    console.error('資料載入失敗：', err);
-    document.getElementById('catsEmpty').textContent = '資料載入失敗，請稍後再試';
-    document.getElementById('catsEmpty').style.display = 'block';
-    document.getElementById('dogsEmpty').textContent = '資料載入失敗，請稍後再試';
-    document.getElementById('dogsEmpty').style.display = 'block';
-  }
+  const ref = collection(db, 'pets');
+  const snap = await getDocs(query(ref, orderBy('createdAt','desc')));
+  const list = snap.docs.map(d=>({ id:d.id, ...d.data() }));
+  renderSection(list,'cat','cats');
+  renderSection(list,'dog','dogs');
 })();
 </script>
 </body>
