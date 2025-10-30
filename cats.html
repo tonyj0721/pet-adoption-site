@@ -3,95 +3,176 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>待認養貓咪｜台中簡媽媽狗園</title>
+<title>台中簡媽媽狗園｜貓咪專區</title>
 <style>
-:root{--green:#497f54;--mint:#9ed2a3;--bg:#f8f9f7;}
-body{margin:0;font-family:'Noto Sans TC',system-ui;background:var(--bg);color:#333;}
-header{background:var(--mint);color:#fff;}
-.nav{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;padding:1rem;}
-.nav a{color:#fff;text-decoration:none;margin-left:1rem;font-weight:600;}
-.section{max-width:1100px;margin:2rem auto;padding:0 1rem;}
-h2{color:var(--green);margin-bottom:1rem;}
-.filters{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;}
-select{padding:.5rem;border:1px solid #ccc;border-radius:6px;}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;}
-.card{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;text-align:center;}
-.card img{width:100%;height:180px;object-fit:contain;background:#fafafa;}
-.card h3{margin:.5rem 0 .2rem;}
-.card p{margin:.1rem 0;font-size:.95rem;}
-footer{background:var(--green);color:#fff;text-align:center;padding:1rem;margin-top:2rem;}
-.empty{color:#777;padding:.6rem 0;}
+:root { --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+*{ box-sizing:border-box }
+body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
+header{ background:var(--mint); color:#fff; }
+.nav{ max-width:1100px; margin:auto; display:flex; justify-content:space-between; align-items:center; padding:1rem; }
+.nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600; }
+
+main{ max-width:1100px; margin:2rem auto; padding:0 1rem; }
+
+.filters{ display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; }
+select{ padding:.4rem; border-radius:6px; border:1px solid #ccc; }
+
+.cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; }
+.card{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; text-align:center; cursor:pointer; }
+.card .imgbox{ width:100%; height:180px; background:#f2f3f5; display:flex; align-items:center; justify-content:center; }
+.card img{ width:100%; height:100%; object-fit:contain; }
+.card h3{ margin:.5rem 0 .2rem; }
+.card p{ margin:.1rem 0; font-size:.9rem; }
+
+footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
+
+/* Modal */
+.modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:1rem; z-index:50; }
+.modal.open{ display:flex; }
+.panel{ background:#fff; border-radius:12px; max-width:900px; width:100%; max-height:90vh; overflow:auto; }
+.head{ display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; border-bottom:1px solid #eee; }
+.close{ background:transparent; border:0; font-size:1.5rem; cursor:pointer; }
+.body{ display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem; }
+.main-img{ width:100%; height:360px; object-fit:cover; border-radius:8px; }
+.thumbs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem; }
+.thumbs img{ width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent; }
+.thumbs img.active{ border-color:var(--mint); }
+.see-more{ background:var(--green); color:#fff; border:none; padding:.6rem 1rem; border-radius:6px; cursor:pointer; margin-top:.8rem; }
 </style>
 </head>
 <body>
 <header>
   <div class="nav">
-    <div style="font-weight:800">台中簡媽媽狗園</div>
+    <div style="font-weight:800;">台中簡媽媽狗園</div>
     <nav>
       <a href="index.html">首頁</a>
-      <a href="dogs.html">狗狗</a>
+      <a href="adoptlist.html">待認養</a>
+      <a href="about.html">關於簡媽媽</a>
+      <a href="login.html">管理員登入</a>
     </nav>
   </div>
 </header>
 
-<main class="section">
-  <h2>待認養的貓咪</h2>
+<main>
+  <h2 style="color:var(--green)">我想看貓咪 👀</h2>
   <div class="filters">
     <select id="breedFilter">
-      <option>不限</option>
-      <option>美短</option><option>英短</option><option>藍貓</option><option>暹羅貓</option>
-      <option>波斯貓</option><option>布偶貓</option>
-      <option>橘貓</option><option>黑貓</option><option>虎斑貓</option><option>白底虎斑貓</option>
-      <option>三花貓</option><option>玳瑁貓</option><option>白貓</option><option>米克斯</option>
+      <option value="">不限品種</option>
+      <option>美短</option><option>英短</option><option>藍貓</option>
+      <option>暹羅貓</option><option>波斯貓</option><option>布偶貓</option>
+      <option>米克斯</option>
+    </select>
+    <select id="colorFilter">
+      <option value="">不限毛色</option>
+      <option>橘貓</option><option>黑貓</option><option>虎斑貓</option>
+      <option>白底虎斑貓</option><option>三花貓</option>
+      <option>玳瑁貓</option><option>白貓</option>
     </select>
     <select id="ageFilter">
-      <option>不限</option><option>1歲以下</option><option>1</option><option>2</option>
-      <option>3</option><option>4</option><option>5</option><option>6</option>
-      <option>7</option><option>8</option><option>9</option><option>10</option><option>10歲以上</option>
+      <option value="">不限年齡</option>
+      <option>1歲以下</option><option>1</option><option>2</option><option>3</option>
+      <option>4</option><option>5</option><option>6</option><option>7</option>
+      <option>8</option><option>9</option><option>10</option><option>10歲以上</option>
     </select>
-    <select id="genderFilter"><option>不限</option><option>男生</option><option>女生</option></select>
+    <select id="genderFilter">
+      <option value="">不限性別</option>
+      <option>男生</option><option>女生</option>
+    </select>
   </div>
-  <div id="cats" class="cards"></div>
-  <div id="empty" class="empty" style="display:none">目前尚無貓咪資料</div>
+
+  <div id="catGrid" class="cards"></div>
 </main>
 
 <footer>© 2025 台中簡媽媽狗園</footer>
 
+<!-- 詳細視窗 Modal -->
+<div id="detailModal" class="modal" aria-hidden="true">
+  <div class="panel">
+    <div class="head">
+      <strong id="mTitle">動物資料</strong>
+      <button class="close" aria-label="關閉" id="closeBtn">✕</button>
+    </div>
+    <div class="body">
+      <div>
+        <img id="mMain" class="main-img" src="" alt="">
+        <div id="mThumbs" class="thumbs"></div>
+      </div>
+      <div>
+        <p><b>品種：</b><span id="mBreed"></span></p>
+        <p><b>年齡：</b><span id="mAge"></span></p>
+        <p><b>性別：</b><span id="mGender"></span></p>
+        <p><b>介紹：</b><span id="mIntro"></span></p>
+        <button class="see-more" id="adoptBtn">我要領養</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",authDomain:"pet-adoption-32294.firebaseapp.com",projectId:"pet-adoption-32294",storageBucket:"pet-adoption-32294.firebasestorage.app",messagingSenderId:"102978803311",appId:"1:102978803311:web:a7d890096b2b23cad15f9a"};
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-async function loadCats(){
-  const q=query(collection(db,"pets"),where("species","==","cat"));
-  const snap=await getDocs(q);
-  let cats=snap.docs.map(d=>({id:d.id,...d.data()}));
+const firebaseConfig = {
+  apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
+  authDomain: "pet-adoption-32294.firebaseapp.com",
+  projectId: "pet-adoption-32294",
+  storageBucket: "pet-adoption-32294.firebasestorage.app",
+  messagingSenderId: "102978803311",
+  appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
+};
 
-  const breed=document.getElementById("breedFilter").value;
-  const age=document.getElementById("ageFilter").value;
-  const gender=document.getElementById("genderFilter").value;
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const q = (s,el=document)=>el.querySelector(s);
 
-  if(breed!=="不限")cats=cats.filter(c=>c.breed===breed);
-  if(age!=="不限")cats=cats.filter(c=>c.age===age);
-  if(gender!=="不限")cats=cats.filter(c=>c.gender===gender);
-
-  const list=document.getElementById("cats");
-  const empty=document.getElementById("empty");
-  list.innerHTML="";
-  if(!cats.length){empty.style.display="block";return;}
-  empty.style.display="none";
-  cats.forEach(c=>{
-    const el=document.createElement("div");
-    el.className="card";
-    const cover=c.images?.[0]?.url || 'https://placehold.co/600x400?text=No+Image';
-    el.innerHTML=`<img src="${cover}"><h3>${c.name}</h3><p>${c.breed||''}</p><p>${c.age||''}・${c.gender||''}</p>`;
-    list.appendChild(el);
-  });
+function makeCard(pet){
+  const el=document.createElement('div');
+  el.className='card';
+  const cover = pet?.images?.[0]?.url || 'https://placehold.co/600x400?text=No+Image';
+  el.innerHTML = `
+    <div class="imgbox"><img src="${cover}" alt="${pet.name||''}"></div>
+    <h3>${pet.name||''}</h3>
+    <p>${pet.breed||''}</p>
+    <p>${pet.age||''}・${pet.gender||''}</p>
+  `;
+  el.addEventListener('click',()=>openModal(pet));
+  return el;
 }
-document.querySelectorAll("select").forEach(s=>s.addEventListener("change",loadCats));
-loadCats();
+
+function openModal(p){
+  q('#mTitle').textContent=p.name||'動物資料';
+  q('#mBreed').textContent=p.breed||'—';
+  q('#mAge').textContent=p.age||'—';
+  q('#mGender').textContent=p.gender||'—';
+  q('#mIntro').textContent=p.intro||'';
+  const imgs=(p.images?.length)?p.images.map(x=>x.url):['https://placehold.co/800x500?text=No+Image'];
+  let current=0; const main=q('#mMain'),thumbs=q('#mThumbs'); thumbs.innerHTML='';
+  main.src=imgs[0];
+  imgs.forEach((src,i)=>{const im=new Image();im.src=src;im.addEventListener('click',()=>{current=i;update();});thumbs.appendChild(im);});
+  function update(){main.src=imgs[current];[...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active',idx===current));}
+  update();
+  main.addEventListener('click',()=>{current=(current+1)%imgs.length;update();});
+  q('#adoptBtn').onclick=()=>{const url=new URL('adopt.html',location.href);url.searchParams.set('pet',p.id||'');location.href=url.toString();};
+  q('#detailModal').classList.add('open');q('#detailModal').setAttribute('aria-hidden','false');
+}
+function closeModal(){q('#detailModal').classList.remove('open');q('#detailModal').setAttribute('aria-hidden','true');}
+q('#closeBtn').addEventListener('click',closeModal);
+q('#detailModal').addEventListener('click',e=>{if(e.target.id==='detailModal')closeModal();});
+
+let allCats=[];
+(async()=>{
+  const snap=await getDocs(query(collection(db,'pets'),orderBy('createdAt','desc')));
+  allCats=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.species==='cat');
+  render();
+})();
+function render(){
+  const breed=q('#breedFilter').value, color=q('#colorFilter').value, age=q('#ageFilter').value, gender=q('#genderFilter').value;
+  const grid=q('#catGrid'); grid.innerHTML='';
+  allCats.filter(p=>
+    (!breed||p.breed===breed)&&(!color||p.color===color)&&(!age||p.age?.includes(age))&&(!gender||p.gender===gender)
+  ).forEach(p=>grid.appendChild(makeCard(p)));
+}
+['breedFilter','colorFilter','ageFilter','genderFilter'].forEach(id=>q('#'+id).addEventListener('change',render));
 </script>
 </body>
 </html>
