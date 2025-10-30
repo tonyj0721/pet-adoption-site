@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>管理員登入｜台中簡媽媽狗園</title>
 <style>
   :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
@@ -44,17 +44,22 @@
 <footer>© 2025 台中簡媽媽狗園</footer>
 
 <script>
-  const acc=document.getElementById('account');
-  const pw=document.getElementById('password');
-  const btn=document.getElementById('loginBtn');
-  btn.addEventListener('click',()=>{
-    if(acc.value==='admin' && pw.value==='1234'){
-      sessionStorage.setItem('loggedIn','1');
-      location.href='admin.html';
-    }else{
+  const acc = document.getElementById('account');
+  const pw = document.getElementById('password');
+  const btn = document.getElementById('loginBtn');
+
+  function login() {
+    if (acc.value === 'chienma' && pw.value === '1234') {
+      sessionStorage.setItem('loggedIn', '1');
+      location.href = 'admin.html';
+    } else {
       alert('帳號或密碼錯誤');
     }
-  });
+  }
+
+  btn.addEventListener('click', login);
+  acc.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+  pw.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
 </script>
 </body>
 </html>
