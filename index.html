@@ -1,48 +1,47 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>貓狗送養平台</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>台中簡媽媽狗園｜首頁</title>
 <style>
-  :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
-  *{ box-sizing:border-box }
-  body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
-  header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
-  .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem; }
-  .nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
-  .nav a:hover{ text-decoration:underline }
-  .hero{ background:url('images/hero-bg.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:6rem 1rem; position:relative }
-  .hero::after{ content:""; position:absolute; inset:0; background:rgba(0,0,0,.25) }
-  .hero > div{ position:relative; z-index:1 }
-  .hero h1{ font-size:2.4rem; margin:0 0 .5rem }
-  .container{ max-width:1100px; margin:2rem auto; padding:0 1rem }
-  h2.section{ color:var(--green); display:flex; align-items:center; justify-content:space-between; margin:1.5rem 0 .8rem }
-  .see-more{ border:0; background:var(--green); color:#fff; padding:.5rem .8rem; border-radius:8px; cursor:pointer }
-  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem }
-  .card{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; }
-  .card img{ width:100%; height:160px; object-fit:cover; display:block }
-  .card .info{ padding:.8rem }
-  .pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem; margin-right:.4rem }
-  /* Modal */
-  .modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:1rem; z-index:50 }
-  .modal.open{ display:flex }
-  .panel{ background:#fff; border-radius:12px; max-width:900px; width:100%; max-height:90vh; overflow:auto }
-  .head{ display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; border-bottom:1px solid #eee }
-  .close{ background:transparent; border:0; font-size:1.5rem; cursor:pointer }
-  .body{ display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem }
-  .main-img{ width:100%; height:360px; object-fit:cover; border-radius:8px }
-  .thumbs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem }
-  .thumbs img{ width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent }
-  .thumbs img.active{ border-color:var(--mint) }
-  footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
+:root { --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+*{ box-sizing:border-box }
+body { margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
+header { background:var(--mint); color:#fff; }
+.nav { max-width:1100px; margin:auto; display:flex; justify-content:space-between; align-items:center; padding:1rem; }
+.nav a { color:#fff; text-decoration:none; margin-left:1rem; font-weight:600; }
+
+.hero {
+  position:relative; width:100%; height:320px;
+  background:url('images/hero-bg.jpg') center/cover no-repeat;
+  display:flex; justify-content:center; align-items:center;
+  color:#fff; text-shadow:0 0 8px rgba(0,0,0,.5);
+}
+.hero h1 { background:rgba(0,0,0,.35); padding:1rem 2rem; border-radius:12px; font-size:2rem; }
+
+.section { max-width:1100px; margin:2rem auto; padding:0 1rem; }
+.section h2 { color:var(--green); margin:.2rem 0 .8rem; display:inline-block; font-size:1.25rem; }
+.section a.more { text-decoration:none; color:var(--green); font-size:1.25rem; margin-left:1rem; }
+
+.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; }
+.card { background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; text-align:center; cursor:pointer; }
+.card .imgbox{ width:100%; height:180px; background:#f2f3f5; display:flex; align-items:center; justify-content:center; }
+.card img { width:100%; height:100%; object-fit:contain; } /* 顯示完整圖、不裁切 */
+.card h3 { margin:.5rem 0 .2rem; color:#333; font-size:1.05rem; }
+.card p  { margin:.1rem 0; font-size:.94rem; }
+
+.empty { color:#777; padding:.6rem 0; }
+
+footer { background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
 </style>
 </head>
 <body>
 <header>
   <div class="nav">
-    <div style="font-weight:800">貓狗送養平台</div>
+    <div style="font-weight:800;">台中簡媽媽狗園</div>
     <nav>
+      <a href="index.html">首頁</a>
       <a href="adoptlist.html">待認養</a>
       <a href="about.html">關於簡媽媽</a>
       <a href="login.html">管理員登入</a>
@@ -50,153 +49,83 @@
   </div>
 </header>
 
-<section class="hero">
-  <div>
-    <h1>給牠一個溫暖的家</h1>
-    <p>用領養，改變一條生命的軌跡。</p>
-  </div>
-</section>
-
-<main class="container">
-  <section id="cats">
-    <h2 class="section">貓咪 
-      <a class="see-more" href="cats.html">查看全部</a>
-    </h2>
-    <div id="catGrid" class="grid"></div>
-  </section>
-
-  <section id="dogs">
-    <h2 class="section">狗狗 
-      <a class="see-more" href="dogs.html">查看全部</a>
-    </h2>
-    <div id="dogGrid" class="grid"></div>
-  </section>
-</main>
-
-<!-- 詳細視窗 Modal -->
-<div id="detailModal" class="modal" aria-hidden="true">
-  <div class="panel">
-    <div class="head">
-      <strong id="mTitle">動物資料</strong>
-      <button class="close" aria-label="關閉" id="closeBtn">✕</button>
-    </div>
-    <div class="body">
-      <div>
-        <img id="mMain" class="main-img" src="" alt="">
-        <div id="mThumbs" class="thumbs"></div>
-      </div>
-      <div>
-        <div class="meta">
-          <p><span class="pill" id="mSpecies"></span></p>
-          <p>毛色：<span id="mColor"></span></p>
-          <p>年齡：<span id="mAge"></span></p>
-          <p>性別：<span id="mGender"></span></p>
-          <p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p>
-        </div>
-        <button class="see-more" id="adoptBtn">我要領養</button>
-      </div>
-    </div>
-  </div>
+<div class="hero">
+  <h1>給牠一個溫暖的家</h1>
 </div>
 
-<footer>© 2025 貓狗送養平台｜讓愛延續每一個生命</footer>
+<main class="section">
+  <h2>貓咪</h2><a href="cats.html" class="more">查看全部</a>
+  <div id="cats" class="cards"></div>
+  <div id="catsEmpty" class="empty" style="display:none">目前尚無貓咪資料</div>
+
+  <h2 style="margin-top:2rem;">狗狗</h2><a href="dogs.html" class="more">查看全部</a>
+  <div id="dogs" class="cards"></div>
+  <div id="dogsEmpty" class="empty" style="display:none">目前尚無狗狗資料</div>
+</main>
+
+<footer>© 2025 台中簡媽媽狗園</footer>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
-    authDomain: "pet-adoption-32294.firebaseapp.com",
-    projectId: "pet-adoption-32294",
-    storageBucket: "pet-adoption-32294.firebasestorage.app",
-    messagingSenderId: "102978803311",
-    appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
+  authDomain: "pet-adoption-32294.firebaseapp.com",
+  projectId: "pet-adoption-32294",
+  storageBucket: "pet-adoption-32294.firebasestorage.app",
+  messagingSenderId: "102978803311",
+  appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
 
-  const q=(s,el=document)=>el.querySelector(s);
+function makeCard(pet){
+  const el = document.createElement('div');
+  el.className = 'card';
+  const cover = pet?.images?.[0]?.url || 'https://placehold.co/600x400?text=No+Image';
+  el.innerHTML = `
+    <div class="imgbox"><img src="${cover}" alt="${pet.name || ''}"></div>
+    <h3>${pet.name || ''}</h3>
+    <p>${pet.breed || ''}</p>
+    <p>${pet.age || ''}・${pet.gender || ''}</p>
+  `;
+  el.addEventListener('click', ()=>{
+    const url = new URL('adopt.html', location.href);
+    url.searchParams.set('pet', pet.id || '');
+    location.href = url.toString();
+  });
+  return el;
+}
 
-  function card(pet){
-    const el=document.createElement('div');
-    el.className='card';
-    const cover = pet.images?.[0]?.url || 'https://placehold.co/600x400?text=No+Image';
-    el.innerHTML = `
-      <img src="${cover}" alt="${pet.name||''}">
-      <div class="info">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <strong>${pet.name||''}</strong>
-          <span class="pill">${pet.species==='cat'?'貓咪':'狗狗'}</span>
-        </div>
-        <div style="font-size:.92rem;margin-top:.25rem">
-          <div>毛色：${pet.color||'—'}</div>
-          <div>年齡：${pet.age||'—'}　性別：${pet.gender||'—'}</div>
-        </div>
-      </div>`;
-    el.addEventListener('click',()=>openModal(pet));
-    return el;
-  }
+function renderSection(list, species, containerId, emptyId){
+  const box  = document.getElementById(containerId);
+  const empty= document.getElementById(emptyId);
+  const items = list.filter(p=>p.species===species).slice(0,4);
+  box.innerHTML = '';
+  if(!items.length){ empty.style.display='block'; return; }
+  empty.style.display='none';
+  items.forEach(p=> box.appendChild(makeCard(p)));
+}
 
-  function openModal(p){
-    q('#mTitle').textContent = p.name || '動物資料';
-    q('#mSpecies').textContent = p.species==='cat'?'貓咪':'狗狗';
-    q('#mColor').textContent = p.color || '—';
-    q('#mAge').textContent = p.age || '—';
-    q('#mGender').textContent = p.gender || '—';
-    q('#mIntro').textContent = p.intro || '';
-    const imgs = (p.images?.length)? p.images.map(x=>x.url) : ['https://placehold.co/800x500?text=No+Image'];
-    let current = 0;
-    const main = q('#mMain'); const thumbs = q('#mThumbs'); thumbs.innerHTML='';
-    main.src = imgs[0];
-    imgs.forEach((src,i)=>{
-      const im = new Image(); im.src=src; im.alt='thumb';
-      im.addEventListener('click',()=>{ current=i; update(); });
-      thumbs.appendChild(im);
-    });
-    function update(){
-      main.src = imgs[current];
-      [...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active', idx===current));
-    }
-    update();
-    main.addEventListener('click',()=>{ current=(current+1)%imgs.length; update(); });
-    document.onkeydown = (e)=>{
-      if(q('#detailModal').classList.contains('open')){
-        if(e.key==='ArrowRight'){ current=(current+1)%imgs.length; update(); }
-        if(e.key==='ArrowLeft'){ current=(current-1+imgs.length)%imgs.length; update(); }
-        if(e.key==='Escape'){ closeModal(); }
-      }
-    };
-    q('#adoptBtn').onclick=()=>{
-      const url = new URL('adopt.html', location.href);
-      url.searchParams.set('pet', p.id || '');
-      location.href = url.toString();
-    };
-    q('#detailModal').classList.add('open');
-    q('#detailModal').setAttribute('aria-hidden','false');
-  }
-  function closeModal(){
-    q('#detailModal').classList.remove('open');
-    q('#detailModal').setAttribute('aria-hidden','true');
-    document.onkeydown=null;
-  }
-  q('#closeBtn').addEventListener('click', closeModal);
-  q('#detailModal').addEventListener('click', (e)=>{ if(e.target.id==='detailModal') closeModal(); });
-
-  function render4(species, list){
-    const grid = q(species==='cat'?'#catGrid':'#dogGrid');
-    grid.innerHTML='';
-    list.filter(p=>p.species===species).slice(0,4).forEach(p=>grid.appendChild(card(p)));
-  }
-
-  (async ()=>{
+(async ()=>{
+  try{
+    // 一次抓回依建立時間排序的所有資料（你提供的寫法）
     const ref = collection(db, 'pets');
-    const qs = await getDocs(query(ref, orderBy('createdAt','desc')));
-    const list = qs.docs.map(d=>({ id:d.id, ...d.data() }));
-    render4('cat', list);
-    render4('dog', list);
-  })();
+    const snap = await getDocs(query(ref, orderBy('createdAt','desc')));
+    const list = snap.docs.map(d=>({ id:d.id, ...d.data() }));
+
+    renderSection(list, 'cat', 'cats', 'catsEmpty');
+    renderSection(list, 'dog', 'dogs', 'dogsEmpty');
+  }catch(err){
+    console.error('資料載入失敗：', err);
+    document.getElementById('catsEmpty').textContent = '資料載入失敗，請稍後再試';
+    document.getElementById('catsEmpty').style.display = 'block';
+    document.getElementById('dogsEmpty').textContent = '資料載入失敗，請稍後再試';
+    document.getElementById('dogsEmpty').style.display = 'block';
+  }
+})();
 </script>
 </body>
 </html>
