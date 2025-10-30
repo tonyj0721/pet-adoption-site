@@ -22,13 +22,15 @@ h2.section { color:var(--green); display:flex; align-items:center; justify-conte
 .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
 .card { background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; cursor:pointer; transition:transform .15s ease; }
 
-/* 卡片圖片：完整顯示、灰底 */
+/* ✅ 卡片圖片：灰底、不裁切、自動高度 */
 .card img {
   width:100%;
-  height:160px;
+  height:auto;
+  max-height:220px;
   object-fit:contain;
   background:#f0f0f0;
   display:block;
+  margin:auto;
 }
 
 .card .info { padding:.8rem; }
