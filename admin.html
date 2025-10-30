@@ -1,5 +1,115 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-<!-- 這裡應放完整 admin.html 第1~3段整合內容 -->
-<!-- 使用者可直接部署上傳 -->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>後台管理｜台中簡媽媽狗園</title>
+<style>
+  :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; --danger:#b00020; }
+  body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
+  header{ background:var(--mint); color:#fff }
+  .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
+  .nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
+  .wrap{ max-width:1100px; margin:1.2rem auto; padding:0 1rem; display:grid; grid-template-columns:360px 1fr; gap:1rem }
+  @media (max-width: 900px){ .wrap{ grid-template-columns:1fr } }
+  .card{ background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.08); padding:1rem }
+  .grid2{ display:grid; grid-template-columns:1fr; gap:.6rem }
+  label{ display:block; margin:.2rem 0 .1rem; font-size:.92rem; }
+  input,select,textarea{ width:100%; padding:.55rem; border:1px solid #ccc; border-radius:8px }
+  textarea{ min-height:100px; resize:vertical }
+  .thumbs{ display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.5rem }
+  .thumb{ width:70px; height:70px; border-radius:8px; overflow:hidden; position:relative; background:#f0f1f3 }
+  .thumb img{ width:100%; height:100%; object-fit:cover }
+  .thumb b{ position:absolute; top:2px; right:6px; background:rgba(0,0,0,.6); color:#fff; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer }
+  .save{ background:var(--green); color:#fff; border:0; border-radius:8px; padding:.6rem .9rem; cursor:pointer; margin-top:.6rem; width:100% }
+  .save[disabled]{ opacity:.6; cursor:not-allowed }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin-bottom:.6rem }
+  .search{ max-width:280px; width:100% }
+  table{ width:100%; border-collapse:collapse }
+  th,td{ border-bottom:1px solid #eee; padding:.6rem; text-align:left; vertical-align:top }
+  .danger{ background:var(--danger); color:#fff; border:0; border-radius:8px; padding:.35rem .6rem; cursor:pointer }
+  .toast{ display:none; margin-top:.6rem; background:#eef6ef; color:#2d5b39; padding:.6rem .8rem; border-radius:8px }
+  footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
+  .modal{ position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; align-items:center; justify-content:center; z-index:99; padding:1rem }
+  .modal.open{ display:flex }
+  .panel{ background:#fff; border-radius:12px; padding:1rem 1.2rem; width:100%; max-width:420px }
+  .panel h4{ margin:.2rem 0 1rem; color:#333 }
+  .rowbtn{ display:flex; gap:.6rem; justify-content:flex-end }
+  .btn{ padding:.45rem .8rem; border-radius:8px; border:1px solid #ccc; background:#fff; cursor:pointer }
+  .btn.danger{ background:var(--danger); color:#fff; border:0 }
+  .spinner{ display:inline-block; width:1em; height:1em; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite; vertical-align:middle; margin-left:.4rem }
+  @keyframes spin { to{ transform:rotate(360deg) } }
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div style="font-weight:800">台中簡媽媽狗園</div>
+    <nav><a href="index.html">回到首頁</a></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card">
+    <h3 style="margin:.2rem 0;color:#497f54">新增動物（登錄）</h3>
+    <div class="grid2">
+      <div><label>名字</label><input id="name"></div>
+      <div><label>類別</label><select id="group"><option value="cat">貓</option><option value="dog">狗</option></select></div>
+      <div><label>次類別</label><select id="subGroup"><option value="pure">品種貓</option><option value="mix">米克斯</option></select></div>
+      <div><label>品種／毛色</label><select id="breed"></select></div>
+      <div><label>年齡</label><input id="age" placeholder="幾歲或幾個月"></div>
+      <div><label>性別</label><select id="gender"><option>男生</option><option>女生</option></select></div>
+      <div><label>介紹</label><textarea id="intro" placeholder="性格、習慣、備註等"></textarea></div>
+      <div><label>上傳圖片（最多 6 張，會自動壓縮）</label><input id="photos" type="file" accept="image/*" multiple><div id="previews" class="thumbs"></div></div>
+      <button class="save" id="saveBtn">登錄</button><div id="toast" class="toast">✅ 登錄成功！</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="topbar"><h3 style="margin:.2rem 0;color:#497f54">已登錄動物</h3><input id="search" class="search" placeholder="搜尋名字…（即時篩選）"></div>
+    <table><thead><tr><th>名字</th><th>品種</th><th>年齡</th><th>性別</th><th>建立時間</th><th>操作</th></tr></thead><tbody id="list"></tbody></table>
+    <div id="empty" style="display:none;color:#666;padding:.6rem 0">查無此動物</div>
+  </section>
+</main>
+
+<footer>© 2025 台中簡媽媽狗園</footer>
+
+<div id="confirmModal" class="modal"><div class="panel"><h4>確定要刪除這筆動物資料嗎？</h4><div class="rowbtn"><button class="btn" id="cancelDel">取消</button><button class="btn danger" id="okDel">刪除</button></div></div></div>
+<div id="dupModal" class="modal"><div class="panel"><h4>該名字已存在，請確認是否繼續登錄</h4><div class="rowbtn"><button class="btn" id="dupNo">否</button><button class="btn danger" id="dupYes">是</button></div></div></div>
+
+<script>
+  if(sessionStorage.getItem('loggedIn')!=='1'){ location.href='login.html'; }
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, updateDoc, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
+const firebaseConfig={apiKey:"AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",authDomain:"pet-adoption-32294.firebaseapp.com",projectId:"pet-adoption-32294",storageBucket:"pet-adoption-32294.firebasestorage.app",messagingSenderId:"102978803311",appId:"1:102978803311:web:a7d890096b2b23cad15f9a"};
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);const storage=getStorage(app);
+const $=s=>document.querySelector(s);
+let selectedFiles=[],allPets=[],deleteTargetId=null,dupProceed=false;
+const listEl=$('#list'),emptyEl=$('#empty'),saveBtn=$('#saveBtn'),toast=$('#toast'),photos=$('#photos'),previews=$('#previews'),dupModal=$('#dupModal'),dupYes=$('#dupYes'),dupNo=$('#dupNo');
+const breedSets={cat:{pure:["美短","英短","藍貓","暹羅貓","波斯貓","布偶貓"],mix:["橘貓","黑貓","虎斑貓","白底虎斑貓","三花貓","玳瑁貓","白貓"]},dog:{pure:["博美","貴賓","吉娃娃","馬爾濟斯","柯基","柴犬","哈士奇","高山犬","黃金獵犬"],mix:["黑狗","白狗","黃狗","虎斑","花花"]}};
+function updateSubGroup(){const group=$('#group').value,sub=$('#subGroup');sub.innerHTML='';if(group==='cat'){sub.innerHTML='<option value="pure">品種貓</option><option value="mix">米克斯</option>';}else{sub.innerHTML='<option value="pure">品種犬</option><option value="mix">米克斯</option>';}updateBreed();}
+function updateBreed(){const g=$('#group').value,s=$('#subGroup').value,b=$('#breed');b.innerHTML='';breedSets[g][s].forEach(name=>{const o=document.createElement('option');o.textContent=name;b.appendChild(o);});}
+$('#group').addEventListener('change',updateSubGroup);$('#subGroup').addEventListener('change',updateBreed);updateSubGroup();
+photos.addEventListener('change',e=>{selectedFiles=selectedFiles.concat([...e.target.files]).slice(0,6);photos.value='';renderPreviews();});
+function renderPreviews(){previews.innerHTML='';selectedFiles.forEach((f,i)=>{const box=document.createElement('div');box.className='thumb';const img=new Image();img.src=URL.createObjectURL(f);box.appendChild(img);const del=document.createElement('b');del.textContent='×';del.onclick=()=>{selectedFiles.splice(i,1);renderPreviews();};box.appendChild(del);previews.appendChild(box);});}
+async function compressImage(file,maxW=1280,quality=0.85){const bmp=await createImageBitmap(file);const s=Math.min(1,maxW/bmp.width);const w=bmp.width*s,h=bmp.height*s;const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(bmp,0,0,w,h);const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',quality));return new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'});}
+async function uploadImages(files,pid){const out=[];let i=0;for(const f of files.slice(0,6)){const cf=await compressImage(f,1280,0.85);const p=`images/pets/${pid}/${Date.now()}-${i++}.jpg`;const sref=ref(storage,p);await uploadBytes(sref,cf);const url=await getDownloadURL(sref);out.push({url,path:p});}return out;}
+function renderList(items){listEl.innerHTML='';items.forEach(p=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${p.name}</td><td>${p.breed||'-'}</td><td>${p.age||'-'}</td><td>${p.gender||'-'}</td><td>${new Date(p.createdAt||Date.now()).toLocaleString()}</td><td><button class="danger" data-id="${p.id}">刪除</button></td>`;listEl.appendChild(tr);});listEl.querySelectorAll('.danger').forEach(b=>b.onclick=()=>{deleteTargetId=b.dataset.id;openConfirm();});emptyEl.style.display=items.length?'none':'';}
+async function loadList(){const refCol=collection(db,'pets');const qs=await getDocs(query(refCol,orderBy('createdAt','desc')));allPets=qs.docs.map(d=>({id:d.id,...d.data()}));renderList(allPets);}
+$('#search').addEventListener('input',e=>{const t=e.target.value.trim().toLowerCase();const s=allPets.filter(p=>(p.name||'').toLowerCase().includes(t));renderList(s);if(!s.length){emptyEl.textContent='查無此動物';emptyEl.style.display='';}});
+function openConfirm(){$('#confirmModal').classList.add('open');}
+function closeConfirm(){$('#confirmModal').classList.remove('open');}
+$('#cancelDel').onclick=closeConfirm;$('#okDel').onclick=async()=>{const id=deleteTargetId;closeConfirm();const d=allPets.find(p=>p.id===id);if(d?.images){for(const im of d.images){try{await deleteObject(ref(storage,im.path));}catch(e){}}}await deleteDoc(doc(db,'pets',id));await loadList();};
+$('#saveBtn').addEventListener('click',async()=>{const name=$('#name').value.trim();const group=$('#group').value;const sub=$('#subGroup').value;const breed=$('#breed').value;const age=$('#age').value.trim();const gender=$('#gender').value.trim();const intro=$('#intro').value.trim();if(!name){alert('請輸入名字');return;}const refCol=collection(db,'pets');const exist=await getDocs(query(refCol,where('name','==',name)));if(!exist.empty&&!dupProceed){openDup();return;}saveBtn.disabled=true;const orig=saveBtn.textContent;saveBtn.innerHTML='登錄中... <span class="spinner"></span>';try{const docRef=await addDoc(refCol,{name,species:group,breed:sub==='mix'?`米克斯/${breed}`:breed,age,gender,intro,images:[],createdAt:Date.now()});const imgs=await uploadImages(selectedFiles,docRef.id);await updateDoc(docRef,{images:imgs});$('#name').value='';$('#age').value='';$('#intro').value='';selectedFiles=[];previews.innerHTML='';toast.style.display='block';setTimeout(()=>toast.style.display='none',1800);await loadList();}catch(e){alert('登錄失敗，請稍後再試');}finally{saveBtn.disabled=false;saveBtn.textContent=orig;dupProceed=false;}});
+function openDup(){dupModal.classList.add('open');}
+function closeDup(){dupModal.classList.remove('open');}
+dupNo.onclick=()=>{dupProceed=false;closeDup();};
+dupYes.onclick=()=>{dupProceed=true;closeDup();$('#saveBtn').click();};
+loadList();
+</script>
+</body>
 </html>
