@@ -3,37 +3,51 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>後台管理｜貓狗送養平台</title>
+<title>後台管理｜台中簡媽媽狗園</title>
 <style>
-  :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+  :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; --danger:#b00020; }
   body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
   header{ background:var(--mint); color:#fff }
   .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
   .nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
   .wrap{ max-width:1100px; margin:1.2rem auto; padding:0 1rem; display:grid; grid-template-columns:360px 1fr; gap:1rem }
+  @media (max-width: 900px){ .wrap{ grid-template-columns:1fr } }
   .card{ background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.08); padding:1rem }
-  .grid2{ display:grid; grid-template-columns:1fr; gap:.6rem } /* 統一寬度 */
-  label{ display:block; margin:.2rem 0 .1rem; font-size:.92rem; color:#333 }
+  .grid2{ display:grid; grid-template-columns:1fr; gap:.6rem }
+  label{ display:block; margin:.2rem 0 .1rem; font-size:.92rem; }
   input,select,textarea{ width:100%; padding:.55rem; border:1px solid #ccc; border-radius:8px }
   textarea{ min-height:100px; resize:vertical }
-  .hint{ font-size:.85rem; color:#666 }
   .thumbs{ display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.5rem }
-  .thumbs img{ width:60px; height:60px; object-fit:cover; border-radius:6px }
-  table{ width:100%; border-collapse:collapse }
-  th,td{ border-bottom:1px solid #eee; padding:.6rem; text-align:left; vertical-align:top }
-  .danger{ background:#b00020; color:#fff; border:0; border-radius:8px; padding:.4rem .6rem; cursor:pointer }
+  .thumb{ width:70px; height:70px; border-radius:8px; overflow:hidden; position:relative; background:#f0f1f3 }
+  .thumb img{ width:100%; height:100%; object-fit:cover }
+  .thumb b{ position:absolute; top:2px; right:6px; background:rgba(0,0,0,.6); color:#fff; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer }
   .save{ background:var(--green); color:#fff; border:0; border-radius:8px; padding:.6rem .9rem; cursor:pointer; margin-top:.6rem; width:100% }
-  .toast{ display:none; margin-top:.6rem; background:#eef6ef; color:#2d5b39; padding:.6rem .8rem; border-radius:8px }
+  .save[disabled]{ opacity:.6; cursor:not-allowed }
   .topbar{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin-bottom:.6rem }
   .search{ max-width:280px; width:100% }
-  @media (max-width: 900px){ .wrap{ grid-template-columns:1fr } }
+  table{ width:100%; border-collapse:collapse }
+  th,td{ border-bottom:1px solid #eee; padding:.6rem; text-align:left; vertical-align:top }
+  .danger{ background:var(--danger); color:#fff; border:0; border-radius:8px; padding:.35rem .6rem; cursor:pointer }
+  .toast{ display:none; margin-top:.6rem; background:#eef6ef; color:#2d5b39; padding:.6rem .8rem; border-radius:8px }
   footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
+
+  /* 自訂刪除確認 Modal（避免瀏覽器「…顯示」字樣） */
+  .modal{ position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; align-items:center; justify-content:center; z-index:99; padding:1rem }
+  .modal.open{ display:flex }
+  .panel{ background:#fff; border-radius:12px; padding:1rem 1.2rem; width:100%; max-width:420px }
+  .panel h4{ margin:.2rem 0 1rem; color:#333 }
+  .rowbtn{ display:flex; gap:.6rem; justify-content:flex-end }
+  .btn{ padding:.45rem .8rem; border-radius:8px; border:1px solid #ccc; background:#fff; cursor:pointer }
+  .btn.danger{ background:var(--danger); color:#fff; border:0 }
+  /* spinner */
+  .spinner{ display:inline-block; width:1em; height:1em; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite; vertical-align:middle; margin-left:.4rem }
+  @keyframes spin { to{ transform:rotate(360deg) } }
 </style>
 </head>
 <body>
 <header>
   <div class="nav">
-    <div style="font-weight:800">貓狗送養平台</div>
+    <div style="font-weight:800">台中簡媽媽狗園</div>
     <nav><a href="index.html">回到首頁</a></nav>
   </div>
 </header>
@@ -46,23 +60,18 @@
         <label>名字</label><input id="name">
       </div>
       <div>
-        <label>品種</label>
-        <select id="species">
-          <option value="cat">貓咪</option>
-          <option value="dog">狗狗</option>
-        </select>
-      </div>
-      <div id="colorWrap" style="display:none">
-        <label>毛色（僅貓咪）</label>
-        <select id="color">
-          <option value="">請選擇</option>
-          <option>橘貓</option><option>虎斑</option><option>白底虎斑</option>
-          <option>賓士</option><option>乳牛</option><option>三花</option>
-          <option>玳瑁</option><option>黑貓</option><option>品種貓</option>
+        <label>類別</label>
+        <select id="group">
+          <option value="cat">貓</option>
+          <option value="dog">狗</option>
         </select>
       </div>
       <div>
-        <label>年齡</label><input id="age" placeholder="幼年 / 成年 / 高齡 或自訂">
+        <label>品種</label>
+        <select id="breed"></select>
+      </div>
+      <div>
+        <label>年齡</label><input id="age" placeholder="幾歲或幾個月">
       </div>
       <div>
         <label>性別</label>
@@ -81,7 +90,6 @@
       </div>
       <button class="save" id="saveBtn">登錄</button>
       <div id="toast" class="toast">✅ 登錄成功！</div>
-      <p class="hint">資料儲存於 Firebase（Firestore + Storage）。</p>
     </div>
   </section>
 
@@ -91,34 +99,28 @@
       <input id="search" class="search" placeholder="搜尋名字…（即時篩選）">
     </div>
     <table>
-      <thead><tr><th>名字</th><th>品種</th><th>毛色</th><th>年齡</th><th>性別</th><th>建立時間</th><th>操作</th></tr></thead>
+      <thead><tr><th>名字</th><th>品種</th><th>年齡</th><th>性別</th><th>建立時間</th><th>操作</th></tr></thead>
       <tbody id="list"></tbody>
     </table>
-    <div id="empty" class="hint" style="display:none;padding:.6rem 0">查無此動物</div>
+    <div id="empty" style="display:none;color:#666;padding:.6rem 0">查無此動物</div>
   </section>
 </main>
 
-<footer>© 2025 貓狗送養平台</footer>
+<footer>© 2025 台中簡媽媽狗園</footer>
+
+<!-- 自訂刪除確認 -->
+<div id="confirmModal" class="modal" aria-hidden="true">
+  <div class="panel">
+    <h4>確定要刪除這筆動物資料嗎？</h4>
+    <div class="rowbtn">
+      <button class="btn" id="cancelDel">取消</button>
+      <button class="btn danger" id="okDel">刪除</button>
+    </div>
+  </div>
+</div>
 
 <script>
   if(sessionStorage.getItem('loggedIn')!=='1'){ location.href='login.html'; }
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const input = document.getElementById('photos');
-    const box = document.getElementById('previews');
-    input.addEventListener('change', (e)=>{
-      const files=[...e.target.files].slice(0,6);
-      box.innerHTML='';
-      files.forEach(f=>{
-        const r=new FileReader();
-        r.onload=()=>{ const im=new Image(); im.src=r.result; im.alt='preview'; box.appendChild(im); };
-        r.readAsDataURL(f);
-      });
-    });
-    const species=document.getElementById('species');
-    const colorWrap=document.getElementById('colorWrap');
-    species.addEventListener('change', ()=>{ colorWrap.style.display = species.value==='cat' ? '' : 'none'; });
-    colorWrap.style.display = species.value==='cat' ? '' : 'none';
-  });
 </script>
 
 <script type="module">
@@ -134,38 +136,77 @@
     messagingSenderId: "102978803311",
     appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
   };
-
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const storage = getStorage(app);
 
   const $=s=>document.querySelector(s);
   const listEl = $('#list'), emptyEl = $('#empty');
+  const saveBtn = $('#saveBtn'), toast=$('#toast');
+  const photos = $('#photos'), previews = $('#previews');
   let allPets = [];
+  let selectedFiles = []; // 支援第二次選檔不覆蓋
+  let deleteTargetId = null;
 
-  // 壓縮圖片：最大寬 1280px、品質 0.85
+  // 品種選項
+  const breeds = {
+    cat: [
+      "美短","英短","藍貓","暹羅貓","波斯貓","布偶貓",
+      "米克斯/橘貓","米克斯/黑貓","米克斯/虎斑貓","米克斯/白底虎斑貓",
+      "米克斯/三花貓","米克斯/玳瑁貓","米克斯/白貓"
+    ],
+    dog: [
+      "博美","貴賓","吉娃娃","馬爾濟斯","柯基","柴犬","哈士奇","高山犬","黃金獵犬",
+      "米克斯/黑狗","米克斯/黃狗","米克斯/白狗","米克斯/玳瑁"
+    ]
+  };
+  function fillBreeds(){
+    const g=$('#group').value, b=$('#breed');
+    b.innerHTML='';
+    breeds[g].forEach(name=>{
+      const opt=document.createElement('option'); opt.textContent=name; b.appendChild(opt);
+    });
+  }
+  $('#group').addEventListener('change', fillBreeds);
+  fillBreeds();
+
+  // 預覽（可累加、可個別移除）
+  photos.addEventListener('change', (e)=>{
+    selectedFiles = selectedFiles.concat([...e.target.files]).slice(0,6);
+    photos.value='';
+    renderPreviews();
+  });
+  function renderPreviews(){
+    previews.innerHTML='';
+    selectedFiles.forEach((f,i)=>{
+      const box=document.createElement('div'); box.className='thumb';
+      const img=new Image(); img.src=URL.createObjectURL(f); box.appendChild(img);
+      const del=document.createElement('b'); del.textContent='×'; del.onclick=()=>{ selectedFiles.splice(i,1); renderPreviews(); };
+      box.appendChild(del);
+      previews.appendChild(box);
+    });
+  }
+
+  // 圖片壓縮
   async function compressImage(file, maxW=1280, quality=0.85){
     const bitmap = await createImageBitmap(file);
     const scale = Math.min(1, maxW / bitmap.width);
     const w = Math.round(bitmap.width * scale);
     const h = Math.round(bitmap.height * scale);
-    const canvas = document.createElement('canvas');
-    canvas.width = w; canvas.height = h;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(bitmap, 0, 0, w, h);
-    const blob = await new Promise(res=>canvas.toBlob(res, 'image/jpeg', quality));
+    const canvas = document.createElement('canvas'); canvas.width=w; canvas.height=h;
+    const ctx = canvas.getContext('2d'); ctx.drawImage(bitmap,0,0,w,h);
+    const blob = await new Promise(res=>canvas.toBlob(res,'image/jpeg',quality));
     return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type:'image/jpeg' });
   }
 
   async function uploadImages(files, petId){
-    const out = [];
-    let idx = 0;
-    for (const f of files.slice(0,6)){
-      const cf = await compressImage(f, 1280, 0.85);
+    const out=[]; let idx=0;
+    for(const f of files.slice(0,6)){
+      const cf = await compressImage(f,1280,0.85);
       const path = `images/pets/${petId}/${Date.now()}-${idx++}.jpg`;
-      const storageRef = ref(storage, path);
-      await uploadBytes(storageRef, cf);
-      const url = await getDownloadURL(storageRef);
+      const sref = ref(storage, path);
+      await uploadBytes(sref, cf);
+      const url = await getDownloadURL(sref);
       out.push({ url, path });
     }
     return out;
@@ -177,16 +218,20 @@
       const tr=document.createElement('tr');
       tr.innerHTML = `
         <td>${p.name}</td>
-        <td>${p.species==='cat'?'貓咪':'狗狗'}</td>
-        <td>${p.color||'—'}</td>
-        <td>${p.age||'—'}</td>
-        <td>${p.gender||'—'}</td>
+        <td>${p.breed||'-'}</td>
+        <td>${p.age||'-'}</td>
+        <td>${p.gender||'-'}</td>
         <td>${new Date(p.createdAt||Date.now()).toLocaleString()}</td>
         <td><button class="danger" data-id="${p.id}">刪除</button></td>
       `;
       listEl.appendChild(tr);
     });
-    listEl.querySelectorAll('.danger').forEach(btn=>btn.addEventListener('click',()=>removeItem(btn.dataset.id)));
+    listEl.querySelectorAll('.danger').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        deleteTargetId = btn.dataset.id;
+        openConfirm();
+      });
+    });
     emptyEl.style.display = items.length ? 'none' : '';
   }
 
@@ -205,53 +250,52 @@
     if(!shown.length) { emptyEl.textContent='查無此動物'; emptyEl.style.display=''; }
   });
 
-  async function removeItem(id){
-    if(!confirm('確定要刪除？')) return;
-    // 抓取該 doc 的 images.path 後刪 Storage
+  // 自訂刪除確認
+  function openConfirm(){ $('#confirmModal').classList.add('open'); $('#confirmModal').setAttribute('aria-hidden','false'); }
+  function closeConfirm(){ $('#confirmModal').classList.remove('open'); $('#confirmModal').setAttribute('aria-hidden','true'); }
+  $('#cancelDel').onclick=closeConfirm;
+  $('#okDel').onclick=async ()=>{
+    const id = deleteTargetId; closeConfirm();
     const docData = allPets.find(p=>p.id===id);
-    if(docData?.images){
-      for(const im of docData.images){
-        try{ await deleteObject(ref(storage, im.path)); }catch(e){ console.warn('刪除檔案失敗', e); }
-      }
-    }
+    if(docData?.images){ for(const im of docData.images){ try{ await deleteObject(ref(storage, im.path)); }catch(e){} } }
     await deleteDoc(doc(db,'pets',id));
     await loadList();
-    alert('已刪除');
-  }
+    // 不再提示「已刪除」
+  };
 
-  // 登錄
+  // 登錄（含 Loading）
   $('#saveBtn').addEventListener('click', async ()=>{
     const name=$('#name').value.trim();
-    const species=$('#species').value;
-    const color=$('#color')?.value?.trim() || '';
+    const group=$('#group').value;       // cat / dog
+    const breed=$('#breed').value;       // 實際品種（含米克斯子類）
     const age=$('#age').value.trim();
     const gender=$('#gender').value.trim();
     const intro=$('#intro').value.trim();
-    const files=[...$('#photos').files];
-
     if(!name){ alert('請輸入名字'); return; }
 
     // 防重複（同名）
     const refCol = collection(db, 'pets');
     const exist = await getDocs(query(refCol, where('name','==',name)));
-    if(!exist.empty){ alert('該動物名字已存在，請確認是否重複登錄'); return; }
+    if(!exist.empty){ alert('該名字已存在，請確認是否重複登錄'); return; }
 
-    // 先建立空 doc
-    const docRef = await addDoc(refCol, {
-      name, species, color, age, gender, intro,
-      images: [],
-      createdAt: Date.now()
-    });
+    // Loading
+    saveBtn.disabled=true; const orig=saveBtn.textContent; saveBtn.innerHTML='登錄中... <span class="spinner"></span>';
 
-    // 上傳圖片並回寫
-    const images = await uploadImages(files, docRef.id);
-    await updateDoc(docRef, { images });
+    try{
+      const docRef = await addDoc(refCol, {
+        name, species: group, breed, age, gender, intro,
+        images: [], createdAt: Date.now()
+      });
+      const images = await uploadImages(selectedFiles, docRef.id);
+      await updateDoc(docRef, { images });
 
-    // 清空 + 提示 + 立即刷新
-    $('#name').value=''; $('#age').value=''; $('#gender').value='男生'; $('#intro').value=''; $('#photos').value=''; $('#previews').innerHTML='';
-    if($('#species').value==='cat'){ $('#color').value=''; }
-    const toast = $('#toast'); toast.style.display='block'; setTimeout(()=>toast.style.display='none', 2000);
-    await loadList();
+      // 清空
+      $('#name').value=''; $('#age').value=''; $('#gender').value='男生'; $('#intro').value='';
+      selectedFiles=[]; previews.innerHTML='';
+      toast.style.display='block'; setTimeout(()=>toast.style.display='none', 1800);
+      await loadList();
+    }catch(e){ alert('登錄失敗，請稍後再試'); }
+    finally{ saveBtn.disabled=false; saveBtn.textContent=orig; }
   });
 
   loadList();
