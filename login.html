@@ -33,11 +33,15 @@
 <main>
   <div class="card">
     <h2>管理員登入</h2>
-    <label>帳號</label>
-    <input id="account" type="text" placeholder="請輸入帳號">
-    <label>密碼</label>
-    <input id="password" type="password" placeholder="請輸入密碼">
-    <button id="loginBtn">登入</button>
+    <form id="loginForm" autocomplete="off" spellcheck="false">
+      <label>帳號</label>
+      <input id="account" type="text" placeholder="請輸入帳號"
+             autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+      <label>密碼</label>
+      <input id="password" type="password" placeholder="請輸入密碼"
+             autocomplete="new-password" autocapitalize="off" autocorrect="off" spellcheck="false">
+      <button id="loginBtn" type="button">登入</button>
+    </form>
   </div>
 </main>
 
