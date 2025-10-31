@@ -107,8 +107,16 @@ resetLogoutTimer();
 
 // ✅ 手動登出
 document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  document.getElementById('logoutModal').classList.add('open');
+});
+
+document.getElementById('logoutCancel').addEventListener('click', ()=>{
+  document.getElementById('logoutModal').classList.remove('open');
+});
+
+document.getElementById('logoutConfirm').addEventListener('click', ()=>{
   sessionStorage.removeItem('loggedIn');
-  alert('您已登出。');
+  document.getElementById('logoutModal').classList.remove('open');
   location.href='login.html';
 });
 </script>
@@ -158,5 +166,14 @@ dupNo.onclick=()=>{dupProceed=false;closeDup();};
 dupYes.onclick=()=>{dupProceed=true;closeDup();$('#saveBtn').click();};
 loadList();
 </script>
+<div id="logoutModal" class="modal">
+  <div class="panel">
+    <h4>確定要登出後台嗎？</h4>
+    <div class="rowbtn">
+      <button class="btn" id="logoutCancel">取消</button>
+      <button class="btn danger" id="logoutConfirm">登出</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
