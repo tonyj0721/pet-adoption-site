@@ -39,7 +39,7 @@ header {
   color:#fff;
 }
 
-/* 🟢 hero 區塊：把「台中簡媽媽狗園」放進去 */
+/* 🟢 hero 區塊 */
 .hero {
   background:url('images/hero-bg.jpg') center/cover no-repeat;
   color:#fff;
@@ -70,15 +70,13 @@ header {
   margin:0.5rem 0;
   text-shadow:0 2px 5px rgba(0,0,0,0.6);
 }
-
-/* 🟢 子標「給牠一個溫暖的家」樣式（往下移、與副標一致） */
 .hero .sub {
   font-size:1.1rem;
   color:#fff;
   margin-top:2rem;
 }
 
-/* 🟢 勸募字號 */
+/* 勸募字號 */
 .fund-code {
   position: absolute;
   bottom: 8px;
@@ -196,9 +194,34 @@ footer { background:var(--green); color:#fff; text-align:center; padding:1rem; m
   </section>
 </main>
 
+<!-- 詳細視窗 Modal -->
+<div id="detailModal" class="modal" aria-hidden="true">
+  <div class="panel">
+    <div class="head">
+      <strong id="mTitle">動物資料</strong>
+      <button class="close" aria-label="關閉" id="closeBtn">✕</button>
+    </div>
+    <div class="body">
+      <div>
+        <img id="mMain" class="main-img" src="" alt="">
+        <div id="mThumbs" class="thumbs"></div>
+      </div>
+      <div>
+        <div class="meta">
+          <p><span class="pill" id="mSpecies"></span></p>
+          <p>品種：<span id="mBreed"></span></p>
+          <p>年齡：<span id="mAge"></span></p>
+          <p>性別：<span id="mGender"></span></p>
+          <p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p>
+        </div>
+        <button class="see-more" id="adoptBtn">我要領養</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
-<!-- JS -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
@@ -214,7 +237,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const q=(s,el=document)=>el.querySelector(s);
+const q = (s, el=document) => el.querySelector(s);
 
 function card(pet){
   const el=document.createElement('div');
@@ -259,7 +282,31 @@ function openModal(p){
   }
   update();
   main.addEventListener('click',()=>{ current=(current+1)%imgs.length; update(); });
+  q('#detailModal').classList.add('open');
+  q('#detailModal').setAttribute('aria-hidden','false');
 }
+
+function closeModal(){
+  q('#detailModal').classList.remove('open');
+  q('#detailModal').setAttribute('aria-hidden','true');
+}
+
+q('#closeBtn').addEventListener('click', closeModal);
+q('#detailModal').addEventListener('click', e=>{ if(e.target.id==='detailModal') closeModal(); });
+
+function render4(species, list){
+  const grid=q(species==='cat'?'#catGrid':'#dogGrid');
+  grid.innerHTML='';
+  list.filter(p=>p.species===species).slice(0,4).forEach(p=>grid.appendChild(card(p)));
+}
+
+(async()=>{
+  const ref = collection(db, 'pets');
+  const qs = await getDocs(query(ref, orderBy('createdAt','desc')));
+  const list = qs.docs.map(d=>({ id:d.id, ...d.data() }));
+  render4('cat', list);
+  render4('dog', list);
+})();
 </script>
 </body>
 </html>
