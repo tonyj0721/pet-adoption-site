@@ -20,9 +20,19 @@ header { background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08
 h2.section { color:var(--green); display:flex; align-items:center; justify-content:space-between; margin:1.5rem 0 .8rem; font-size:1.5rem; }
 .see-more { border:0; background:var(--green); color:#fff; padding:.5rem .8rem; border-radius:8px; cursor:pointer; font-size:1rem; text-decoration:none; }
 .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
-.card { background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; cursor:pointer; transition:transform .15s ease; display:flex; flex-direction:column; justify-content:space-between; }
 
-/* ✅ 卡片圖片：灰底、不裁切、自動高度 */
+/* ✅ 卡片置中圖片 + 文字固定底部 */
+.card {
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .15s ease;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
 .card img {
   width:100%;
   height:220px;
@@ -31,8 +41,11 @@ h2.section { color:var(--green); display:flex; align-items:center; justify-conte
   display:block;
   margin:auto;
 }
-
-.card .info { padding:.8rem; background:#fff; flex-shrink:0; }
+.card .info {
+  padding:.8rem;
+  background:#fff;
+  flex-shrink:0;
+}
 .pill { display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem; margin-right:.4rem; }
 
 /* Modal */
@@ -43,7 +56,7 @@ h2.section { color:var(--green); display:flex; align-items:center; justify-conte
 .close { background:transparent; border:0; font-size:1.5rem; cursor:pointer; }
 .body { display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem; }
 
-/* Modal 主圖：完整顯示、灰底 */
+/* Modal 主圖 */
 .main-img {
   width:100%;
   height:auto;
@@ -54,7 +67,6 @@ h2.section { color:var(--green); display:flex; align-items:center; justify-conte
   display:block;
   margin:0 auto;
 }
-
 .thumbs { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem; }
 .thumbs img { width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent; }
 .thumbs img.active { border-color:var(--mint); }
@@ -111,7 +123,7 @@ footer { background:var(--green); color:#fff; text-align:center; padding:1rem; m
       <div>
         <div class="meta">
           <p><span class="pill" id="mSpecies"></span></p>
-          <p>毛色：<span id="mColor"></span></p>
+          <p>品種：<span id="mBreed"></span></p>
           <p>年齡：<span id="mAge"></span></p>
           <p>性別：<span id="mGender"></span></p>
           <p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p>
@@ -145,6 +157,7 @@ function card(pet){
   const el=document.createElement('div');
   el.className='card';
   const cover = pet.images?.[0]?.url || 'https://placehold.co/600x400?text=No+Image';
+  const breedText = pet.breed || '—';
   el.innerHTML = `
     <img src="${cover}" alt="${pet.name||''}">
     <div class="info">
@@ -164,7 +177,7 @@ function card(pet){
 function openModal(p){
   q('#mTitle').textContent = p.name || '動物資料';
   q('#mSpecies').textContent = p.species==='cat'?'貓咪':'狗狗';
-  q('#mColor').textContent = p.color || '—';
+  q('#mBreed').textContent = p.breed || '—';
   q('#mAge').textContent = p.age || '—';
   q('#mGender').textContent = p.gender || '—';
   q('#mIntro').textContent = p.intro || '';
