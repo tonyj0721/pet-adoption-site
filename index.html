@@ -14,11 +14,20 @@ header { background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08
 .nav { max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:center; gap:.6rem; padding:.8rem 1rem; }
 .nav a { text-decoration:none; }
 .nav .btn {
-  display:inline-block; background:#fff; color:#2d5b39;
-  padding:.45rem .9rem; border-radius:999px; font-weight:700;
-  border:2px solid rgba(0,0,0,.08); box-shadow:0 1px 3px rgba(0,0,0,.08);
+  display:inline-block;
+  background:var(--green);
+  color:#fff;
+  padding:.45rem .9rem;
+  border-radius:999px;
+  font-weight:700;
+  border:2px solid rgba(0,0,0,.05);
+  box-shadow:0 1px 3px rgba(0,0,0,.08);
+  transition:background .2s, filter .2s;
 }
-.nav .btn:hover { filter:brightness(0.95); }
+.nav .btn:hover {
+  background:#3a6645; /* hover 時稍微變深一點 */
+  filter:brightness(1);
+}
 
 /* Hero */
 .hero{
@@ -52,7 +61,7 @@ h2.section{ color:var(--green); display:flex; align-items:center; justify-conten
 .card:hover{ transform:translateY(-2px); }
 .card img{ width:100%; height:220px; object-fit:contain; background:#f0f0f0; display:block; margin:auto; }
 .card .info{ padding:.8rem; background:#fff; flex-shrink:0; }
-.card .info div > div{ min-height:1.2em; } /* 讓每行高度一致 */
+.card .info div > div{ min-height:1.2em; }
 .pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem; margin-right:.4rem; }
 
 /* Modal */
@@ -82,7 +91,7 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
   .card img{ height:180px; }
   footer{ font-size:.9rem; }
   .main-img{
-    height:260px;           /* 手機稍微低一點，看起來更舒服 */
+    height:260px;
     object-fit:contain;
   }
 }
@@ -220,7 +229,6 @@ function openModal(p){
 
   main.addEventListener('click',()=>{ current=(current+1)%imgs.length; update(); });
 
-  // adopt.html 導向
   $('#adoptBtn').onclick = () => {
     const url = new URL('adopt.html', location.href);
     url.searchParams.set('pet', p.id || '');
@@ -231,26 +239,4 @@ function openModal(p){
   $('#detailModal').setAttribute('aria-hidden','false');
 }
 
-function closeModal(){
-  $('#detailModal').classList.remove('open');
-  $('#detailModal').setAttribute('aria-hidden','true');
-}
-$('#closeBtn').addEventListener('click', closeModal);
-$('#detailModal').addEventListener('click', e=>{ if(e.target.id==='detailModal') closeModal(); });
-
-function render4(species, list){
-  const grid = $(species==='cat'?'#catGrid':'#dogGrid');
-  grid.innerHTML='';
-  list.filter(p=>p.species===species).slice(0,4).forEach(p=>grid.appendChild(card(p)));
-}
-
-(async ()=>{
-  const ref = collection(db, 'pets');
-  const qs = await getDocs(query(ref, orderBy('createdAt','desc')));
-  const list = qs.docs.map(d=>({ id:d.id, ...d.data() }));
-  render4('cat', list);
-  render4('dog', list);
-})();
-</script>
-</body>
-</html>
+function closeMo
