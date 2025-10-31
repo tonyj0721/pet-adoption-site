@@ -10,15 +10,29 @@
 body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
 header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08) }
 .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
-.nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
-.nav a:hover{ text-decoration:underline }
+.nav a{ color:#fff; text-decoration:none; background:var(--green); padding:.45rem .9rem; border-radius:8px; font-weight:600; transition:.2s }
+.nav a:hover{ background:#3a6645 }
+
 .container{ max-width:1100px; margin:2rem auto; padding:0 1rem }
 h1{ text-align:center; color:var(--green); margin-bottom:1rem }
+
+/* 篩選列 */
 .filters{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:0 auto 1.2rem }
 select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; background:#fff; min-width:150px }
 
-/* ✅ 卡片圖片置中、不裁切、文字固定底部 */
-.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem }
+/* ✅ 卡片排列：桌機4張，手機2張 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+}
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+}
+
 .card{
   background:#fff;
   border-radius:12px;
@@ -48,8 +62,11 @@ select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; backgrou
 .head{ display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; border-bottom:1px solid #eee }
 .close{ background:transparent; border:0; font-size:1.5rem; cursor:pointer }
 .body{ display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem }
+
+/* ✅ Modal 主圖固定高度不裁切 */
 .main-img{
-  width:100%; height:auto; max-height:65vh; object-fit:contain;
+  width:100%; height:320px;
+  object-fit:contain;
   background:#f0f0f0; border-radius:8px; display:block; margin:0 auto;
 }
 .thumbs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem }
@@ -57,16 +74,19 @@ select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; backgrou
 .thumbs img.active{ border-color:var(--mint) }
 
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
+
+/* 📱 手機版 Modal 單欄 */
+@media (max-width:768px){
+  .body{ grid-template-columns:1fr; }
+  .main-img{ height:260px; }
+}
 </style>
 </head>
 <body>
 <header>
   <div class="nav">
-    <div style="font-weight:800">台中簡媽媽狗園</div>
-    <nav>
-      <a href="index.html">首頁</a>
-      <a href="cats.html">我想看貓咪 👀</a>
-    </nav>
+    <div style="font-weight:800;font-size:1.1rem;">台中簡媽媽狗園</div>
+    <nav><a href="index.html">首頁</a></nav>
   </div>
 </header>
 
@@ -203,9 +223,10 @@ function card(p){
         <strong>${p.name||''}</strong>
         <span class="pill">狗狗</span>
       </div>
-      <div style="font-size:.92rem;margin-top:.25rem">
+      <div style="font-size:.92rem;margin-top:.25rem;line-height:1.4;">
         <div>品種：${p.breed||'—'}</div>
-        <div>年齡：${p.age||'—'}　性別：${p.gender||'—'}</div>
+        <div>年齡：${p.age||'—'}</div>
+        <div>性別：${p.gender||'—'}</div>
       </div>
     </div>`;
   el.addEventListener('click', ()=>openModal(p));
