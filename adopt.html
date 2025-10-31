@@ -16,19 +16,20 @@ form{ display:grid; gap:1rem; }
 .subCard{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); padding:1.2rem; }
 .sectionTitle{ color:var(--green); font-weight:700; font-size:1.1rem; margin:.2rem 0 1rem; }
 
-/* ✅ 修正對齊：使用 grid + align-items:start */
+/* ✅ 完整對齊設定 */
 .row{
   display:grid;
-  grid-template-columns:repeat(2, minmax(0,1fr));
+  grid-template-columns:repeat(2, 1fr);
   gap:1rem 2rem;
   align-items:start;
+  justify-content:space-between;
 }
 @media(max-width:800px){
   .row{ grid-template-columns:1fr; }
 }
 
-/* label 與 input 對齊美化 */
-.field{ display:flex; flex-direction:column; }
+/* ✅ 統一欄位寬度與邊距 */
+.field{ display:flex; flex-direction:column; width:100%; box-sizing:border-box; }
 label{ font-weight:500; margin-bottom:.25rem; }
 input, textarea{
   width:100%;
@@ -36,8 +37,15 @@ input, textarea{
   border:1px solid #ccc;
   border-radius:8px;
   font-size:.95rem;
+  box-sizing:border-box;
 }
 textarea{ resize:vertical; min-height:80px }
+
+/* ✅ 移除外層影響布局的間距 */
+.subCard .row > .field:last-child input,
+.subCard .row > .field:last-child textarea {
+  margin-right:0;
+}
 
 /* 按鈕樣式 */
 .back-btn{ background:#fff; border:1px solid #ccc; color:#333; border-radius:8px; padding:.5rem .9rem; cursor:pointer; margin-bottom:1rem; }
