@@ -16,13 +16,29 @@ header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08)
 h1{ text-align:center; color:var(--green); margin-bottom:1rem }
 .filters{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:0 auto 1.2rem }
 select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; background:#fff; min-width:150px }
+
+/* ✅ 卡片樣式：圖片置中、不裁切、文字固定底部 */
 .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem }
-.card{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; cursor:pointer }
-.card img{
-  width:100%; height:auto; max-height:220px; object-fit:contain;
-  background:#f0f0f0; display:block; margin:auto;
+.card{
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  overflow:hidden;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:transform .15s ease;
 }
-.card .info{ padding:.8rem }
+.card img{
+  width:100%;
+  height:220px;
+  object-fit:contain;
+  background:#f0f0f0;
+  display:block;
+  margin:auto;
+}
+.card .info{ padding:.8rem; background:#fff; flex-shrink:0 }
 .pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem }
 
 /* Modal */
@@ -39,7 +55,6 @@ select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; backgrou
 .thumbs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem }
 .thumbs img{ width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent }
 .thumbs img.active{ border-color:var(--mint) }
-
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
 </style>
 </head>
@@ -59,31 +74,23 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
 
   <!-- 篩選列 -->
   <div class="filters">
-    <!-- 類別：不限類別 / 品種貓 / 米克斯 -->
     <select id="catType">
       <option value="">不限類別</option>
       <option value="pedigree">品種貓</option>
       <option value="mix">米克斯</option>
     </select>
-
-    <!-- 品種：依類別動態變化 -->
     <select id="subType" disabled>
       <option value="">請先選類別</option>
     </select>
-
-    <!-- 年齡 -->
     <select id="age">
       <option value="">不限年齡</option>
       <option>1歲以下</option><option>1</option><option>2</option><option>3</option><option>4</option>
       <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
       <option>10歲以上</option>
     </select>
-
-    <!-- 性別 -->
     <select id="gender">
       <option value="">不限性別</option>
-      <option>男生</option>
-      <option>女生</option>
+      <option>男生</option><option>女生</option>
     </select>
   </div>
 
@@ -128,68 +135,45 @@ const firebaseConfig = {
   messagingSenderId: "102978803311",
   appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const $ = (s,el=document)=>el.querySelector(s);
-const grid = $('#catGrid');
+const $=(s,el=document)=>el.querySelector(s);
+const grid=$('#catGrid');
 
-const PEDIGREE = ["美短","英短","藍貓","暹羅貓","波斯貓","布偶貓"];
-const MIX = ["橘貓","黑貓","虎斑貓","白底虎斑貓","三花貓","玳瑁貓","白貓"];
+const PEDIGREE=["美短","英短","藍貓","暹羅貓","波斯貓","布偶貓"];
+const MIX=["橘貓","黑貓","虎斑貓","白底虎斑貓","三花貓","玳瑁貓","白貓"];
 
-/* 將 breed 標準化：
-   - "米克斯/虎斑貓" -> {cat:"mix", sub:"虎斑貓"}
-   - "美短" -> {cat:"pedigree", sub:"美短"} */
 function normalizeBreed(breedRaw=""){
-  const b = String(breedRaw).trim();
-  if (b.startsWith('米克斯/')) {
-    const sub = b.split('/')[1] || '';
-    return { cat:'mix', sub };
+  const b=String(breedRaw).trim();
+  if(b.startsWith('米克斯/')){
+    const sub=b.split('/')[1]||'';
+    return{cat:'mix',sub};
   }
-  if (PEDIGREE.includes(b)) return { cat:'pedigree', sub:b };
-  if (MIX.includes(b)) return { cat:'mix', sub:b }; // 也兼容直接存子項
-  // 無法判斷時歸類到品種貓，讓它至少能被看見
-  return { cat:'pedigree', sub:b };
+  if(PEDIGREE.includes(b))return{cat:'pedigree',sub:b};
+  if(MIX.includes(b))return{cat:'mix',sub:b};
+  return{cat:'pedigree',sub:b};
 }
 
-/* ------ UI：依類別切換第二個下拉 ------ */
-const catType = $('#catType');
-const subType = $('#subType');
-
+const catType=$('#catType');
+const subType=$('#subType');
 function fillSubOptions(){
-  const type = catType.value; // '', 'pedigree', 'mix'
-  subType.innerHTML = '';
-  subType.disabled = false;
-
-  if (!type) {
-    subType.disabled = true;
-    subType.innerHTML = `<option value="">請先選類別</option>`;
-    return;
-  }
-
-  if (type === 'pedigree') {
-    subType.append(new Option('不限品種', ''));
-    PEDIGREE.forEach(x=>subType.append(new Option(x, x)));
-  } else {
-    subType.append(new Option('不限毛色', ''));
-    MIX.forEach(x=>subType.append(new Option(x, x)));
-  }
+  const type=catType.value;
+  subType.innerHTML=''; subType.disabled=false;
+  if(!type){subType.disabled=true;subType.innerHTML='<option>請先選類別</option>';return;}
+  if(type==='pedigree'){subType.append(new Option('不限品種',''));PEDIGREE.forEach(x=>subType.append(new Option(x,x)));}
+  else{subType.append(new Option('不限毛色',''));MIX.forEach(x=>subType.append(new Option(x,x)));}
 }
-catType.addEventListener('change', ()=>{ fillSubOptions(); applyFilters(); });
-subType.addEventListener('change', applyFilters);
+catType.addEventListener('change',()=>{fillSubOptions();applyFilters();});
+subType.addEventListener('change',applyFilters);
+$('#age').addEventListener('change',applyFilters);
+$('#gender').addEventListener('change',applyFilters);
 
-const ageSel = $('#age');
-const genderSel = $('#gender');
-ageSel.addEventListener('change', applyFilters);
-genderSel.addEventListener('change', applyFilters);
-
-/* ------ 資料渲染 ------ */
 function card(p){
-  const el = document.createElement('div');
+  const el=document.createElement('div');
   el.className='card';
-  const cover = p.images?.[0]?.url || 'https://placehold.co/600x400?text=No+Image';
-  el.innerHTML = `
+  const cover=p.images?.[0]?.url||'https://placehold.co/600x400?text=No+Image';
+  el.innerHTML=`
     <img src="${cover}" alt="${p.name||''}">
     <div class="info">
       <div style="display:flex;justify-content:space-between;align-items:center">
@@ -201,108 +185,55 @@ function card(p){
         <div>年齡：${p.age||'—'}　性別：${p.gender||'—'}</div>
       </div>
     </div>`;
-  el.addEventListener('click', ()=>openModal(p));
+  el.addEventListener('click',()=>openModal(p));
   return el;
 }
+function render(list){grid.innerHTML='';list.forEach(p=>grid.appendChild(card(p)));}
 
-function render(list){
-  grid.innerHTML='';
-  list.forEach(p=>grid.appendChild(card(p)));
-}
-
-/* ------ Modal ------ */
 function openModal(p){
-  $('#mTitle').textContent = p.name || '動物資料';
-  $('#mSpecies').textContent = '貓咪';
-  $('#mBreed').textContent = p.breed || '—';
-  $('#mAge').textContent = p.age || '—';
-  $('#mGender').textContent = p.gender || '—';
-  $('#mIntro').textContent = p.intro || '';
-
-  const imgs = (p.images?.length) ? p.images.map(x=>x.url) : ['https://placehold.co/800x500?text=No+Image'];
-  let current = 0;
-  const main = $('#mMain'), thumbs = $('#mThumbs'); thumbs.innerHTML='';
-  main.src = imgs[0];
-  imgs.forEach((src,i)=>{
-    const im=new Image(); im.src=src; im.alt='thumb';
-    im.addEventListener('click',()=>{ current=i; update(); });
-    thumbs.appendChild(im);
-  });
-  function update(){
-    main.src = imgs[current];
-    [...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active', idx===current));
-  }
+  $('#mTitle').textContent=p.name||'動物資料';
+  $('#mSpecies').textContent='貓咪';
+  $('#mBreed').textContent=p.breed||'—';
+  $('#mAge').textContent=p.age||'—';
+  $('#mGender').textContent=p.gender||'—';
+  $('#mIntro').textContent=p.intro||'';
+  const imgs=(p.images?.length)?p.images.map(x=>x.url):['https://placehold.co/800x500?text=No+Image'];
+  let current=0;const main=$('#mMain'),thumbs=$('#mThumbs');thumbs.innerHTML='';
+  main.src=imgs[0];
+  imgs.forEach((src,i)=>{const im=new Image();im.src=src;im.addEventListener('click',()=>{current=i;update();});thumbs.appendChild(im);});
+  function update(){main.src=imgs[current];[...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active',idx===current));}
   update();
-  main.addEventListener('click',()=>{ current=(current+1)%imgs.length; update(); });
-
-  $('#adoptBtn').onclick = ()=>{
-    const url = new URL('adopt.html', location.href);
-    url.searchParams.set('pet', p.id || '');
-    location.href = url.toString();
-  };
-
+  main.addEventListener('click',()=>{current=(current+1)%imgs.length;update();});
+  $('#adoptBtn').onclick=()=>{const url=new URL('adopt.html',location.href);url.searchParams.set('pet',p.id||'');location.href=url.toString();};
   $('#detailModal').classList.add('open');
 }
-$('#closeBtn').addEventListener('click', ()=>$('#detailModal').classList.remove('open'));
-$('#detailModal').addEventListener('click', (e)=>{ if(e.target.id==='detailModal') $('#detailModal').classList.remove('open'); });
+$('#closeBtn').addEventListener('click',()=>$('#detailModal').classList.remove('open'));
+$('#detailModal').addEventListener('click',e=>{if(e.target.id==='detailModal')$('#detailModal').classList.remove('open');});
 
-/* ------ 載入與篩選 ------ */
-let allCats = []; // 原始
-let allCatsNorm = []; // 加上 normalize 後的輔助欄位
-
-function matchAge(val, sel){
-  if(!sel) return true;
-  const a = String(val||'');
-  if(sel==='1歲以下') return /個月|月|0/.test(a);
-  if(sel==='10歲以上'){
-    const m=a.match(/\d+/); return m ? (parseInt(m[0],10) >= 10) : false;
-  }
-  const m=a.match(/\d+/); return m ? (parseInt(m[0],10) === parseInt(sel,10)) : a.includes(sel);
+let allCats=[],allCatsNorm=[];
+function matchAge(val,sel){
+  if(!sel)return true;
+  const a=String(val||'');
+  if(sel==='1歲以下')return/個月|月|0/.test(a);
+  if(sel==='10歲以上'){const m=a.match(/\d+/);return m?(parseInt(m[0],10)>=10):false;}
+  const m=a.match(/\d+/);return m?(parseInt(m[0],10)===parseInt(sel,10)):a.includes(sel);
 }
-
 function applyFilters(){
-  const type = catType.value;      // '', 'pedigree', 'mix'
-  const sub  = subType.disabled ? '' : subType.value; // 可能為 ''（不限）
-  const age  = ageSel.value;
-  const gen  = genderSel.value;
-
-  let list = allCatsNorm.slice();
-
-  // 類別（第一層）
-  if(type){
-    list = list.filter(x=> x._cat === type);
-  }
-
-  // 子選單（第二層）
-  if(type==='pedigree'){
-    // sub === '' => 不限品種 -> 顯示所有品種貓
-    if(sub){ list = list.filter(x=> x._cat==='pedigree' && x._sub === sub); }
-  }else if(type==='mix'){
-    // sub === '' => 不限毛色 -> 顯示所有米克斯
-    if(sub){ list = list.filter(x=> x._cat==='mix' && x._sub === sub); }
-  }
-
-  // 年齡
-  if(age){ list = list.filter(x=> matchAge(x.age, age)); }
-
-  // 性別
-  if(gen){ list = list.filter(x=> (x.gender||'').includes(gen)); }
-
+  const type=catType.value,sub=subType.disabled?'':subType.value,age=$('#age').value,gen=$('#gender').value;
+  let list=allCatsNorm.slice();
+  if(type)list=list.filter(x=>x._cat===type);
+  if(type==='pedigree'&&sub)list=list.filter(x=>x._cat==='pedigree'&&x._sub===sub);
+  if(type==='mix'&&sub)list=list.filter(x=>x._cat==='mix'&&x._sub===sub);
+  if(age)list=list.filter(x=>matchAge(x.age,age));
+  if(gen)list=list.filter(x=>(x.gender||'').includes(gen));
   render(list);
 }
-
-(async ()=>{
-  const ref = collection(db, 'pets');
-  const snap = await getDocs(query(ref, orderBy('createdAt','desc')));
-  allCats = snap.docs.map(d=>({ id:d.id, ...d.data() })).filter(p=>p.species==='cat');
-
-  // 建立正規化欄位（_cat, _sub）
-  allCatsNorm = allCats.map(p=>{
-    const n = normalizeBreed(p.breed||'');
-    return { ...p, _cat:n.cat, _sub:n.sub };
-  });
-
-  fillSubOptions();   // 依預設類別填子選單
+(async()=>{
+  const ref=collection(db,'pets');
+  const snap=await getDocs(query(ref,orderBy('createdAt','desc')));
+  allCats=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.species==='cat');
+  allCatsNorm=allCats.map(p=>{const n=normalizeBreed(p.breed||'');return{...p,_cat:n.cat,_sub:n.sub};});
+  fillSubOptions();
   render(allCatsNorm);
 })();
 </script>
