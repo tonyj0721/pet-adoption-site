@@ -52,6 +52,7 @@ h2.section{ color:var(--green); display:flex; align-items:center; justify-conten
 .card:hover{ transform:translateY(-2px); }
 .card img{ width:100%; height:220px; object-fit:contain; background:#f0f0f0; display:block; margin:auto; }
 .card .info{ padding:.8rem; background:#fff; flex-shrink:0; }
+.card .info div > div{ min-height:1.2em; } /* 讓每行高度一致 */
 .pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem; margin-right:.4rem; }
 
 /* Modal */
@@ -76,7 +77,7 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
   .site-title{ font-size:2rem; }
   .tagline{ font-size:1rem; }
   .fund-code{ font-size:.9rem; padding:.2rem .6rem; }
-  .body{ grid-template-columns:1fr; }       /* ← Modal 改單欄，主圖會顯示 */
+  .body{ grid-template-columns:1fr; }
   .grid{ grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); }
   .card img{ height:180px; }
   footer{ font-size:.9rem; }
@@ -100,9 +101,7 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
 
 <section class="hero">
   <div class="hero-inner">
-    <!-- 把站名移到這裡 -->
     <h1 class="site-title">台中簡媽媽狗園</h1>
-    <!-- 原本大標改成副標，字級與副標一致 -->
     <p class="tagline">給牠一個溫暖的家 · 用領養，改變一條生命的軌跡。</p>
   </div>
   <div class="fund-code">勸募字號 中市社團字第1140036732號</div>
@@ -169,6 +168,7 @@ function card(pet){
   const el = document.createElement('div');
   el.className = 'card';
   const cover = pet.images?.[0]?.url || 'https://placehold.co/800x500?text=No+Image';
+  const breedText = pet.breed || '—';
   el.innerHTML = `
     <img src="${cover}" alt="${pet.name||''}">
     <div class="info">
@@ -176,9 +176,10 @@ function card(pet){
         <strong>${pet.name||''}</strong>
         <span class="pill">${pet.species==='cat'?'貓咪':'狗狗'}</span>
       </div>
-      <div style="font-size:.92rem;margin-top:.25rem">
-        <div>品種：${pet.breed || '—'}</div>
-        <div>年齡：${pet.age||'—'}　性別：${pet.gender||'—'}</div>
+      <div style="font-size:.92rem;margin-top:.25rem;line-height:1.5">
+        <div>品種：${breedText}</div>
+        <div>年齡：${pet.age || '—'}</div>
+        <div>性別：${pet.gender || '—'}</div>
       </div>
     </div>`;
   el.addEventListener('click',()=>openModal(pet));
@@ -215,7 +216,7 @@ function openModal(p){
 
   main.addEventListener('click',()=>{ current=(current+1)%imgs.length; update(); });
 
-  // 導向 adopt.html（你已確認存在）
+  // adopt.html 導向
   $('#adoptBtn').onclick = () => {
     const url = new URL('adopt.html', location.href);
     url.searchParams.set('pet', p.id || '');
