@@ -16,13 +16,29 @@ header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08)
 h1{ text-align:center; color:var(--green); margin-bottom:1rem }
 .filters{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:0 auto 1.2rem }
 select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; background:#fff; min-width:150px }
+
+/* ✅ 卡片圖片置中、不裁切、文字固定底部 */
 .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem }
-.card{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; cursor:pointer }
-.card img{
-  width:100%; height:auto; max-height:220px; object-fit:contain;
-  background:#f0f0f0; display:block; margin:auto;
+.card{
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  overflow:hidden;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:transform .15s ease;
 }
-.card .info{ padding:.8rem }
+.card img{
+  width:100%;
+  height:220px;
+  object-fit:contain;
+  background:#f0f0f0;
+  display:block;
+  margin:auto;
+}
+.card .info{ padding:.8rem; background:#fff; flex-shrink:0 }
 .pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem }
 
 /* Modal */
@@ -85,6 +101,7 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
   <div id="dogGrid" class="grid"></div>
 </main>
 
+<!-- 詳細視窗 -->
 <div id="detailModal" class="modal" aria-hidden="true">
   <div class="panel">
     <div class="head">
@@ -130,7 +147,7 @@ const $ = (s,el=document)=>el.querySelector(s);
 const grid = $('#dogGrid');
 
 const PEDIGREE = ["博美","貴賓","吉娃娃","馬爾濟斯","柯基","柴犬","哈士奇","高山犬","黃金獵犬"];
-const MIX = ["黑狗","白狗","黃狗","虎斑","花花"];
+const MIX = ["黑狗","白狗","黃狗","虎斑","花花","棕色"];
 
 function normalizeBreed(breedRaw=""){
   const b = String(breedRaw).trim();
