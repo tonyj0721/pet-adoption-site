@@ -82,8 +82,20 @@
 
 <footer>© 2025 台中簡媽媽狗園</footer>
 
+<!-- 刪除與重複警示 Modal -->
 <div id="confirmModal" class="modal"><div class="panel"><h4>確定要刪除這筆動物資料嗎？</h4><div class="rowbtn"><button class="btn" id="cancelDel">取消</button><button class="btn danger" id="okDel">刪除</button></div></div></div>
 <div id="dupModal" class="modal"><div class="panel"><h4>該名字已存在，請確認是否繼續登錄</h4><div class="rowbtn"><button class="btn" id="dupNo">否</button><button class="btn danger" id="dupYes">是</button></div></div></div>
+
+<!-- 登出確認 Modal -->
+<div id="logoutModal" class="modal">
+  <div class="panel">
+    <h4>確定要登出後台嗎？</h4>
+    <div class="rowbtn">
+      <button class="btn" id="logoutCancel">取消</button>
+      <button class="btn danger" id="logoutConfirm">登出</button>
+    </div>
+  </div>
+</div>
 
 <script>
 // ✅ 登入檢查
@@ -91,7 +103,7 @@ if(sessionStorage.getItem('loggedIn')!=='1'){ location.href='login.html'; }
 
 // ✅ 自動登出功能
 let logoutTimer;
-const AUTO_LOGOUT_MS = 10 * 60 * 1000; // 10 分鐘
+const AUTO_LOGOUT_MS = 10 * 60 * 1000;
 function resetLogoutTimer(){
   clearTimeout(logoutTimer);
   logoutTimer = setTimeout(()=>{
@@ -105,19 +117,20 @@ function resetLogoutTimer(){
 });
 resetLogoutTimer();
 
-// ✅ 手動登出
-document.getElementById('logoutBtn').addEventListener('click', ()=>{
-  document.getElementById('logoutModal').classList.add('open');
-});
+// ✅ 手動登出 Modal 綁定（確保 DOM 載入後再執行）
+window.addEventListener('DOMContentLoaded', ()=>{
+  const logoutBtn = document.getElementById('logoutBtn');
+  const logoutModal = document.getElementById('logoutModal');
+  const logoutCancel = document.getElementById('logoutCancel');
+  const logoutConfirm = document.getElementById('logoutConfirm');
 
-document.getElementById('logoutCancel').addEventListener('click', ()=>{
-  document.getElementById('logoutModal').classList.remove('open');
-});
-
-document.getElementById('logoutConfirm').addEventListener('click', ()=>{
-  sessionStorage.removeItem('loggedIn');
-  document.getElementById('logoutModal').classList.remove('open');
-  location.href='login.html';
+  logoutBtn.addEventListener('click', ()=>logoutModal.classList.add('open'));
+  logoutCancel.addEventListener('click', ()=>logoutModal.classList.remove('open'));
+  logoutConfirm.addEventListener('click', ()=>{
+    sessionStorage.removeItem('loggedIn');
+    logoutModal.classList.remove('open');
+    location.href='login.html';
+  });
 });
 </script>
 
@@ -166,14 +179,5 @@ dupNo.onclick=()=>{dupProceed=false;closeDup();};
 dupYes.onclick=()=>{dupProceed=true;closeDup();$('#saveBtn').click();};
 loadList();
 </script>
-<div id="logoutModal" class="modal">
-  <div class="panel">
-    <h4>確定要登出後台嗎？</h4>
-    <div class="rowbtn">
-      <button class="btn" id="logoutCancel">取消</button>
-      <button class="btn danger" id="logoutConfirm">登出</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
