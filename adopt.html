@@ -92,6 +92,14 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
 <main>
   <button class="back-btn" onclick="history.back()">← 回上一頁</button>
   <h1>我要領養</h1>
+  <p id="petInfo" style="text-align:center;color:#666;margin-top:-.5rem;"></p>
+
+  <script>
+  const petId = new URLSearchParams(location.search).get('pet');
+  if (petId) {
+    document.getElementById("petInfo").textContent = `目前申請認養的動物編號：${petId}`;
+  }
+  </script>
 
   <form id="adoptForm">
     <!-- （表單內容維持原樣） -->
