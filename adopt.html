@@ -58,7 +58,60 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
   <button class="back-btn" onclick="history.back()" style="background:#fff;border:1px solid #ccc;color:#333;border-radius:8px;padding:.5rem .9rem;cursor:pointer;margin-bottom:1rem;">← 回上一頁</button>
   <h1 id="title">我要領養</h1>
 
-  <!-- 表單內容（原樣省略） -->
+  <form id="adoptForm">
+    <div class="subCard">
+      <div class="sectionTitle">基本資料</div>
+      <div class="row">
+        <div class="field"><label>姓名</label><input name="name" required></div>
+        <div class="field"><label>年齡</label><input name="age"></div>
+        <div class="field"><label>居住地（縣市／區域）</label><input name="location"></div>
+        <div class="field"><label>居住環境（租屋或自宅／透天或公寓）</label><input name="houseType"></div>
+        <div class="field"><label>職業</label><input name="job"></div>
+        <div class="field"><label>月收入（大約即可）</label><input name="income"></div>
+        <div class="field"><label>家庭成員</label><input name="family"></div>
+        <div class="field"><label>家庭成員總人數</label><input name="members"></div>
+        <div class="field"><label>現居住狀況（與家人同住或獨居）</label><input name="living"></div>
+        <div class="field"><label>同居成員（例如：伴侶、配偶、父母等）</label><input name="cohabit"></div>
+      </div>
+    </div>
+
+    <div class="subCard">
+      <div class="sectionTitle">飼養寵物經驗</div>
+      <div class="row">
+        <div class="field"><label>是否曾經飼養過寵物？</label><input name="hadPets"></div>
+        <div class="field"><label>飼養過什麼寵物？</label><input name="petHistory"></div>
+      </div>
+    </div>
+
+    <div class="subCard">
+      <div class="sectionTitle">現有寵物狀況</div>
+      <div class="field"><label>目前家中是否有寵物？</label><input name="hasNow"></div>
+      <div class="field"><label>若有，請提供寵物種類、是否已結紮、性別等資訊：</label><textarea name="hasNowInfo"></textarea></div>
+    </div>
+
+    <div class="subCard">
+      <div class="sectionTitle">認養動機</div>
+      <div class="field"><label>為什麼想認養這隻毛孩呢？</label><textarea name="reason"></textarea></div>
+    </div>
+
+    <div class="subCard">
+      <div class="sectionTitle">飼養方式</div>
+      <div class="field"><label>您會如何照顧這隻毛孩？（例如：飲食安排、居住空間、教育方式等）</label><textarea name="careMethod"></textarea></div>
+    </div>
+
+    <div class="subCard">
+      <div class="sectionTitle">飼養花費認知</div>
+      <div class="field"><label>您認為飼養寵物需要哪些支出？（請舉例說明）</label><textarea name="costAwareness"></textarea></div>
+    </div>
+
+    <div class="subCard">
+      <div class="sectionTitle">環境參考（可上傳最多 10 個檔案：照片或影片）</div>
+      <input id="envFiles" type="file" accept="image/*,video/*" multiple>
+      <div id="envPreview" class="previews" style="margin-top:.6rem"></div>
+    </div>
+
+    <button type="submit" id="submitBtn">送出申請</button>
+  </form>
 </main>
 
 <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
