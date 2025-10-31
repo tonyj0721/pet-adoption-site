@@ -8,38 +8,12 @@
 :root { --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
 * { box-sizing:border-box; }
 body { margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
+header { background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
+.nav { max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem; }
+.nav a { color:#fff; text-decoration:none; margin-left:1rem; font-weight:600; }
+.nav a:hover { text-decoration:underline; }
 
-/* 🟢 Header */
-header {
-  background:var(--mint);
-  color:#fff;
-  box-shadow:0 2px 6px rgba(0,0,0,.08);
-}
-.nav {
-  max-width:1100px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:0.8rem;
-  padding:1rem;
-}
-.nav a {
-  background:#fff;
-  color:var(--green);
-  text-decoration:none;
-  font-weight:700;
-  border-radius:8px;
-  padding:.45rem 1rem;
-  transition:background .2s, color .2s;
-  font-size:1rem;
-}
-.nav a:hover {
-  background:var(--green);
-  color:#fff;
-}
-
-/* 🟢 hero 區塊 */
+/* ✅ 調整 hero 背景與文字對比 */
 .hero {
   background:url('images/hero-bg.jpg') center/cover no-repeat;
   color:#fff;
@@ -51,32 +25,24 @@ header {
   content:"";
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,0.15);
+  background:rgba(0,0,0,0.15); /* 淺化遮罩，恢復亮度 */
 }
-.hero-inner {
+.hero h1, .hero p {
   position:relative;
   z-index:1;
-}
-.hero h2 {
-  font-size:2rem;
-  margin:0 0 .8rem;
-  font-weight:800;
   color:#fff;
-  text-shadow:0 2px 6px rgba(0,0,0,0.6);
+  text-shadow:0 3px 8px rgba(0,0,0,0.6); /* 增強可讀性 */
+}
+.hero h1 {
+  font-size:2.6rem;
+  font-weight:800;
+  margin:0 0 .5rem;
 }
 .hero p {
   font-size:1.1rem;
-  color:#fff;
-  margin:0.5rem 0;
-  text-shadow:0 2px 5px rgba(0,0,0,0.6);
-}
-.hero .sub {
-  font-size:1.1rem;
-  color:#fff;
-  margin-top:2rem;
 }
 
-/* 勸募字號 */
+/* 勸募字號固定於底部 */
 .fund-code {
   position: absolute;
   bottom: 8px;
@@ -91,13 +57,12 @@ header {
   white-space: nowrap;
 }
 
-/* 🟢 卡片區域 */
 .container { max-width:1100px; margin:2rem auto; padding:0 1rem; }
 h2.section { color:var(--green); display:flex; align-items:center; justify-content:space-between; margin:1.5rem 0 .8rem; font-size:1.5rem; }
 .see-more { border:0; background:var(--green); color:#fff; padding:.5rem .8rem; border-radius:8px; cursor:pointer; font-size:1rem; text-decoration:none; }
 .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
 
-/* ✅ 卡片樣式 */
+/* ✅ 卡片置中圖片 + 文字固定底部 */
 .card {
   background:#fff;
   border-radius:12px;
@@ -124,7 +89,7 @@ h2.section { color:var(--green); display:flex; align-items:center; justify-conte
 }
 .pill { display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem; margin-right:.4rem; }
 
-/* 🟢 Modal */
+/* Modal */
 .modal { position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:1rem; z-index:50; }
 .modal.open { display:flex; }
 .panel { background:#fff; border-radius:12px; max-width:900px; width:100%; max-height:90vh; overflow:auto; }
@@ -132,7 +97,7 @@ h2.section { color:var(--green); display:flex; align-items:center; justify-conte
 .close { background:transparent; border:0; font-size:1.5rem; cursor:pointer; }
 .body { display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem; }
 
-/* 🟢 Modal 主圖 */
+/* Modal 主圖 */
 .main-img {
   width:100%;
   height:auto;
@@ -146,33 +111,24 @@ h2.section { color:var(--green); display:flex; align-items:center; justify-conte
 .thumbs { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem; }
 .thumbs img { width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent; }
 .thumbs img.active { border-color:var(--mint); }
-
 footer { background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
-
-/* 📱 手機版調整 */
-@media (max-width: 768px) {
-  .hero { padding: 4rem 1rem 5rem; }
-  .hero h2 { font-size: 1.6rem; }
-  .hero p, .hero .sub { font-size: 1rem; }
-  .nav { flex-wrap: wrap; gap: .5rem; }
-  .nav a { font-size: .95rem; padding:.4rem .9rem; }
-}
 </style>
 </head>
 <body>
-
 <header>
   <div class="nav">
-    <a href="adoptlist.html">待認養</a>
-    <a href="about.html">關於簡媽媽</a>
-    <a href="login.html">管理員登入</a>
+    <div style="font-weight:800">台中簡媽媽狗園</div>
+    <nav>
+      <a href="adoptlist.html">待認養</a>
+      <a href="about.html">關於簡媽媽</a>
+      <a href="login.html">管理員登入</a>
+    </nav>
   </div>
 </header>
 
 <section class="hero">
-  <div class="hero-inner">
-    <h2>台中簡媽媽狗園</h2>
-    <p class="sub">給牠一個溫暖的家</p>
+  <div>
+    <h1>給牠一個溫暖的家</h1>
     <p>用領養，改變一條生命的軌跡。</p>
   </div>
   <div class="fund-code">勸募字號 中市社團字第1140036732號</div>
@@ -237,7 +193,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const q = (s, el=document) => el.querySelector(s);
+const q=(s,el=document)=>el.querySelector(s);
 
 function card(pet){
   const el=document.createElement('div');
@@ -282,31 +238,16 @@ function openModal(p){
   }
   update();
   main.addEventListener('click',()=>{ current=(current+1)%imgs.length; update(); });
-  q('#detailModal').classList.add('open');
-  q('#detailModal').setAttribute('aria-hidden','false');
+  q('#adoptBtn').onclick=()=>{ const url=new URL('adopt.html',location.href); url.searchParams.set('pet',p.id||''); location.href=url.toString(); };
+  q('#detailModal').classList.add('open'); q('#detailModal').setAttribute('aria-hidden','false');
 }
-
-function closeModal(){
-  q('#detailModal').classList.remove('open');
-  q('#detailModal').setAttribute('aria-hidden','true');
-}
-
+function closeModal(){ q('#detailModal').classList.remove('open'); q('#detailModal').setAttribute('aria-hidden','true'); }
 q('#closeBtn').addEventListener('click', closeModal);
 q('#detailModal').addEventListener('click', e=>{ if(e.target.id==='detailModal') closeModal(); });
 
-function render4(species, list){
-  const grid=q(species==='cat'?'#catGrid':'#dogGrid');
-  grid.innerHTML='';
-  list.filter(p=>p.species===species).slice(0,4).forEach(p=>grid.appendChild(card(p)));
-}
+function render4(species, list){ const grid=q(species==='cat'?'#catGrid':'#dogGrid'); grid.innerHTML=''; list.filter(p=>p.species===species).slice(0,4).forEach(p=>grid.appendChild(card(p))); }
 
-(async()=>{
-  const ref = collection(db, 'pets');
-  const qs = await getDocs(query(ref, orderBy('createdAt','desc')));
-  const list = qs.docs.map(d=>({ id:d.id, ...d.data() }));
-  render4('cat', list);
-  render4('dog', list);
-})();
+(async()=>{ const ref=collection(db,'pets'); const qs=await getDocs(query(ref,orderBy('createdAt','desc'))); const list=qs.docs.map(d=>({id:d.id,...d.data()})); render4('cat',list); render4('dog',list); })();
 </script>
 </body>
 </html>
