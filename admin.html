@@ -47,13 +47,13 @@
 <header>
   <div class="nav">
     <div style="font-weight:800">台中簡媽媽狗園</div>
-    <nav><a href="index.html">回到首頁</a></nav>
+    <nav><a href="index.html">首頁</a></nav>
   </div>
 </header>
 
 <main class="wrap">
   <section class="card">
-    <h3 style="margin:.2rem 0;color:#497f54">新增動物（登錄）</h3>
+    <h3 style="margin:.2rem 0;color:#497f54">新增動物</h3>
     <div class="grid2">
       <div><label>名字</label><input id="name"></div>
       <div><label>類別</label><select id="group"><option value="cat">貓</option><option value="dog">狗</option></select></div>
@@ -62,13 +62,13 @@
       <div><label>年齡</label><input id="age" placeholder="幾歲或幾個月"></div>
       <div><label>性別</label><select id="gender"><option>男生</option><option>女生</option></select></div>
       <div><label>介紹</label><textarea id="intro" placeholder="性格、習慣、備註等"></textarea></div>
-      <div><label>上傳圖片（最多 6 張，會自動壓縮）</label><input id="photos" type="file" accept="image/*" multiple><div id="previews" class="thumbs"></div></div>
+      <div><label>上傳圖片（最多 6 張）</label><input id="photos" type="file" accept="image/*" multiple><div id="previews" class="thumbs"></div></div>
       <button class="save" id="saveBtn">登錄</button><div id="toast" class="toast">✅ 登錄成功！</div>
     </div>
   </section>
 
   <section class="card">
-    <div class="topbar"><h3 style="margin:.2rem 0;color:#497f54">已登錄動物</h3><input id="search" class="search" placeholder="搜尋名字…（即時篩選）"></div>
+    <div class="topbar"><h3 style="margin:.2rem 0;color:#497f54">已登錄動物</h3><input id="search" class="search" placeholder="搜尋名字…"></div>
     <table>
       <thead><tr><th>名字</th><th>類別</th><th>品種</th><th>年齡</th><th>性別</th><th>建立時間</th><th>操作</th></tr></thead>
       <tbody id="list"></tbody>
@@ -95,7 +95,7 @@ const app=initializeApp(firebaseConfig);const db=getFirestore(app);const storage
 const $=s=>document.querySelector(s);
 let selectedFiles=[],allPets=[],deleteTargetId=null,dupProceed=false;
 const listEl=$('#list'),emptyEl=$('#empty'),saveBtn=$('#saveBtn'),toast=$('#toast'),photos=$('#photos'),previews=$('#previews'),dupModal=$('#dupModal'),dupYes=$('#dupYes'),dupNo=$('#dupNo');
-const breedSets={cat:{pure:["美短","英短","藍貓","暹羅貓","波斯貓","布偶貓"],mix:["橘貓","黑貓","虎斑貓","白底虎斑貓","賓士貓","三花貓","玳瑁貓","白貓"]},dog:{pure:["博美","貴賓","吉娃娃","馬爾濟斯","柯基","柴犬","哈士奇","高山犬","黃金獵犬"],mix:["黑狗","白狗","黃狗","棕色","虎斑","花花"]}};
+const breedSets={cat:{pure:["美短","英短","藍貓","暹羅貓","波斯貓","布偶貓"],mix:["橘貓","黑貓","虎斑貓","白底虎斑貓","賓士貓","三花貓","玳瑁貓","白貓"]},dog:{pure:["博美","貴賓","吉娃娃","馬爾濟斯","柯基","柴犬","哈士奇","高山犬","黃金獵犬"],mix:["黑色","白色","黃色","棕色","虎斑","花花"]}};
 function updateSubGroup(){const group=$('#group').value,sub=$('#subGroup');sub.innerHTML='';if(group==='cat'){sub.innerHTML='<option value="pure">品種貓</option><option value="mix">米克斯</option>';}else{sub.innerHTML='<option value="pure">品種犬</option><option value="mix">米克斯</option>';}updateBreed();}
 function updateBreed(){const g=$('#group').value,s=$('#subGroup').value,b=$('#breed');b.innerHTML='';breedSets[g][s].forEach(name=>{const o=document.createElement('option');o.textContent=name;b.appendChild(o);});}
 $('#group').addEventListener('change',updateSubGroup);$('#subGroup').addEventListener('change',updateBreed);updateSubGroup();
