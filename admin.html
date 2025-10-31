@@ -27,8 +27,8 @@
   .save[disabled]{ opacity:.6; cursor:not-allowed }
   .topbar{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin-bottom:.6rem }
   .search{ max-width:280px; width:100% }
-  table{ width:100%; border-collapse:collapse; table-layout: auto; white-space: nowrap; overflow-x: auto; display: block;}
-  th,td{ border-bottom:1px solid #eee; padding: .6rem 1rem; text-align:left; vertical-align: middle }
+  table{ width:100%; border-collapse:collapse; table-layout:auto; white-space:nowrap; overflow-x:auto; display:block;}
+  th,td{ border-bottom:1px solid #eee; padding:.6rem 1rem; text-align:left; vertical-align:middle }
   .danger{ background:var(--danger); color:#fff; border:0; border-radius:8px; padding:.35rem .6rem; cursor:pointer }
   .toast{ display:none; margin-top:.6rem; background:#eef6ef; color:#2d5b39; padding:.6rem .8rem; border-radius:8px; text-align:center }
   footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
@@ -47,7 +47,10 @@
 <header>
   <div class="nav">
     <div style="font-weight:800">台中簡媽媽狗園</div>
-    <nav><a href="index.html">首頁</a></nav>
+    <nav>
+      <a href="index.html">首頁</a>
+      <a href="#" id="logoutBtn" style="font-weight:600;text-decoration:underline;">登出</a>
+    </nav>
   </div>
 </header>
 
@@ -83,33 +86,72 @@
 <div id="dupModal" class="modal"><div class="panel"><h4>該名字已存在，請確認是否繼續登錄</h4><div class="rowbtn"><button class="btn" id="dupNo">否</button><button class="btn danger" id="dupYes">是</button></div></div></div>
 
 <script>
-  if(sessionStorage.getItem('loggedIn')!=='1'){ location.href='login.html'; }
+// ✅ 登入檢查
+if(sessionStorage.getItem('loggedIn')!=='1'){ location.href='login.html'; }
+
+// ✅ 自動登出功能
+let logoutTimer;
+const AUTO_LOGOUT_MS = 10 * 60 * 1000; // 10 分鐘
+function resetLogoutTimer(){
+  clearTimeout(logoutTimer);
+  logoutTimer = setTimeout(()=>{
+    sessionStorage.removeItem('loggedIn');
+    alert("已超過 10 分鐘未操作，自動登出。");
+    location.href='login.html';
+  }, AUTO_LOGOUT_MS);
+}
+['click','mousemove','keydown','scroll','touchstart'].forEach(ev=>{
+  document.addEventListener(ev, resetLogoutTimer);
+});
+resetLogoutTimer();
+
+// ✅ 手動登出
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  sessionStorage.removeItem('loggedIn');
+  alert('您已登出。');
+  location.href='login.html';
+});
 </script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, updateDoc, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
+
 const firebaseConfig={apiKey:"AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",authDomain:"pet-adoption-32294.firebaseapp.com",projectId:"pet-adoption-32294",storageBucket:"pet-adoption-32294.firebasestorage.app",messagingSenderId:"102978803311",appId:"1:102978803311:web:a7d890096b2b23cad15f9a"};
-const app=initializeApp(firebaseConfig);const db=getFirestore(app);const storage=getStorage(app);
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const storage=getStorage(app);
+
 const $=s=>document.querySelector(s);
 let selectedFiles=[],allPets=[],deleteTargetId=null,dupProceed=false;
 const listEl=$('#list'),emptyEl=$('#empty'),saveBtn=$('#saveBtn'),toast=$('#toast'),photos=$('#photos'),previews=$('#previews'),dupModal=$('#dupModal'),dupYes=$('#dupYes'),dupNo=$('#dupNo');
 const breedSets={cat:{pure:["美短","英短","藍貓","暹羅貓","波斯貓","布偶貓"],mix:["橘貓","黑貓","虎斑貓","白底虎斑貓","賓士貓","三花貓","玳瑁貓","白貓"]},dog:{pure:["博美","貴賓","吉娃娃","馬爾濟斯","柯基","柴犬","狐狸犬","哈士奇","高山犬","黃金獵犬"],mix:["黑色","白色","黃色","棕色","虎斑","花花"]}};
+
 function updateSubGroup(){const group=$('#group').value,sub=$('#subGroup');sub.innerHTML='';if(group==='cat'){sub.innerHTML='<option value="pure">品種貓</option><option value="mix">米克斯</option>';}else{sub.innerHTML='<option value="pure">品種犬</option><option value="mix">米克斯</option>';}updateBreed();}
 function updateBreed(){const g=$('#group').value,s=$('#subGroup').value,b=$('#breed');b.innerHTML='';breedSets[g][s].forEach(name=>{const o=document.createElement('option');o.textContent=name;b.appendChild(o);});}
-$('#group').addEventListener('change',updateSubGroup);$('#subGroup').addEventListener('change',updateBreed);updateSubGroup();
+$('#group').addEventListener('change',updateSubGroup);
+$('#subGroup').addEventListener('change',updateBreed);
+updateSubGroup();
+
 photos.addEventListener('change',e=>{selectedFiles=selectedFiles.concat([...e.target.files]).slice(0,6);photos.value='';renderPreviews();});
 function renderPreviews(){previews.innerHTML='';selectedFiles.forEach((f,i)=>{const box=document.createElement('div');box.className='thumb';const img=new Image();img.src=URL.createObjectURL(f);box.appendChild(img);const del=document.createElement('b');del.textContent='×';del.onclick=()=>{selectedFiles.splice(i,1);renderPreviews();};box.appendChild(del);previews.appendChild(box);});}
+
 async function compressImage(file,maxW=1280,quality=0.85){const bmp=await createImageBitmap(file);const s=Math.min(1,maxW/bmp.width);const w=bmp.width*s,h=bmp.height*s;const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(bmp,0,0,w,h);const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',quality));return new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'});}
 async function uploadImages(files,pid){const out=[];let i=0;for(const f of files.slice(0,6)){const cf=await compressImage(f,1280,0.85);const p=`images/pets/${pid}/${Date.now()}-${i++}.jpg`;const sref=ref(storage,p);await uploadBytes(sref,cf);const url=await getDownloadURL(sref);out.push({url,path:p});}return out;}
+
 function renderList(items){listEl.innerHTML='';items.forEach(p=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${p.name}</td><td>${p.species==='cat'?'貓':'狗'}</td><td>${p.breed||'-'}</td><td>${p.age||'-'}</td><td>${p.gender||'-'}</td><td>${new Date(p.createdAt||Date.now()).toLocaleString()}</td><td><button class="danger" data-id="${p.id}">刪除</button></td>`;listEl.appendChild(tr);});listEl.querySelectorAll('.danger').forEach(b=>b.onclick=()=>{deleteTargetId=b.dataset.id;openConfirm();});emptyEl.style.display=items.length?'none':'';}
+
 async function loadList(){const refCol=collection(db,'pets');const qs=await getDocs(query(refCol,orderBy('createdAt','desc')));allPets=qs.docs.map(d=>({id:d.id,...d.data()}));renderList(allPets);}
 $('#search').addEventListener('input',e=>{const t=e.target.value.trim().toLowerCase();const s=allPets.filter(p=>(p.name||'').toLowerCase().includes(t));renderList(s);if(!s.length){emptyEl.textContent='查無此動物';emptyEl.style.display='';}});
+
 function openConfirm(){$('#confirmModal').classList.add('open');}
 function closeConfirm(){$('#confirmModal').classList.remove('open');}
-$('#cancelDel').onclick=closeConfirm;$('#okDel').onclick=async()=>{const id=deleteTargetId;closeConfirm();const d=allPets.find(p=>p.id===id);if(d?.images){for(const im of d.images){try{await deleteObject(ref(storage,im.path));}catch(e){}}}await deleteDoc(doc(db,'pets',id));await loadList();};
+$('#cancelDel').onclick=closeConfirm;
+$('#okDel').onclick=async()=>{const id=deleteTargetId;closeConfirm();const d=allPets.find(p=>p.id===id);if(d?.images){for(const im of d.images){try{await deleteObject(ref(storage,im.path));}catch(e){}}}await deleteDoc(doc(db,'pets',id));await loadList();};
+
 $('#saveBtn').addEventListener('click',async()=>{const name=$('#name').value.trim();const group=$('#group').value;const sub=$('#subGroup').value;const breed=$('#breed').value;const age=$('#age').value.trim();const gender=$('#gender').value.trim();const intro=$('#intro').value.trim();if(!name){alert('請輸入名字');return;}const refCol=collection(db,'pets');const exist=await getDocs(query(refCol,where('name','==',name)));if(!exist.empty&&!dupProceed){openDup();return;}saveBtn.disabled=true;const orig=saveBtn.textContent;saveBtn.innerHTML='登錄中... <span class="spinner"></span>';try{const docRef=await addDoc(refCol,{name,species:group,breed:sub==='mix'?`米克斯/${breed}`:breed,age,gender,intro,images:[],createdAt:Date.now()});const imgs=await uploadImages(selectedFiles,docRef.id);await updateDoc(docRef,{images:imgs});$('#name').value='';$('#age').value='';$('#intro').value='';$('#group').value='cat';updateSubGroup();$('#gender').value='男生';selectedFiles=[];previews.innerHTML='';window.scrollTo({top:0,behavior:'smooth'});toast.style.display='block';setTimeout(()=>toast.style.display='none',1800);await loadList();}catch(e){alert('登錄失敗，請稍後再試');}finally{saveBtn.disabled=false;saveBtn.textContent=orig;dupProceed=false;}});
+
 function openDup(){dupModal.classList.add('open');}
 function closeDup(){dupModal.classList.remove('open');}
 dupNo.onclick=()=>{dupProceed=false;closeDup();};
