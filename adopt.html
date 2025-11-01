@@ -196,6 +196,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+const auth = getAuth(app);
+signInAnonymously(auth).then(() => {
+  console.log("✅ 匿名登入成功，可安全上傳檔案");
+}).catch(err => {
+  console.error("❌ 匿名登入失敗", err);
+});
 
 /* 🔗 後端 API 端點（改為發送到本地伺服器） */
 const apiUrl = "https://script.google.com/macros/s/AKfycbz574nDlbc_I-0guGtQ4KQrydo-IGgy0iUl0oJtkT3BvDdAT4qNJiRfT9k1cF7d6ZuhVw/exec";
