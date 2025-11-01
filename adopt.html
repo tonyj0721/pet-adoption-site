@@ -118,6 +118,7 @@ form.addEventListener('submit', async e=>{
   e.preventDefault();
   const btn=document.getElementById('submitBtn');
   btn.disabled=true; btn.textContent='上傳中...';
+  console.log("🚀 表單提交事件觸發！");
 
   const data=Object.fromEntries(new FormData(form).entries());
   data.petId=petId||'unknown';
@@ -136,6 +137,7 @@ form.addEventListener('submit', async e=>{
 
   // 傳送到 Apps Script（同時推 LINE + Messenger）
   try {
+    console.log("🎯 正在傳送到：", relayUrl);
     const res=await fetch(relayUrl,{
       method:"POST",
       headers:{"Content-Type":"application/json"},
