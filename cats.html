@@ -20,7 +20,7 @@ h1{ text-align:center; color:var(--green); margin-bottom:1rem }
 .filters{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:0 auto 1.2rem }
 select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; background:#fff; min-width:150px }
 
-/* ✅ 卡片排列：桌機4張，手機2張 */
+/* 卡片排列 */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -63,7 +63,7 @@ select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; backgrou
 .close{ background:transparent; border:0; font-size:1.5rem; cursor:pointer }
 .body{ display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem }
 
-/* ✅ Modal 主圖固定高度不裁切 */
+/* Modal 主圖 */
 .main-img{
   width:100%; height:320px;
   object-fit:contain;
@@ -75,7 +75,7 @@ select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; backgrou
 
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
 
-/* 📱 手機版 Modal 單欄 */
+/* 手機版 Modal */
 @media (max-width:768px){
   footer{ font-size:.9rem; }
   .body{ grid-template-columns:1fr; }
@@ -106,8 +106,9 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
     </select>
     <select id="age">
       <option value="">不限年齡</option>
-      <option>1歲以下</option><option>1</option><option>2</option><option>3</option><option>4</option>
-      <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+      <option>1歲以下</option>
+      <option>1~5歲</option>
+      <option>6~10歲</option>
       <option>10歲以上</option>
     </select>
     <select id="gender">
@@ -236,11 +237,16 @@ $('#detailModal').addEventListener('click',e=>{if(e.target.id==='detailModal')$(
 let allCats=[],allCatsNorm=[];
 function matchAge(val,sel){
   if(!sel)return true;
-  const a=String(val||'');
-  if(sel==='1歲以下')return/個月|月|0/.test(a);
-  if(sel==='10歲以上'){const m=a.match(/\d+/);return m?(parseInt(m[0],10)>=10):false;}
-  const m=a.match(/\d+/);return m?(parseInt(m[0],10)===parseInt(sel,10)):a.includes(sel);
+  const str=String(val||'');
+  const numMatch=str.match(/\d+/);
+  const ageNum=numMatch?parseInt(numMatch[0],10):0;
+  if(sel==='1歲以下') return str.includes('月') || ageNum===0;
+  if(sel==='1~5歲') return ageNum>=1 && ageNum<=5;
+  if(sel==='6~10歲') return ageNum>=6 && ageNum<=10;
+  if(sel==='10歲以上') return ageNum>10;
+  return true;
 }
+
 function applyFilters(){
   const type=catType.value,sub=subType.disabled?'':subType.value,age=$('#age').value,gen=$('#gender').value;
   let list=allCatsNorm.slice();
@@ -251,6 +257,7 @@ function applyFilters(){
   if(gen)list=list.filter(x=>(x.gender||'').includes(gen));
   render(list);
 }
+
 (async()=>{
   const ref=collection(db,'pets');
   const snap=await getDocs(query(ref,orderBy('createdAt','desc')));
@@ -262,7 +269,3 @@ function applyFilters(){
 </script>
 </body>
 </html>
-
-
-
-
