@@ -20,17 +20,14 @@ h1{ text-align:center; color:var(--green); margin-bottom:1rem }
 .filters{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:0 auto 1.2rem }
 select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; background:#fff; min-width:150px }
 
-/* ✅ 卡片排列：桌機4張，手機2張 */
+/* 卡片排列 */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.2rem;
 }
 @media (max-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.8rem;
-  }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
 }
 
 .card{
@@ -63,19 +60,13 @@ select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; backgrou
 .close{ background:transparent; border:0; font-size:1.5rem; cursor:pointer }
 .body{ display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem }
 
-/* ✅ Modal 主圖固定高度不裁切 */
-.main-img{
-  width:100%; height:320px;
-  object-fit:contain;
-  background:#f0f0f0; border-radius:8px; display:block; margin:0 auto;
-}
+.main-img{ width:100%; height:320px; object-fit:contain; background:#f0f0f0; border-radius:8px; display:block; margin:0 auto; }
 .thumbs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem }
 .thumbs img{ width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent }
 .thumbs img.active{ border-color:var(--mint) }
 
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
 
-/* 📱 手機版 Modal 單欄 */
 @media (max-width:768px){
   footer{ font-size:.9rem; }
   .body{ grid-template-columns:1fr; }
@@ -107,8 +98,9 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
 
     <select id="age">
       <option value="">不限年齡</option>
-      <option>1歲以下</option><option>1</option><option>2</option><option>3</option><option>4</option>
-      <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+      <option>1歲以下</option>
+      <option>1~5歲</option>
+      <option>6~10歲</option>
       <option>10歲以上</option>
     </select>
 
@@ -160,7 +152,6 @@ const firebaseConfig = {
   messagingSenderId: "102978803311",
   appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -171,53 +162,35 @@ const PEDIGREE = ["博美","貴賓","吉娃娃","馬爾濟斯","柯基","柴犬"
 const MIX = ["黑狗","白狗","黃狗","虎斑","花花","棕色"];
 
 function normalizeBreed(breedRaw=""){
-  const b = String(breedRaw).trim();
-  if (b.startsWith('米克斯/')) {
-    const sub = b.split('/')[1] || '';
-    return { cat:'mix', sub };
-  }
-  if (PEDIGREE.includes(b)) return { cat:'pedigree', sub:b };
-  if (MIX.includes(b)) return { cat:'mix', sub:b };
-  return { cat:'pedigree', sub:b };
+  const b=String(breedRaw).trim();
+  if(b.startsWith('米克斯/')){const sub=b.split('/')[1]||'';return{cat:'mix',sub};}
+  if(PEDIGREE.includes(b))return{cat:'pedigree',sub:b};
+  if(MIX.includes(b))return{cat:'mix',sub:b};
+  return{cat:'pedigree',sub:b};
 }
 
-/* ---- 下拉控制 ---- */
-const dogType = $('#dogType');
-const subType = $('#subType');
-
+/* 下拉選單控制 */
+const dogType=$('#dogType');
+const subType=$('#subType');
 function fillSubOptions(){
-  const type = dogType.value;
-  subType.innerHTML = '';
-  subType.disabled = false;
-
-  if (!type) {
-    subType.disabled = true;
-    subType.innerHTML = `<option value="">請先選類別</option>`;
-    return;
-  }
-
-  if (type === 'pedigree') {
-    subType.append(new Option('不限品種', ''));
-    PEDIGREE.forEach(x=>subType.append(new Option(x, x)));
-  } else {
-    subType.append(new Option('不限毛色', ''));
-    MIX.forEach(x=>subType.append(new Option(x, x)));
-  }
+  const type=dogType.value;
+  subType.innerHTML=''; subType.disabled=false;
+  if(!type){subType.disabled=true;subType.innerHTML='<option value="">請先選類別</option>';return;}
+  if(type==='pedigree'){subType.append(new Option('不限品種',''));PEDIGREE.forEach(x=>subType.append(new Option(x,x)));}
+  else{subType.append(new Option('不限毛色',''));MIX.forEach(x=>subType.append(new Option(x,x)));}
 }
-dogType.addEventListener('change', ()=>{ fillSubOptions(); applyFilters(); });
-subType.addEventListener('change', applyFilters);
+dogType.addEventListener('change',()=>{fillSubOptions();applyFilters();});
+subType.addEventListener('change',applyFilters);
 
-const ageSel = $('#age');
-const genderSel = $('#gender');
-ageSel.addEventListener('change', applyFilters);
-genderSel.addEventListener('change', applyFilters);
+$('#age').addEventListener('change',applyFilters);
+$('#gender').addEventListener('change',applyFilters);
 
-/* ---- 渲染卡片 ---- */
+/* 卡片顯示 */
 function card(p){
   const el=document.createElement('div');
   el.className='card';
-  const cover = p.images?.[0]?.url || 'https://placehold.co/600x400?text=No+Image';
-  el.innerHTML = `
+  const cover=p.images?.[0]?.url||'https://placehold.co/600x400?text=No+Image';
+  el.innerHTML=`
     <img src="${cover}" alt="${p.name||''}">
     <div class="info">
       <div style="display:flex;justify-content:space-between;align-items:center">
@@ -230,58 +203,47 @@ function card(p){
         <div>性別：${p.gender||'—'}</div>
       </div>
     </div>`;
-  el.addEventListener('click', ()=>openModal(p));
+  el.addEventListener('click',()=>openModal(p));
   return el;
 }
-function render(list){ grid.innerHTML=''; list.forEach(p=>grid.appendChild(card(p))); }
+function render(list){grid.innerHTML='';list.forEach(p=>grid.appendChild(card(p)));}
 
-/* ---- Modal ---- */
+/* 詳細視窗 */
 function openModal(p){
-  $('#mTitle').textContent = p.name || '動物資料';
-  $('#mSpecies').textContent = '狗狗';
-  $('#mBreed').textContent = p.breed || '—';
-  $('#mAge').textContent = p.age || '—';
-  $('#mGender').textContent = p.gender || '—';
-  $('#mIntro').textContent = p.intro || '';
-
-  const imgs = (p.images?.length)? p.images.map(x=>x.url):['https://placehold.co/800x500?text=No+Image'];
-  let current = 0;
-  const main=$('#mMain'), thumbs=$('#mThumbs'); thumbs.innerHTML='';
-  main.src = imgs[0];
-  imgs.forEach((src,i)=>{
-    const im=new Image(); im.src=src; im.alt='thumb';
-    im.addEventListener('click',()=>{current=i;update();});
-    thumbs.appendChild(im);
-  });
-  function update(){
-    main.src = imgs[current];
-    [...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active',idx===current));
-  }
+  $('#mTitle').textContent=p.name||'動物資料';
+  $('#mSpecies').textContent='狗狗';
+  $('#mBreed').textContent=p.breed||'—';
+  $('#mAge').textContent=p.age||'—';
+  $('#mGender').textContent=p.gender||'—';
+  $('#mIntro').textContent=p.intro||'';
+  const imgs=(p.images?.length)?p.images.map(x=>x.url):['https://placehold.co/800x500?text=No+Image'];
+  let current=0;const main=$('#mMain'),thumbs=$('#mThumbs');thumbs.innerHTML='';
+  main.src=imgs[0];
+  imgs.forEach((src,i)=>{const im=new Image();im.src=src;im.addEventListener('click',()=>{current=i;update();});thumbs.appendChild(im);});
+  function update(){main.src=imgs[current];[...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active',idx===current));}
   update();
   main.addEventListener('click',()=>{current=(current+1)%imgs.length;update();});
-
-  $('#adoptBtn').onclick=()=>{
-    const url=new URL('adopt.html',location.href);
-    url.searchParams.set('pet',p.id||'');
-    location.href=url.toString();
-  };
+  $('#adoptBtn').onclick=()=>{const url=new URL('adopt.html',location.href);url.searchParams.set('pet',p.id||'');location.href=url.toString();};
   $('#detailModal').classList.add('open');
 }
 $('#closeBtn').addEventListener('click',()=>$('#detailModal').classList.remove('open'));
 $('#detailModal').addEventListener('click',e=>{if(e.target.id==='detailModal')$('#detailModal').classList.remove('open');});
 
-/* ---- 篩選 ---- */
-let allDogs=[], allDogsNorm=[];
+/* 篩選邏輯 */
+let allDogs=[],allDogsNorm=[];
 function matchAge(val,sel){
   if(!sel)return true;
-  const a=String(val||'');
-  if(sel==='1歲以下')return /個月|月|0/.test(a);
-  if(sel==='10歲以上'){const m=a.match(/\d+/);return m?(parseInt(m[0],10)>=10):false;}
-  const m=a.match(/\d+/);return m?(parseInt(m[0],10)===parseInt(sel,10)):a.includes(sel);
+  const str=String(val||'');
+  const numMatch=str.match(/\d+/);
+  const ageNum=numMatch?parseInt(numMatch[0],10):0;
+  if(sel==='1歲以下') return str.includes('月') || ageNum===0;
+  if(sel==='1~5歲') return ageNum>=1 && ageNum<=5;
+  if(sel==='6~10歲') return ageNum>=6 && ageNum<=10;
+  if(sel==='10歲以上') return ageNum>10;
+  return true;
 }
 function applyFilters(){
-  const type=dogType.value, sub=subType.disabled?'':subType.value;
-  const age=ageSel.value, gen=genderSel.value;
+  const type=dogType.value,sub=subType.disabled?'':subType.value,age=$('#age').value,gen=$('#gender').value;
   let list=allDogsNorm.slice();
   if(type)list=list.filter(x=>x._cat===type);
   if(type==='pedigree'&&sub)list=list.filter(x=>x._sub===sub);
@@ -291,21 +253,15 @@ function applyFilters(){
   render(list);
 }
 
-/* ---- 載入 ---- */
+/* 載入資料 */
 (async()=>{
   const ref=collection(db,'pets');
   const snap=await getDocs(query(ref,orderBy('createdAt','desc')));
   allDogs=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.species==='dog');
-  allDogsNorm=allDogs.map(p=>{
-    const n=normalizeBreed(p.breed||'');
-    return {...p,_cat:n.cat,_sub:n.sub};
-  });
+  allDogsNorm=allDogs.map(p=>{const n=normalizeBreed(p.breed||'');return{...p,_cat:n.cat,_sub:n.sub};});
   fillSubOptions();
   render(allDogsNorm);
 })();
 </script>
 </body>
 </html>
-
-
-
