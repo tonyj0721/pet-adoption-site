@@ -198,7 +198,7 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 /* 🔗 後端 API 端點（改為發送到本地伺服器） */
-const apiUrl = "https://script.google.com/macros/s/AKfycbxGv8nsj0G-vcf3TYiEilbVCz-AL3L7GfNv34b4DTxK_JMETObrcd4xRwWB4WzCdm3VJA/exec";
+const apiUrl = "https://script.google.com/macros/s/AKfycbw5rOfGg8c8p3pf5nXkoGAxrmFDnXbvc2ZKDFjrYVlomkXYlmkWOcKrHUChxwpac4gR3A/exec";
 
 /* 讀取 URL ?pet= 並顯示名字 */
 const petId = new URLSearchParams(location.search).get('pet');
@@ -281,7 +281,7 @@ form.addEventListener('submit', async e=>{
   try{
     const res = await fetch(apiUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "text/plain" },
       body: JSON.stringify(data)
     });
     const result = await res.json();
