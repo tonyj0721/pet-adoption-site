@@ -43,27 +43,19 @@ button#contactBtn{
 }
 button#contactBtn:hover{ filter:brightness(.95); transform:translateY(1px); }
 
-/* ✅ 中央提示 Modal */
+/* Modal 提示 */
 #successModal{
   position:fixed; inset:0; background:rgba(0,0,0,.45);
-  display:none; align-items:center; justify-content:center; z-index:200;
+  display:none; align-items:center; justify-content:center; z-index:9999;
 }
 #successModal.open{ display:flex; }
 #successModal .box{
   background:#fff; border:3px solid var(--green);
-  border-radius:12px; padding:2rem 2.5rem; text-align:center;
-  box-shadow:0 4px 14px rgba(0,0,0,.25);
-  max-width:400px; width:90%;
+  border-radius:16px; padding:2rem 1.5rem; text-align:center;
+  box-shadow:0 4px 18px rgba(0,0,0,.2);
 }
-#successModal .icon{ font-size:2.5rem; color:var(--green); margin-bottom:.6rem; }
-#successModal .box p{ font-size:1.05rem; margin:.6rem 0; }
-#successModal .btn{
-  margin-top:1.2rem; background:var(--green); color:#fff;
-  border:none; border-radius:999px; padding:.7rem 1.6rem;
-  font-weight:700; cursor:pointer; font-size:1rem;
-  display:none;
-}
-#successModal .btn:hover{ background:#3a6645; }
+#successModal .icon{ font-size:3rem; color:var(--green); margin-bottom:.5rem; }
+#successModal p{ margin:.3rem 0; font-weight:600; font-size:1.1rem; }
 
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
 </style>
@@ -139,12 +131,12 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
   <button id="contactBtn">📋 複製表單並聯絡小編</button>
 </main>
 
-<!-- ✅ 中央提示 Modal -->
+<!-- ✅ 提示 Modal -->
 <div id="successModal">
   <div class="box">
     <div class="icon">✅</div>
-    <p id="msgText"><strong>表單已複製！即將開啟 Messenger…3</strong></p>
-    <button class="btn" id="openMessengerBtn">開啟 Messenger</button>
+    <p id="msgLine1">表單複製中</p>
+    <p id="msgLine2">即將開啟 Messenger...3</p>
   </div>
 </div>
 
@@ -154,8 +146,6 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
 const petId = new URLSearchParams(location.search).get('pet');
 const title = document.getElementById('title');
 const modal = document.getElementById('successModal');
-const openBtn = document.getElementById('openMessengerBtn');
-const msgText = document.getElementById('msgText');
 let petName = petId || "（未指定）";
 title.innerHTML = `我要領養：<span>${petName}</span>`;
 
@@ -182,25 +172,20 @@ document.getElementById("contactBtn").addEventListener("click", async ()=>{
     await navigator.clipboard.writeText(msg);
     modal.classList.add("open");
     let count = 3;
+    const line2 = document.getElementById("msgLine2");
     const timer = setInterval(()=>{
       count--;
-      msgText.innerHTML = `<strong>表單已複製！即將開啟 Messenger…${count}</strong>`;
+      line2.textContent = `即將開啟 Messenger...${count}`;
       if(count <= 0){
         clearInterval(timer);
-        msgText.innerHTML = `<strong>✅ 表單已複製完成！</strong><br>請點下方按鈕開啟 Messenger`;
-        openBtn.style.display = "inline-block";
+        modal.classList.remove("open");
+        window.open(`https://m.me/61582634772771?text=${encodeURIComponent(msg)}`, "_blank");
       }
-    },1000);
+    }, 1000);
   }catch(e){
     alert("⚠️ 複製失敗，請手動貼上訊息。");
   }
 });
-
-openBtn.addEventListener("click", ()=>{
-  modal.classList.remove("open");
-  window.open("https://m.me/100070289411620", "_blank");
-});
 </script>
 </body>
 </html>
-
