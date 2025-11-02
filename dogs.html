@@ -21,34 +21,11 @@ h1{ text-align:center; color:var(--green); margin-bottom:1rem }
 select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; background:#fff; min-width:150px }
 
 /* 卡片排列 */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.2rem;
-}
-@media (max-width: 768px) {
-  .grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
-}
+.grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1.2rem; }
+@media(max-width:768px){ .grid{ grid-template-columns:repeat(2,1fr); gap:0.8rem; } }
 
-.card{
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
-  overflow:hidden;
-  cursor:pointer;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  transition:transform .15s ease;
-}
-.card img{
-  width:100%;
-  height:220px;
-  object-fit:contain;
-  background:#f0f0f0;
-  display:block;
-  margin:auto;
-}
+.card{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; cursor:pointer; display:flex; flex-direction:column; justify-content:space-between; transition:transform .15s ease; }
+.card img{ width:100%; height:220px; object-fit:contain; background:#f0f0f0; display:block; margin:auto; }
 .card .info{ padding:.8rem; background:#fff; flex-shrink:0 }
 .pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem }
 
@@ -67,7 +44,27 @@ select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; backgrou
 
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
 
-@media (max-width:768px){
+/* 🟢 新增：我要領養提示 Modal */
+#adoptHint{
+  position:fixed; inset:0; background:rgba(0,0,0,.55);
+  display:none; align-items:center; justify-content:center;
+  z-index:200;
+}
+#adoptHint.open{ display:flex; }
+#adoptHint .modal-box{
+  background:#fff; border-radius:12px; padding:1.5rem 2rem;
+  max-width:420px; width:90%; text-align:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.2);
+}
+#adoptHint .modal-box p{ margin-bottom:1.2rem; line-height:1.7; }
+#adoptHint .modal-box button{
+  background:var(--green); color:#fff; border:none;
+  border-radius:999px; padding:.8rem 2rem; font-weight:700;
+  cursor:pointer; font-size:1rem;
+}
+#adoptHint .modal-box button:hover{ background:#3a6645; }
+
+@media(max-width:768px){
   footer{ font-size:.9rem; }
   .body{ grid-template-columns:1fr; }
   .main-img{ height:260px; }
@@ -138,6 +135,14 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
   </div>
 </div>
 
+<!-- 🟢 我要領養提示 Modal -->
+<div id="adoptHint" class="modal" aria-hidden="true">
+  <div class="modal-box">
+    <p>💡 填寫完表單後，按下「📋 複製表單並聯絡小編」<br>系統會自動複製填寫訊息並開啟 Messenger。</p>
+    <button id="continueBtn">繼續</button>
+  </div>
+</div>
+
 <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
 <script type="module">
@@ -181,7 +186,6 @@ function fillSubOptions(){
 }
 dogType.addEventListener('change',()=>{fillSubOptions();applyFilters();});
 subType.addEventListener('change',applyFilters);
-
 $('#age').addEventListener('change',applyFilters);
 $('#gender').addEventListener('change',applyFilters);
 
@@ -223,7 +227,20 @@ function openModal(p){
   function update(){main.src=imgs[current];[...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active',idx===current));}
   update();
   main.addEventListener('click',()=>{current=(current+1)%imgs.length;update();});
-  $('#adoptBtn').onclick=()=>{const url=new URL('adopt.html',location.href);url.searchParams.set('pet',p.id||'');location.href=url.toString();};
+
+  // 🟢 點擊我要領養 → 顯示提示 Modal
+  $('#adoptBtn').onclick=()=>{
+    const hint=document.getElementById('adoptHint');
+    hint.classList.add('open');
+    const continueBtn=document.getElementById('continueBtn');
+    continueBtn.onclick=()=>{
+      hint.classList.remove('open');
+      const url=new URL('adopt.html',location.href);
+      url.searchParams.set('pet',p.id||'');
+      location.href=url.toString();
+    };
+  };
+
   $('#detailModal').classList.add('open');
 }
 $('#closeBtn').addEventListener('click',()=>$('#detailModal').classList.remove('open'));
