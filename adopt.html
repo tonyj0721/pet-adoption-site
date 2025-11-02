@@ -9,30 +9,18 @@
 *{ box-sizing:border-box; }
 body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
 
-/* Header（與首頁一致：左標題、右兩顆圓角鈕，綠底白字） */
+/* Header */
 header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
-.nav{
-  max-width:1100px; margin:auto;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:1rem;
-}
+.nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem; }
 .nav-left{ font-weight:800; font-size:1.1rem; }
 .nav-right{ display:flex; gap:.6rem; }
 .nav a{ text-decoration:none; }
-.nav .btn{
-  display:inline-block; background:var(--green); color:#fff;
-  padding:.45rem .9rem; border-radius:999px; font-weight:700;
-  border:2px solid rgba(0,0,0,.05); box-shadow:0 1px 3px rgba(0,0,0,.08);
-  transition:background .2s;
-}
+.nav .btn{ display:inline-block; background:var(--green); color:#fff; padding:.45rem .9rem; border-radius:999px; font-weight:700; border:2px solid rgba(0,0,0,.05); box-shadow:0 1px 3px rgba(0,0,0,.08); transition:background .2s; }
 .nav .btn:hover{ background:#3a6645; }
 
 /* Main */
 main{ max-width:900px; margin:1.5rem auto; padding:0 1rem; }
-.back-btn{
-  background:#fff; border:1px solid #ccc; color:#333;
-  border-radius:8px; padding:.5rem .9rem; cursor:pointer; margin-bottom:1rem;
-}
+.back-btn{ background:#fff; border:1px solid #ccc; color:#333; border-radius:8px; padding:.5rem .9rem; cursor:pointer; margin-bottom:1rem; }
 h1{ color:var(--green); text-align:center; margin:.5rem 0 1rem; }
 h1 span{ color:#333; font-weight:600; margin-left:.4rem; }
 
@@ -49,46 +37,47 @@ input,textarea{
   border-radius:8px; font-size:.95rem; background:#fff;
 }
 
-/* 檔案預覽 */
-.previews{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.6rem; }
-.thumb{ width:84px; height:84px; border-radius:8px; overflow:hidden; background:#f0f1f3; position:relative }
-.thumb img,.thumb video{ width:100%; height:100%; object-fit:cover }
-.thumb b{ position:absolute; top:2px; right:6px; background:rgba(0,0,0,.6); color:#fff; border-radius:50%;
-  width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer }
+/* 按鈕 */
+.action-buttons{
+  display:flex; justify-content:center;
+  margin-top:1.5rem;
+}
+.action-buttons a{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:6px;
+  background:var(--green); color:#fff;
+  padding:.9rem 1.6rem; border-radius:999px;
+  font-weight:700; font-size:1rem;
+  text-decoration:none; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+  transition:all .2s;
+}
+.action-buttons a:hover{
+  background:#3a6645; transform:translateY(-1px);
+}
 
-/* Submit */
-button[type=submit]{
-  display:block;
-  width:100%;
+/* ✅ 彈出提示 */
+.toast{
+  position:fixed;
+  bottom:25px;
+  left:50%;
+  transform:translateX(-50%) translateY(40px);
   background:var(--green);
   color:#fff;
-  border:0;
-  border-radius:12px;
-  padding:1rem 0;
-  font-size:1.1rem;
-  font-weight:700;
-  letter-spacing:.05em;
-  cursor:pointer;
-  text-align:center;
-  box-shadow:0 2px 8px rgba(0,0,0,.12);
-  transition:filter .2s, transform .1s;
+  padding:.9rem 1.4rem;
+  border-radius:999px;
+  box-shadow:0 3px 12px rgba(0,0,0,.2);
+  opacity:0;
+  font-weight:600;
+  transition:all .4s ease;
+  z-index:9999;
 }
-button[type=submit]:hover{
-  filter:brightness(.95);
-  transform:translateY(1px);
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
 }
-button[disabled]{ opacity:.6; cursor:not-allowed }
-.spinner{ display:inline-block; width:1em; height:1em; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%;
-  animation:spin .8s linear infinite; vertical-align:middle; margin-left:.4rem }
-@keyframes spin { to{ transform:rotate(360deg) } }
 
-/* 成功 Modal */
-.s-modal{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; padding:1rem; z-index:999 }
-.s-modal.open{ display:flex }
-.s-panel{ background:#fff; border-radius:12px; padding:1.2rem 1.5rem; max-width:520px; width:100%; text-align:center }
-.s-panel h3{ color:var(--green); margin-top:0 }
-
-/* Footer（與首頁一致） */
+/* Footer */
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
 @media(max-width:768px){ footer{ font-size:.9rem; } }
 </style>
@@ -113,77 +102,70 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
     <div class="subCard">
       <div class="sectionTitle">基本資料</div>
       <div class="row">
-        <div class="field"><label>姓名</label><input name="name" required></div>
-        <div class="field"><label>年齡</label><input name="age"></div>
-        <div class="field"><label>居住地（縣市／區域）</label><input name="location"></div>
-        <div class="field"><label>居住環境（租屋或自宅／透天或公寓）</label><input name="houseType"></div>
-        <div class="field"><label>職業</label><input name="job"></div>
-        <div class="field"><label>月收入（大約即可）</label><input name="income"></div>
-        <div class="field"><label>家庭成員</label><input name="family"></div>
-        <div class="field"><label>家庭成員總人數</label><input name="members"></div>
-        <div class="field"><label>現居住狀況（與家人同住或獨居）</label><input name="living"></div>
-        <div class="field"><label>同居成員（例如：伴侶、配偶、父母等）</label><input name="cohabit"></div>
+        <div class="field"><label>姓名</label><input name="姓名"></div>
+        <div class="field"><label>年齡</label><input name="年齡"></div>
+        <div class="field"><label>居住地</label><input name="居住地"></div>
+        <div class="field"><label>居住環境</label><input name="居住環境"></div>
+        <div class="field"><label>職業</label><input name="職業"></div>
+        <div class="field"><label>月收入</label><input name="月收入"></div>
+        <div class="field"><label>家庭成員</label><input name="家庭成員"></div>
+        <div class="field"><label>家庭成員總人數</label><input name="家庭成員總人數"></div>
+        <div class="field"><label>現居住狀況</label><input name="現居住狀況"></div>
+        <div class="field"><label>同居成員</label><input name="同居成員"></div>
       </div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">飼養寵物經驗</div>
       <div class="row">
-        <div class="field"><label>是否曾經飼養過寵物？</label><input name="hadPets"></div>
-        <div class="field"><label>飼養過什麼寵物？</label><input name="petHistory"></div>
+        <div class="field"><label>是否曾經飼養過寵物？</label><input name="是否曾飼養過寵物"></div>
+        <div class="field"><label>飼養過什麼寵物？</label><input name="飼養過的寵物"></div>
       </div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">現有寵物狀況</div>
-      <div class="field"><label>目前家中是否有寵物？</label><input name="hasNow"></div>
-      <div class="field"><label>若有，請提供寵物種類、是否已結紮、性別等資訊：</label><textarea name="hasNowInfo"></textarea></div>
+      <div class="field"><label>目前家中是否有寵物？</label><input name="目前是否有寵物"></div>
+      <div class="field"><label>若有，請提供寵物資訊：</label><textarea name="現有寵物資訊"></textarea></div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">認養動機</div>
-      <div class="field"><label>為什麼想認養這隻毛孩呢？</label><textarea name="reason"></textarea></div>
+      <div class="field"><label>為什麼想認養這隻毛孩呢？</label><textarea name="認養動機"></textarea></div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">飼養方式</div>
-      <div class="field"><label>您會如何照顧這隻毛孩？（例如：飲食安排、居住空間、教育方式等）</label><textarea name="careMethod"></textarea></div>
+      <div class="field"><label>您會如何照顧這隻毛孩？</label><textarea name="飼養方式"></textarea></div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">飼養花費認知</div>
-      <div class="field"><label>您認為飼養寵物需要哪些支出？（請舉例說明）</label><textarea name="costAwareness"></textarea></div>
+      <div class="field"><label>您認為飼養寵物需要哪些支出？</label><textarea name="花費認知"></textarea></div>
     </div>
 
     <div class="subCard">
-      <div class="sectionTitle">環境參考（可上傳最多 10 個檔案：照片或影片）</div>
-      <input id="envFiles" type="file" accept="image/*,video/*" multiple>
-      <div id="envPreview" class="previews"></div>
+      <div class="sectionTitle">環境參考</div>
+      <p style="font-size:1rem; line-height:1.6; color:#555; margin:0;">
+        📷 請拍攝或錄製毛孩未來的生活區域，<br>
+        聯絡小編後另行上傳，供我們審核參考～謝謝！
+      </p>
     </div>
-
-    <button type="submit" id="submitBtn">送出申請</button>
   </form>
+
+  <div class="action-buttons">
+    <a id="contactBtn">🐶 聯絡小編</a>
+  </div>
 </main>
 
-<!-- 感謝 Modal -->
-<div id="successModal" class="s-modal" aria-hidden="true">
-  <div class="s-panel">
-    <h3>✅ 感謝您，我們已收到您的認養申請！</h3>
-    <p style="white-space: pre-wrap; margin:.6rem 0;">
-🔖 因每日訊息量過多，小編可能無法逐一回覆每一位登記者審核結果，
-最終僅會通知最合適的認養人，以上若有不周敬請見諒 🙏
-    </p>
-    <p>將在 <span id="cd">3</span> 秒後返回首頁…</p>
-  </div>
-</div>
+<!-- ✅ 彈出提示 -->
+<div id="toast" class="toast">✅ 表單內容已複製！</div>
 
 <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
-<!-- 前端：Firebase + Storage 上傳 + 傳送到 Apps Script Relay（LINE 推播） -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
@@ -195,126 +177,67 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
-/* 🔗 後端 API 端點（改為發送到本地伺服器） */
-const apiUrl = "/api/submit-adoption";
-
-/* 讀取 URL ?pet= 並顯示名字 */
+/* 顯示動物名稱 */
 const petId = new URLSearchParams(location.search).get('pet');
 const title = document.getElementById('title');
-let petName = "未指定";
+let petName = "";
 if (petId) {
-  try{
+  try {
     const snap = await getDoc(doc(db, "pets", petId));
     if (snap.exists()) {
-      petName = snap.data().name || "未命名";
+      petName = snap.data().name || "";
       title.innerHTML = `我要領養：<span>${petName}</span>`;
-    } else {
-      title.innerHTML = `我要領養：<span>找不到這隻動物</span>`;
     }
-  }catch(e){
+  } catch (e) {
     console.error(e);
-    title.innerHTML = `我要領養：<span>讀取錯誤</span>`;
   }
 }
 
-/* 環境檔案預覽（可刪除） */
-const envInput = document.getElementById('envFiles');
-const envBox = document.getElementById('envPreview');
-let envSelected = [];
-envInput.addEventListener('change', e=>{
-  const add = [...e.target.files];
-  envSelected = envSelected.concat(add).slice(0,10); // 最多 10 個
-  envInput.value = '';
-  renderEnv();
-});
-function renderEnv(){
-  envBox.innerHTML = '';
-  envSelected.forEach((f,i)=>{
-    const div = document.createElement('div'); div.className='thumb';
-    if(f.type.startsWith('image/')){
-      const img = document.createElement('img'); img.src = URL.createObjectURL(f); div.appendChild(img);
-    }else{
-      const v = document.createElement('video'); v.src = URL.createObjectURL(f); v.muted=true; div.appendChild(v);
+/* ✅ 顯示彈出提示 */
+function showToast(msg){
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"), 2500);
+}
+
+/* 🐶 聯絡小編：複製表單 + 開啟 Messenger */
+document.getElementById("contactBtn").addEventListener("click", ()=>{
+  const form = document.getElementById("adoptForm");
+  const sections = [...form.querySelectorAll(".subCard")];
+  let msg = `📋 我要領養：${petName || "（未指定）"}\n\n`;
+
+  sections.forEach(sec=>{
+    const title = sec.querySelector(".sectionTitle")?.textContent.trim();
+    const inputs = sec.querySelectorAll("input, textarea");
+    let lines = [];
+    inputs.forEach(i=>{
+      if(i.value.trim()){
+        lines.push(`${i.previousElementSibling?.textContent || i.name}：${i.value.trim()}`);
+      }
+    });
+    if(lines.length > 0){
+      // 🟢 若是基本資料區，項目間多空一行
+      if(title === "基本資料"){
+        msg += `【${title}】\n${lines.join("\n\n")}\n\n`;
+      }else{
+        msg += `【${title}】\n${lines.join("\n")}\n\n`;
+      }
     }
-    const del = document.createElement('b'); del.textContent='×';
-    del.onclick=()=>{envSelected.splice(i,1);renderEnv();};
-    div.appendChild(del);
-    envBox.appendChild(div);
   });
-}
 
-/* 表單送出：上傳 Storage → 拿下載連結 → 傳 Apps Script（LINE 推播） */
-const form = document.getElementById('adoptForm');
-const submitBtn = document.getElementById('submitBtn');
+  const encodedMsg = encodeURIComponent(msg);
+  const messengerUrl = `https://m.me/873460069178476?text=${encodedMsg}`;
 
-form.addEventListener('submit', async e=>{
-  e.preventDefault();
-  submitBtn.disabled = true;
-  const orig = submitBtn.textContent;
-  submitBtn.innerHTML = '送出申請中... <span class="spinner"></span>';
-
-  // 收集表單
-  const data = Object.fromEntries(new FormData(form).entries());
-  data.petId = petId || 'unknown';
-  data.petName = petName;
-
-  // 上傳檔案到 Storage，取回公開連結
-  const files = envSelected;
-  const uploaded = [];
-  let idx = 0;
-  for (const f of files) {
-    const safeName = f.name.replace(/[^\w.\-]+/g,'_');
-    const path = `adoptSubmissions/${data.petId}/${Date.now()}-${idx++}-${safeName}`;
-    const fileRef = ref(storage, path);
-    await uploadBytes(fileRef, f);
-    const url = await getDownloadURL(fileRef);
-    uploaded.push({
-      url,
-      type: f.type.startsWith('image/') ? 'image' : (f.type.startsWith('video/') ? 'video' : 'other')
-    });
-  }
-  data.files = uploaded;
-
-  // 傳到後端 API（發送到 LINE）
-  try{
-    const res = await fetch(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-    const result = await res.json();
-    if(!res.ok || !result.success){
-      alert(result.message || "傳送 LINE 通知失敗，請稍後再試。");
-      submitBtn.disabled = false;
-      submitBtn.textContent = orig;
-      return;
-    }
-    // 成功：顯示感謝 Modal，倒數回首頁
-    showSuccessModal();
-    form.reset();
-    envSelected = [];
-    renderEnv();
-  }catch(err){
-    console.error(err);
-    alert("發生錯誤，請稍後再試。");
-    submitBtn.disabled = false;
-    submitBtn.textContent = orig;
-  }
+  navigator.clipboard.writeText(msg).then(()=>{
+    showToast("✅ 表單內容已複製！");
+    setTimeout(()=>window.open(messengerUrl, "_blank"), 800);
+  }).catch(()=>{
+    showToast("⚠️ 複製失敗，請手動貼上");
+    window.open(messengerUrl, "_blank");
+  });
 });
-
-/* 成功後 Modal + 倒數回首頁 */
-function showSuccessModal(){
-  const m = document.getElementById("successModal");
-  const cd = document.getElementById("cd");
-  let n = 3; cd.textContent = n;
-  m.classList.add("open"); m.setAttribute("aria-hidden","false");
-  const t = setInterval(()=>{
-    n--; cd.textContent=n;
-    if(n<=0){ clearInterval(t); location.href="index.html"; }
-  },1000);
-}
 </script>
 </body>
 </html>
