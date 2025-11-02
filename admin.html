@@ -186,7 +186,7 @@ const storage=getStorage(app);
 const $=s=>document.querySelector(s);
 let selectedFiles=[],allPets=[],deleteTargetId=null,dupProceed=false;
 const listEl=$('#list'),emptyEl=$('#empty'),saveBtn=$('#saveBtn'),toast=$('#toast'),photos=$('#photos'),previews=$('#previews'),dupModal=$('#dupModal'),dupYes=$('#dupYes'),dupNo=$('#dupNo');
-const breedSets={cat:{pure:["美短","英短","藍貓","暹羅貓","波斯貓","布偶貓"],mix:["橘貓","黑貓","虎斑貓","白底虎斑貓","賓士貓","三花貓","玳瑁貓","白貓"]},dog:{pure:["博美","貴賓","吉娃娃","馬爾濟斯","柯基","柴犬","狐狸犬","哈士奇","高山犬","黃金獵犬"],mix:["黑色","白色","黃色","棕色","虎斑","花花"]}};
+const breedSets={cat:{pure:["美短","英短","藍貓","暹羅貓","波斯貓","布偶貓","曼赤肯"],mix:["橘貓","黑貓","虎斑貓","白底虎斑貓","賓士貓","三花貓","玳瑁貓","白貓"]},dog:{pure:["博美","貴賓","吉娃娃","馬爾濟斯","柯基","柴犬","狐狸犬","哈士奇","高山犬","黃金獵犬"],mix:["黑色","白色","黃色","棕色","虎斑","花花"]}};
 
 function updateSubGroup(){const group=$('#group').value,sub=$('#subGroup');sub.innerHTML='';if(group==='cat'){sub.innerHTML='<option value="pure">品種貓</option><option value="mix">米克斯</option>';}else{sub.innerHTML='<option value="pure">品種犬</option><option value="mix">米克斯</option>';}updateBreed();}
 function updateBreed(){const g=$('#group').value,s=$('#subGroup').value,b=$('#breed');b.innerHTML='';breedSets[g][s].forEach(name=>{const o=document.createElement('option');o.textContent=name;b.appendChild(o);});}
