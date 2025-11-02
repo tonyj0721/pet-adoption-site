@@ -169,7 +169,7 @@ if (petId) {
   }
 }
 
-/* 🐶 聯絡小編：整理表單、複製並開啟 Messenger */
+/* 🐶 聯絡小編：複製表單 + 開啟 Messenger */
 document.getElementById("contactBtn").addEventListener("click", ()=>{
   const form = document.getElementById("adoptForm");
   const sections = [...form.querySelectorAll(".subCard")];
@@ -180,10 +180,17 @@ document.getElementById("contactBtn").addEventListener("click", ()=>{
     const inputs = sec.querySelectorAll("input, textarea");
     let lines = [];
     inputs.forEach(i=>{
-      if(i.value.trim()) lines.push(`${i.previousElementSibling?.textContent || i.name}：${i.value.trim()}`);
+      if(i.value.trim()){
+        lines.push(`${i.previousElementSibling?.textContent || i.name}：${i.value.trim()}`);
+      }
     });
     if(lines.length > 0){
-      msg += `【${title}】\n${lines.join("\n")}\n\n`;
+      // 🟢 若是基本資料區，項目間多空一行
+      if(title === "基本資料"){
+        msg += `【${title}】\n${lines.join("\n\n")}\n\n`;
+      }else{
+        msg += `【${title}】\n${lines.join("\n")}\n\n`;
+      }
     }
   });
 
@@ -201,5 +208,3 @@ document.getElementById("contactBtn").addEventListener("click", ()=>{
 </script>
 </body>
 </html>
-
-
