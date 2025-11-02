@@ -145,6 +145,7 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
 <!-- 中央倒數提示 -->
 <div id="successModal" aria-hidden="true">
   <div class="box">
+    <div class="big">✅</div>
     <p id="msg1">表單複製中</p>
     <p id="msg2">即將開啟 Messenger...3</p>
   </div>
@@ -193,7 +194,7 @@ function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-
 document.getElementById("contactBtn").addEventListener("click", ()=>{
   const form = document.getElementById("adoptForm");
   const sections = [...form.querySelectorAll(".subCard")];
-  let msg = `📋 我要領養：${petName}\n\n`;
+  let msg = `📋 我要領養：${petName || "（未指定）"}\n\n`;
 
   sections.forEach(sec=>{
     const secTitle = sec.querySelector(".sectionTitle")?.textContent.trim();
