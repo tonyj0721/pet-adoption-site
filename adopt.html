@@ -149,7 +149,7 @@ const modal = document.getElementById('successModal');
 let petName = petId || "（未指定）";
 title.innerHTML = `我要領養：<span>${petName}</span>`;
 
-document.getElementById("contactBtn").addEventListener("click", async ()=>{
+document.getElementById("contactBtn").addEventListener("click", ()=>{
   const form = document.getElementById("adoptForm");
   const sections = [...form.querySelectorAll(".subCard")];
   let msg = `📋 我要領養：${petName}\n\n`;
@@ -168,23 +168,30 @@ document.getElementById("contactBtn").addEventListener("click", async ()=>{
     }
   });
 
-  try{
-    await navigator.clipboard.writeText(msg);
-    modal.classList.add("open");
-    let count = 3;
-    const line2 = document.getElementById("msgLine2");
-    const timer = setInterval(()=>{
-      count--;
+  const encoded = encodeURIComponent(msg);
+  const messengerUrl = `https://m.me/61582634772771?text=${encoded}`;
+
+  // 同步觸發 window.open，避免被阻擋
+  const win = window.open("about:blank");
+
+  // 顯示倒數動畫
+  modal.classList.add("open");
+  let count = 3;
+  const line2 = document.getElementById("msgLine2");
+  line2.textContent = `即將開啟 Messenger...${count}`;
+
+  navigator.clipboard.writeText(msg).catch(()=>{});
+
+  const timer = setInterval(()=>{
+    count--;
+    if(count > 0){
       line2.textContent = `即將開啟 Messenger...${count}`;
-      if(count <= 0){
-        clearInterval(timer);
-        modal.classList.remove("open");
-        window.open(`https://m.me/61582634772771?text=${encodeURIComponent(msg)}`, "_blank");
-      }
-    }, 1000);
-  }catch(e){
-    alert("⚠️ 複製失敗，請手動貼上訊息。");
-  }
+    } else {
+      clearInterval(timer);
+      modal.classList.remove("open");
+      win.location.href = messengerUrl; // 實際跳轉
+    }
+  }, 1000);
 });
 </script>
 </body>
