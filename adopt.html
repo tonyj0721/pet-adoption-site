@@ -6,77 +6,238 @@
 <title>我要領養｜台中簡媽媽狗園</title>
 <style>
 :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+*{ box-sizing:border-box; }
 body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
-main{ max-width:900px; margin:2rem auto; padding:0 1rem; }
-h1{ color:var(--green); text-align:center; margin-bottom:1rem; }
-form{ display:grid; gap:1rem; }
-.subCard{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); padding:1.2rem; }
+
+/* Header */
+header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
+.nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem; }
+.nav-left{ font-weight:800; font-size:1.1rem; }
+.nav-right{ display:flex; gap:.6rem; }
+.nav a{ text-decoration:none; }
+.nav .btn{ display:inline-block; background:var(--green); color:#fff; padding:.45rem .9rem; border-radius:999px; font-weight:700; border:2px solid rgba(0,0,0,.05); box-shadow:0 1px 3px rgba(0,0,0,.08); transition:background .2s; }
+.nav .btn:hover{ background:#3a6645; }
+
+/* Main */
+main{ max-width:900px; margin:1.5rem auto; padding:0 1rem; }
+.back-btn{ background:#fff; border:1px solid #ccc; color:#333; border-radius:8px; padding:.5rem .9rem; cursor:pointer; margin-bottom:1rem; }
+h1{ color:var(--green); text-align:center; margin:.5rem 0 1rem; }
+h1 span{ color:#333; font-weight:600; margin-left:.4rem; }
+
+/* Cards */
+.subCard{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); padding:1.2rem; margin-bottom:1rem; }
 .sectionTitle{ color:var(--green); font-weight:700; font-size:1.1rem; margin:.2rem 0 1rem; }
-.row{ display:grid; grid-template-columns:repeat(2, 1fr); gap:1rem 2rem; }
+.row{ display:grid; grid-template-columns:repeat(2,1fr); gap:1rem 2rem; }
 @media(max-width:800px){ .row{ grid-template-columns:1fr; } }
+
 .field{ display:flex; flex-direction:column; }
 label{ font-weight:500; margin-bottom:.25rem; }
-input, textarea{
-  width:100%;
-  padding:.6rem .7rem;
-  border:1px solid #ccc;
-  border-radius:8px;
-  font-size:.95rem;
-  box-sizing:border-box;
+input,textarea{
+  width:100%; padding:.6rem .7rem; border:1px solid #ccc;
+  border-radius:8px; font-size:.95rem; background:#fff;
 }
-textarea{ resize:vertical; min-height:80px }
+
+/* 按鈕 */
+.action-buttons{
+  display:flex; justify-content:center;
+  margin-top:1.5rem;
+}
+.action-buttons a{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:6px;
+  background:var(--green); color:#fff;
+  padding:.9rem 1.6rem; border-radius:999px;
+  font-weight:700; font-size:1rem;
+  text-decoration:none; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+  transition:all .2s;
+}
+.action-buttons a:hover{
+  background:#3a6645; transform:translateY(-1px);
+}
+
+/* ✅ 彈出提示 */
+.toast{
+  position:fixed;
+  bottom:25px;
+  left:50%;
+  transform:translateX(-50%) translateY(40px);
+  background:var(--green);
+  color:#fff;
+  padding:.9rem 1.4rem;
+  border-radius:999px;
+  box-shadow:0 3px 12px rgba(0,0,0,.2);
+  opacity:0;
+  font-weight:600;
+  transition:all .4s ease;
+  z-index:9999;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* Footer */
+footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
+@media(max-width:768px){ footer{ font-size:.9rem; } }
 </style>
 </head>
 <body>
-<main>
-  <h1>我要領養</h1>
 
-  <form>
+<header>
+  <div class="nav">
+    <div class="nav-left">台中簡媽媽狗園</div>
+    <div class="nav-right">
+      <a class="btn" href="index.html">首頁</a>
+      <a class="btn" href="about.html">關於簡媽媽</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <button class="back-btn" onclick="history.back()">← 回上一頁</button>
+  <h1 id="title">我要領養</h1>
+
+  <form id="adoptForm" autocomplete="off" spellcheck="false">
     <div class="subCard">
       <div class="sectionTitle">基本資料</div>
       <div class="row">
-        <div class="field"><label>姓名</label><input name="name"></div>
-        <div class="field"><label>年齡</label><input name="age"></div>
-        <div class="field"><label>居住地（縣市／區域）</label><input name="location"></div>
-        <div class="field"><label>居住環境（租屋或自宅／透天或公寓）</label><input name="houseType"></div>
-        <div class="field"><label>職業</label><input name="job"></div>
-        <div class="field"><label>月收入（大約即可）</label><input name="income"></div>
-        <div class="field"><label>家庭成員</label><input name="family"></div>
-        <div class="field"><label>家庭成員總人數</label><input name="members"></div>
-        <div class="field"><label>現居住狀況（與家人同住或獨居）</label><input name="living"></div>
-        <div class="field"><label>同居成員（例如：伴侶、配偶、父母等）</label><input name="cohabit"></div>
+        <div class="field"><label>姓名</label><input name="姓名"></div>
+        <div class="field"><label>年齡</label><input name="年齡"></div>
+        <div class="field"><label>居住地</label><input name="居住地"></div>
+        <div class="field"><label>居住環境</label><input name="居住環境"></div>
+        <div class="field"><label>職業</label><input name="職業"></div>
+        <div class="field"><label>月收入</label><input name="月收入"></div>
+        <div class="field"><label>家庭成員</label><input name="家庭成員"></div>
+        <div class="field"><label>家庭成員總人數</label><input name="家庭成員總人數"></div>
+        <div class="field"><label>現居住狀況</label><input name="現居住狀況"></div>
+        <div class="field"><label>同居成員</label><input name="同居成員"></div>
       </div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">飼養寵物經驗</div>
       <div class="row">
-        <div class="field"><label>是否曾經飼養過寵物？</label><input name="hadPets"></div>
-        <div class="field"><label>飼養過什麼寵物？</label><input name="petHistory"></div>
+        <div class="field"><label>是否曾經飼養過寵物？</label><input name="是否曾飼養過寵物"></div>
+        <div class="field"><label>飼養過什麼寵物？</label><input name="飼養過的寵物"></div>
       </div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">現有寵物狀況</div>
-      <div class="field"><label>目前家中是否有寵物？</label><input name="hasNow"></div>
-      <div class="field"><label>若有，請提供寵物種類、是否已結紮、性別等資訊：</label><textarea name="hasNowInfo"></textarea></div>
+      <div class="field"><label>目前家中是否有寵物？</label><input name="目前是否有寵物"></div>
+      <div class="field"><label>若有，請提供寵物資訊：</label><textarea name="現有寵物資訊"></textarea></div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">認養動機</div>
-      <div class="field"><label>為什麼想認養這隻毛孩呢？</label><textarea name="reason"></textarea></div>
+      <div class="field"><label>為什麼想認養這隻毛孩呢？</label><textarea name="認養動機"></textarea></div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">飼養方式</div>
-      <div class="field"><label>您會如何照顧這隻毛孩？（例如：飲食安排、居住空間、教育方式等）</label><textarea name="careMethod"></textarea></div>
+      <div class="field"><label>您會如何照顧這隻毛孩？</label><textarea name="飼養方式"></textarea></div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">飼養花費認知</div>
-      <div class="field"><label>您認為飼養寵物需要哪些支出？（請舉例說明）</label><textarea name="costAwareness"></textarea></div>
+      <div class="field"><label>您認為飼養寵物需要哪些支出？</label><textarea name="花費認知"></textarea></div>
+    </div>
+
+    <div class="subCard">
+      <div class="sectionTitle">環境參考</div>
+      <p style="font-size:1rem; line-height:1.6; color:#555; margin:0;">
+        📷 請拍攝或錄製毛孩未來的生活區域，<br>
+        聯絡小編後另行上傳，供我們審核參考～謝謝！
+      </p>
     </div>
   </form>
+
+  <div class="action-buttons">
+    <a id="contactBtn">🐶 聯絡小編</a>
+  </div>
 </main>
+
+<!-- ✅ 彈出提示 -->
+<div id="toast" class="toast">✅ 表單內容已複製！</div>
+
+<footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
+  authDomain: "pet-adoption-32294.firebaseapp.com",
+  projectId: "pet-adoption-32294",
+  storageBucket: "pet-adoption-32294.firebasestorage.app",
+  messagingSenderId: "102978803311",
+  appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* 顯示動物名稱 */
+const petId = new URLSearchParams(location.search).get('pet');
+const title = document.getElementById('title');
+let petName = "";
+if (petId) {
+  try {
+    const snap = await getDoc(doc(db, "pets", petId));
+    if (snap.exists()) {
+      petName = snap.data().name || "";
+      title.innerHTML = `我要領養：<span>${petName}</span>`;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+/* ✅ 顯示彈出提示 */
+function showToast(msg){
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"), 2500);
+}
+
+/* 🐶 聯絡小編：複製表單 + 開啟 Messenger */
+document.getElementById("contactBtn").addEventListener("click", ()=>{
+  const form = document.getElementById("adoptForm");
+  const sections = [...form.querySelectorAll(".subCard")];
+  let msg = `📋 我要領養：${petName || "（未指定）"}\n\n`;
+
+  sections.forEach(sec=>{
+    const title = sec.querySelector(".sectionTitle")?.textContent.trim();
+    const inputs = sec.querySelectorAll("input, textarea");
+    let lines = [];
+    inputs.forEach(i=>{
+      if(i.value.trim()){
+        lines.push(`${i.previousElementSibling?.textContent || i.name}：${i.value.trim()}`);
+      }
+    });
+    if(lines.length > 0){
+      // 🟢 若是基本資料區，項目間多空一行
+      if(title === "基本資料"){
+        msg += `【${title}】\n${lines.join("\n\n")}\n\n`;
+      }else{
+        msg += `【${title}】\n${lines.join("\n")}\n\n`;
+      }
+    }
+  });
+
+  const encodedMsg = encodeURIComponent(msg);
+  const messengerUrl = `https://m.me/100070289411620?text=${encodedMsg}`;
+
+  navigator.clipboard.writeText(msg).then(()=>{
+    showToast("✅ 表單內容已複製！");
+    setTimeout(()=>window.open(messengerUrl, "_blank"), 800);
+  }).catch(()=>{
+    showToast("⚠️ 複製失敗，請手動貼上");
+    window.open(messengerUrl, "_blank");
+  });
+});
+</script>
 </body>
 </html>
