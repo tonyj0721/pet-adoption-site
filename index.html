@@ -173,25 +173,11 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
 </div>
 
 <!-- 🟢 新增：我要領養提示 Modal -->
-<!-- 🟡 可愛燈泡提示視窗 -->
 <div id="adoptHint" class="modal" aria-hidden="true">
-  <div class="modal-box" style="text-align:center;">
-    <!-- 🔆 卡通風格燈泡 SVG -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="70" height="70" style="margin-bottom:0.5rem;">
-      <circle cx="32" cy="32" r="30" fill="#fff8dc" stroke="#ffcc33" stroke-width="4"/>
-      <path d="M24 38c0-6 4-10 8-10s8 4 8 10c0 3-1 5-3 7v4h-10v-4c-2-2-3-4-3-7z" fill="#ffcc33" stroke="#e0a600" stroke-width="2"/>
-      <rect x="26" y="49" width="12" height="6" rx="2" ry="2" fill="#999"/>
-      <rect x="24" y="55" width="16" height="4" rx="2" ry="2" fill="#666"/>
-      <path d="M20 18l2 2M44 18l-2 2M32 10v4M14 26h4M46 26h4" stroke="#ffcc33" stroke-width="3" stroke-linecap="round"/>
-    </svg>
-
-    <p style="font-size:1rem; line-height:1.6; margin-bottom:1rem;">
-      填寫完表單後，按下<br>
-      「📋 複製表單並聯絡小編」<br>
-      系統會自動複製填寫訊息<br>
-      並開啟 Messenger。
-    </p>
-    <button id="continueBtn" style="background:#497f54; color:#fff; border:0; border-radius:8px; padding:.7rem 1.4rem; font-size:1rem; font-weight:600; cursor:pointer;">繼續</button>
+  <div class="modal-box">
+    <div style="font-size:3rem; line-height:1; margin-bottom:0.5rem;">💡</div>
+    <p>填寫完表單後，按下<br>「📋 複製表單並聯絡小編」<br>系統會自動複製填寫訊息<br>並開啟 Messenger。</p>
+    <button id="continueBtn">繼續</button>
   </div>
 </div>
 
