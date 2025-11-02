@@ -6,58 +6,108 @@
 <title>我要領養｜台中簡媽媽狗園</title>
 <style>
 :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
-*{ box-sizing:border-box; }
 body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
 
-/* Header */
 header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
 .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem; }
 .nav-left{ font-weight:800; font-size:1.1rem; }
 .nav-right{ display:flex; gap:.6rem; }
 .nav a{ text-decoration:none; }
-.nav .btn{ display:inline-block; background:var(--green); color:#fff; padding:.45rem .9rem; border-radius:999px; font-weight:700; border:2px solid rgba(0,0,0,.05); box-shadow:0 1px 3px rgba(0,0,0,.08); transition:background .2s; }
+.nav .btn{
+  display:inline-block;
+  background:var(--green);
+  color:#fff;
+  padding:.45rem .9rem;
+  border-radius:999px;
+  font-weight:700;
+  border:2px solid rgba(0,0,0,.05);
+  box-shadow:0 1px 3px rgba(0,0,0,.08);
+  transition:background .2s;
+}
 .nav .btn:hover{ background:#3a6645; }
 
-/* Main */
 main{ max-width:900px; margin:1.5rem auto; padding:0 1rem; }
-.back-btn{ background:#fff; border:1px solid #ccc; color:#333; border-radius:8px; padding:.5rem .9rem; cursor:pointer; margin-bottom:1rem; }
-h1{ color:var(--green); text-align:center; margin:.5rem 0 1rem; }
-h1 span{ color:#333; font-weight:600; margin-left:.4rem; }
-
-/* Cards */
-.subCard{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); padding:1.2rem; margin-bottom:1rem; }
+h1{ color:var(--green); text-align:center; margin-bottom:1rem; }
+form{ display:grid; gap:1rem; }
+.subCard{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); padding:1.2rem; }
 .sectionTitle{ color:var(--green); font-weight:700; font-size:1.1rem; margin:.2rem 0 1rem; }
-.row{ display:grid; grid-template-columns:repeat(2,1fr); gap:1rem 2rem; }
+.row{ display:grid; grid-template-columns:repeat(2, 1fr); gap:1rem 2rem; }
 @media(max-width:800px){ .row{ grid-template-columns:1fr; } }
-
 .field{ display:flex; flex-direction:column; }
 label{ font-weight:500; margin-bottom:.25rem; }
-input,textarea{
-  width:100%; padding:.6rem .7rem; border:1px solid #ccc;
-  border-radius:8px; font-size:.95rem; background:#fff;
+input, textarea{
+  width:100%;
+  padding:.6rem .7rem;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:.95rem;
+  box-sizing:border-box;
 }
+textarea{ resize:vertical; min-height:80px }
+.back-btn{ background:#fff; border:1px solid #ccc; color:#333; border-radius:8px; padding:.5rem .9rem; cursor:pointer; margin-bottom:1rem; }
 
-/* 按鈕 */
-.action-buttons{
-  display:flex; justify-content:center;
+button.sendBtn{
+  background:var(--green);
+  color:#fff;
+  border:0;
+  border-radius:10px;
+  padding:1rem;
+  font-size:1.1rem;
+  font-weight:700;
+  cursor:pointer;
+  width:100%;
   margin-top:1.5rem;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+  transition:background .2s;
 }
-.action-buttons a{
-  display:inline-flex; align-items:center; justify-content:center;
-  gap:6px;
-  background:var(--green); color:#fff;
-  padding:.9rem 1.6rem; border-radius:999px;
-  font-weight:700; font-size:1rem;
-  text-decoration:none; cursor:pointer;
-  box-shadow:0 2px 8px rgba(0,0,0,.15);
-  transition:all .2s;
-}
-.action-buttons a:hover{
-  background:#3a6645; transform:translateY(-1px);
+button.sendBtn:hover{ background:#3a6645; }
+
+footer{
+  background:var(--green);
+  color:#fff;
+  text-align:center;
+  padding:1rem;
+  margin-top:2rem;
+  font-size:.9rem;
 }
 
-footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
-@media(max-width:768px){ footer{ font-size:.9rem; } }
+/* 提示視窗樣式 */
+#popupOverlay {
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.4);
+  z-index:999;
+}
+#popupBox {
+  background:#fff;
+  border-radius:12px;
+  max-width:350px;
+  padding:1.5rem;
+  text-align:center;
+  margin:auto;
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%, -50%);
+  box-shadow:0 4px 20px rgba(0,0,0,.2);
+}
+#popupBox p {
+  line-height:1.6;
+  margin-bottom:1.2rem;
+  color:#333;
+}
+#popupBox button {
+  background:var(--green);
+  color:#fff;
+  border:0;
+  border-radius:8px;
+  padding:.7rem 1.2rem;
+  font-size:1rem;
+  font-weight:600;
+  cursor:pointer;
+}
+#popupBox button:hover{ background:#3a6645; }
 </style>
 </head>
 <body>
@@ -74,37 +124,17 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
 
 <main>
   <button class="back-btn" onclick="history.back()">← 回上一頁</button>
-  <h1 id="title">我要領養</h1>
+  <h1 id="pageTitle">我要領養</h1>
 
-  <form id="adoptForm" autocomplete="off" spellcheck="false">
+  <form id="adoptForm">
     <div class="subCard">
       <div class="sectionTitle">基本資料</div>
       <div class="row">
         <div class="field"><label>姓名</label><input name="姓名"></div>
         <div class="field"><label>年齡</label><input name="年齡"></div>
         <div class="field"><label>居住地</label><input name="居住地"></div>
-        <div class="field"><label>居住環境</label><input name="居住環境"></div>
         <div class="field"><label>職業</label><input name="職業"></div>
-        <div class="field"><label>月收入</label><input name="月收入"></div>
-        <div class="field"><label>家庭成員</label><input name="家庭成員"></div>
-        <div class="field"><label>家庭成員總人數</label><input name="家庭成員總人數"></div>
-        <div class="field"><label>現居住狀況</label><input name="現居住狀況"></div>
-        <div class="field"><label>同居成員</label><input name="同居成員"></div>
       </div>
-    </div>
-
-    <div class="subCard">
-      <div class="sectionTitle">飼養寵物經驗</div>
-      <div class="row">
-        <div class="field"><label>是否曾經飼養過寵物？</label><input name="是否曾飼養過寵物"></div>
-        <div class="field"><label>飼養過什麼寵物？</label><input name="飼養過的寵物"></div>
-      </div>
-    </div>
-
-    <div class="subCard">
-      <div class="sectionTitle">現有寵物狀況</div>
-      <div class="field"><label>目前家中是否有寵物？</label><input name="目前是否有寵物"></div>
-      <div class="field"><label>若有，請提供寵物資訊：</label><textarea name="現有寵物資訊"></textarea></div>
     </div>
 
     <div class="subCard">
@@ -113,91 +143,56 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
     </div>
 
     <div class="subCard">
-      <div class="sectionTitle">飼養方式</div>
-      <div class="field"><label>您會如何照顧這隻毛孩？</label><textarea name="飼養方式"></textarea></div>
-    </div>
-
-    <div class="subCard">
-      <div class="sectionTitle">飼養花費認知</div>
-      <div class="field"><label>您認為飼養寵物需要哪些支出？</label><textarea name="花費認知"></textarea></div>
-    </div>
-
-    <div class="subCard">
       <div class="sectionTitle">環境參考</div>
-      <p style="font-size:1rem; line-height:1.6; color:#555; margin:0;">
-        📷 請拍攝或錄製毛孩未來的生活區域，<br>
-        聯絡小編後另行上傳，供我們審核參考～謝謝！
-      </p>
+      <p>請拍攝或錄製毛孩未來的生活區域，聯絡小編後自行上傳，供我們審核參考～謝謝！</p>
     </div>
-  </form>
 
-  <div class="action-buttons">
-    <a id="contactBtn">🐶 聯絡小編</a>
-  </div>
+    <button type="button" class="sendBtn" id="sendBtn">📋 複製表單並聯絡小編</button>
+  </form>
 </main>
 
 <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+<!-- 提示視窗 -->
+<div id="popupOverlay">
+  <div id="popupBox">
+    <p>表單已複製到剪貼簿，<br>開啟 Messenger 後將自動填入，<br>若未代入請自行貼上。</p>
+    <button id="continueBtn">繼續</button>
+  </div>
+</div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
-  authDomain: "pet-adoption-32294.firebaseapp.com",
-  projectId: "pet-adoption-32294",
-  storageBucket: "pet-adoption-32294.firebasestorage.app",
-  messagingSenderId: "102978803311",
-  appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+<script>
+const params = new URLSearchParams(window.location.search);
+const petName = params.get("pet");
+if (petName) document.getElementById("pageTitle").innerText = `我要領養 ${petName}`;
 
-/* 顯示動物名稱 */
-const petId = new URLSearchParams(location.search).get('pet');
-const title = document.getElementById('title');
-let petName = "";
-if (petId) {
-  try {
-    const snap = await getDoc(doc(db, "pets", petId));
-    if (snap.exists()) {
-      petName = snap.data().name || "";
-      title.innerHTML = `我要領養：<span>${petName}</span>`;
-    }
-  } catch (e) {
-    console.error(e);
-  }
-}
+let encodedMsg = "";
 
-/* 🐶 聯絡小編：整理表單、複製並開啟 Messenger */
-document.getElementById("contactBtn").addEventListener("click", ()=>{
+document.getElementById("sendBtn").addEventListener("click", async () => {
   const form = document.getElementById("adoptForm");
-  const sections = [...form.querySelectorAll(".subCard")];
-  let msg = `📋 我要領養：${petName || "（未指定）"}\n\n`;
+  const data = new FormData(form);
+  let msg = "📋【我要領養申請表】\n";
+  if (petName) msg += `認養動物：${petName}\n`;
+  msg += "\n";
+  for (const [k, v] of data.entries()) {
+    if (v.trim() !== "") msg += `${k}：${v}\n`;
+  }
+  encodedMsg = encodeURIComponent(msg);
 
-  sections.forEach(sec=>{
-    const title = sec.querySelector(".sectionTitle")?.textContent.trim();
-    const inputs = sec.querySelectorAll("input, textarea");
-    let lines = [];
-    inputs.forEach(i=>{
-      if(i.value.trim()) lines.push(`${i.previousElementSibling?.textContent || i.name}：${i.value.trim()}`);
-    });
-    if(lines.length > 0){
-      msg += `【${title}】\n${lines.join("\n")}\n\n`;
-    }
-  });
+  try {
+    await navigator.clipboard.writeText(msg);
+  } catch(e){ console.warn("複製失敗", e); }
 
-  const encodedMsg = encodeURIComponent(msg);
-  const messengerUrl = `https://m.me/100070289411620?text=${encodedMsg}`;
+  // 顯示提示視窗
+  document.getElementById("popupOverlay").style.display = "block";
+});
 
-  navigator.clipboard.writeText(msg).then(()=>{
-    alert("✅ 表單內容已複製，將自動開啟 Messenger！");
-    window.open(messengerUrl, "_blank");
-  }).catch(()=>{
-    alert("複製失敗，請手動選取文字複製。");
-    window.open(messengerUrl, "_blank");
-  });
+document.getElementById("continueBtn").addEventListener("click", () => {
+  const messengerUrl = `https://m.me/873460069178476?text=${encodedMsg}`;
+  window.open(messengerUrl, "_blank");
+  document.getElementById("popupOverlay").style.display = "none";
 });
 </script>
+
 </body>
 </html>
