@@ -56,28 +56,6 @@ input,textarea{
   background:#3a6645; transform:translateY(-1px);
 }
 
-/* ✅ 彈出提示 */
-.toast{
-  position:fixed;
-  bottom:25px;
-  left:50%;
-  transform:translateX(-50%) translateY(40px);
-  background:var(--green);
-  color:#fff;
-  padding:.9rem 1.4rem;
-  border-radius:999px;
-  box-shadow:0 3px 12px rgba(0,0,0,.2);
-  opacity:0;
-  font-weight:600;
-  transition:all .4s ease;
-  z-index:9999;
-}
-.toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
-}
-
-/* Footer */
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
 @media(max-width:768px){ footer{ font-size:.9rem; } }
 </style>
@@ -158,9 +136,6 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
   </div>
 </main>
 
-<!-- ✅ 彈出提示 -->
-<div id="toast" class="toast">✅ 表單內容已複製！</div>
-
 <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
 <script type="module">
@@ -194,15 +169,7 @@ if (petId) {
   }
 }
 
-/* ✅ 顯示彈出提示 */
-function showToast(msg){
-  const toast = document.getElementById("toast");
-  toast.textContent = msg;
-  toast.classList.add("show");
-  setTimeout(()=>toast.classList.remove("show"), 2500);
-}
-
-/* 🐶 聯絡小編：複製表單 + 開啟 Messenger */
+/* 🐶 聯絡小編：整理表單、複製並開啟 Messenger */
 document.getElementById("contactBtn").addEventListener("click", ()=>{
   const form = document.getElementById("adoptForm");
   const sections = [...form.querySelectorAll(".subCard")];
@@ -213,28 +180,21 @@ document.getElementById("contactBtn").addEventListener("click", ()=>{
     const inputs = sec.querySelectorAll("input, textarea");
     let lines = [];
     inputs.forEach(i=>{
-      if(i.value.trim()){
-        lines.push(`${i.previousElementSibling?.textContent || i.name}：${i.value.trim()}`);
-      }
+      if(i.value.trim()) lines.push(`${i.previousElementSibling?.textContent || i.name}：${i.value.trim()}`);
     });
     if(lines.length > 0){
-      // 🟢 若是基本資料區，項目間多空一行
-      if(title === "基本資料"){
-        msg += `【${title}】\n${lines.join("\n\n")}\n\n`;
-      }else{
-        msg += `【${title}】\n${lines.join("\n")}\n\n`;
-      }
+      msg += `【${title}】\n${lines.join("\n")}\n\n`;
     }
   });
 
   const encodedMsg = encodeURIComponent(msg);
-  const messengerUrl = `https://m.me/873460069178476?text=${encodedMsg}`;
+  const messengerUrl = `https://m.me/100070289411620?text=${encodedMsg}`;
 
   navigator.clipboard.writeText(msg).then(()=>{
-    showToast("✅ 表單內容已複製！");
-    setTimeout(()=>window.open(messengerUrl, "_blank"), 800);
+    alert("✅ 表單內容已複製，將自動開啟 Messenger！");
+    window.open(messengerUrl, "_blank");
   }).catch(()=>{
-    showToast("⚠️ 複製失敗，請手動貼上");
+    alert("複製失敗，請手動選取文字複製。");
     window.open(messengerUrl, "_blank");
   });
 });
