@@ -38,24 +38,30 @@ input,textarea{
 }
 
 /* 按鈕 */
-.action-buttons{
-  display:flex; justify-content:center;
-  margin-top:1.5rem;
-}
+.action-buttons{ display:flex; justify-content:center; margin-top:1.5rem; }
 .action-buttons a{
-  display:inline-flex; align-items:center; justify-content:center;
-  gap:6px;
-  background:var(--green); color:#fff;
-  padding:.9rem 1.6rem; border-radius:999px;
-  font-weight:700; font-size:1rem;
-  text-decoration:none; cursor:pointer;
-  box-shadow:0 2px 8px rgba(0,0,0,.15);
-  transition:all .2s;
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  background:var(--green); color:#fff; padding:.9rem 1.6rem; border-radius:999px;
+  font-weight:700; font-size:1rem; text-decoration:none; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.15); transition:all .2s;
 }
-.action-buttons a:hover{
-  background:#3a6645; transform:translateY(-1px);
-}
+.action-buttons a:hover{ background:#3a6645; transform:translateY(-1px); }
 
+/* 倒數提示 Modal（中央） */
+#successModal{
+  position:fixed; inset:0; background:rgba(0,0,0,.45);
+  display:none; align-items:center; justify-content:center; z-index:9999;
+}
+#successModal.open{ display:flex; }
+#successModal .box{
+  background:#fff; border:3px solid var(--green);
+  border-radius:16px; padding:2rem 1.8rem; text-align:center;
+  box-shadow:0 4px 18px rgba(0,0,0,.2); min-width:280px; max-width:420px;
+}
+#successModal .big{ font-size:2.4rem; color:var(--green); line-height:1; margin-bottom:.4rem; }
+#successModal p{ margin:.25rem 0; font-weight:700; font-size:1.1rem; }
+
+/* Footer */
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
 @media(max-width:768px){ footer{ font-size:.9rem; } }
 </style>
@@ -136,6 +142,14 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
   </div>
 </main>
 
+<!-- 中央倒數提示 -->
+<div id="successModal" aria-hidden="true">
+  <div class="box">
+    <p id="msg1">表單複製中</p>
+    <p id="msg2">即將開啟 Messenger...3</p>
+  </div>
+</div>
+
 <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
 <script type="module">
@@ -169,34 +183,54 @@ if (petId) {
   }
 }
 
-/* 🐶 聯絡小編：整理表單、複製並開啟 Messenger */
+/* 倒數 Modal 控制 */
+const modal = document.getElementById('successModal');
+const msg2 = document.getElementById('msg2');
+function openModal(){ modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); }
+function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); }
+
+/* 🐶 聯絡小編：整理表單、複製、倒數、導向 Messenger（同頁，不開空白分頁） */
 document.getElementById("contactBtn").addEventListener("click", ()=>{
   const form = document.getElementById("adoptForm");
   const sections = [...form.querySelectorAll(".subCard")];
-  let msg = `📋 我要領養：${petName || "（未指定）"}\n\n`;
+  let msg = `📋 我要領養：${petName}\n\n`;
 
   sections.forEach(sec=>{
-    const title = sec.querySelector(".sectionTitle")?.textContent.trim();
+    const secTitle = sec.querySelector(".sectionTitle")?.textContent.trim();
     const inputs = sec.querySelectorAll("input, textarea");
-    let lines = [];
+    const lines = [];
     inputs.forEach(i=>{
-      if(i.value.trim()) lines.push(`${i.previousElementSibling?.textContent || i.name}：${i.value.trim()}`);
+      const label = i.previousElementSibling?.textContent || i.name;
+      const val = (i.value || '').trim();
+      if(val) lines.push(`${label}：${val}`);
     });
-    if(lines.length > 0){
-      msg += `【${title}】\n${lines.join("\n")}\n\n`;
+    if(lines.length){
+      // 基本資料：欄位間空一行；其他區塊正常換行
+      const joiner = (secTitle === "基本資料") ? "\n\n" : "\n";
+      msg += `【${secTitle}】\n${lines.join(joiner)}\n\n`;
     }
   });
 
-  const encodedMsg = encodeURIComponent(msg);
-  const messengerUrl = `https://m.me/100070289411620?text=${encodedMsg}`;
+  // 先嘗試複製（不管成功與否都進行倒數與跳轉）
+  navigator.clipboard.writeText(msg).catch(()=>{});
 
-  navigator.clipboard.writeText(msg).then(()=>{
-    alert("✅ 表單內容已複製，將自動開啟 Messenger！");
-    window.open(messengerUrl, "_blank");
-  }).catch(()=>{
-    alert("複製失敗，請手動選取文字複製。");
-    window.open(messengerUrl, "_blank");
-  });
+  // 倒數 + 導向（同頁）
+  openModal();
+  let count = 3;
+  msg2.textContent = `即將開啟 Messenger...${count}`;
+  const messengerUrl = `https://m.me/100070289411620?text=${encodeURIComponent(msg)}`;
+
+  const t = setInterval(()=>{
+    count--;
+    if(count > 0){
+      msg2.textContent = `即將開啟 Messenger...${count}`;
+    }else{
+      clearInterval(t);
+      closeModal();
+      // 同頁導向，避免彈出空白分頁
+      window.location.href = messengerUrl;
+    }
+  }, 1000);
 });
 </script>
 </body>
