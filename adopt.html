@@ -3,194 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>我要領養｜狗園測試</title>
+<title>我要領養 | 測試</title>
 <style>
-:root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+:root { --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
 *{ box-sizing:border-box; }
 body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
 
-/* Header */
 header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
 .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem; }
-.nav-left{ font-weight:800; font-size:1.1rem; }
-.nav-right{ display:flex; gap:.6rem; }
-.nav a{ text-decoration:none; }
-.nav .btn{ display:inline-block; background:var(--green); color:#fff; padding:.45rem .9rem; border-radius:999px; font-weight:700; box-shadow:0 1px 3px rgba(0,0,0,.08); transition:background .2s; }
-.nav .btn:hover{ background:#3a6645; }
+.nav a{ color:#fff; text-decoration:none; background:var(--green); padding:.45rem .9rem; border-radius:8px; font-weight:600; transition:.2s; }
+.nav a:hover{ background:#3a6645; }
 
-/* Main */
-main{ max-width:900px; margin:1.5rem auto; padding:0 1rem; }
-.back-btn{ background:#fff; border:1px solid #ccc; color:#333; border-radius:8px; padding:.5rem .9rem; cursor:pointer; margin-bottom:1rem; }
-h1{ color:var(--green); text-align:center; margin:.5rem 0 1rem; }
-h1 span{ color:#333; font-weight:600; margin-left:.4rem; }
+main{ max-width:750px; margin:2rem auto; background:#fff; padding:2rem; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.05); }
+h1{ text-align:center; color:var(--green); margin-bottom:1.5rem; }
 
-/* Cards */
-.subCard{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); padding:1.2rem; margin-bottom:1rem; }
-.sectionTitle{ color:var(--green); font-weight:700; font-size:1.1rem; margin:.2rem 0 1rem; }
-.row{ display:grid; grid-template-columns:repeat(2,1fr); gap:1rem 2rem; }
-@media(max-width:800px){ .row{ grid-template-columns:1fr; } }
-.field{ display:flex; flex-direction:column; }
-label{ font-weight:500; margin-bottom:.25rem; }
-input,textarea{ width:100%; padding:.6rem .7rem; border:1px solid #ccc; border-radius:8px; font-size:.95rem; background:#fff; }
+label{ display:block; margin-top:1rem; font-weight:600; color:#2d5b39; }
+input,textarea{ width:100%; padding:.6rem .8rem; border:1px solid #ccc; border-radius:8px; margin-top:.3rem; font-size:1rem; }
+textarea{ min-height:100px; resize:vertical; }
 
-/* 全寬按鈕 */
-button#contactBtn{
-  display:block; width:100%; background:var(--green);
-  color:#fff; border:0; border-radius:12px; padding:1rem 0;
-  font-size:1.1rem; font-weight:700; letter-spacing:.05em;
-  cursor:pointer; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.12);
-  transition:filter .2s, transform .1s; margin-top:1.5rem;
+button.copy-btn{
+  margin-top:1.8rem; display:block; width:100%;
+  background:var(--green); color:#fff; font-weight:700;
+  padding:.9rem; border:none; border-radius:999px; font-size:1.1rem; cursor:pointer;
+  transition:.2s;
 }
-button#contactBtn:hover{ filter:brightness(.95); transform:translateY(1px); }
+button.copy-btn:hover{ background:#3a6645; }
 
-/* 中央下方氣泡提示 */
-.toast{
-  position:fixed; bottom:40px; left:50%;
-  transform:translateX(-50%) translateY(40px);
-  background:var(--green); color:#fff;
-  padding:.9rem 1.6rem; border-radius:999px;
-  box-shadow:0 3px 12px rgba(0,0,0,.2);
-  opacity:0; font-weight:600; transition:all .4s ease;
-  z-index:9999; text-align:center;
+.tip{
+  background:#eef6ef; border-left:5px solid var(--green);
+  padding:.9rem 1rem; margin-top:1.5rem; border-radius:6px;
+  color:#2d5b39; font-size:.95rem;
 }
-.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
-footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
+/* ✅ 成功提示 Modal */
+#successModal{
+  position:fixed; inset:0; background:rgba(0,0,0,.45);
+  display:none; align-items:center; justify-content:center; z-index:200;
+}
+#successModal.open{ display:flex; }
+#successModal .box{
+  background:#fff; border:3px solid var(--green);
+  border-radius:12px; padding:2rem 2.5rem; text-align:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.25);
+  max-width:400px; width:90%;
+}
+#successModal .box .icon{
+  font-size:2.5rem; color:var(--green); margin-bottom:.6rem;
+}
+#successModal .box p{
+  font-size:1.05rem; margin:.6rem 0;
+}
+#successModal .box strong{ color:var(--green); }
+#successModal .count{ font-weight:700; color:var(--green); }
+
+footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; border-top:3px solid #3a6645; }
+@media(max-width:600px){
+  main{ padding:1.4rem; }
+  button.copy-btn{ font-size:1rem; }
+}
 </style>
 </head>
 <body>
 
 <header>
   <div class="nav">
-    <div class="nav-left">台中簡媽媽狗園</div>
-    <div class="nav-right">
-      <a class="btn" href="index.html">首頁</a>
-      <a class="btn" href="about.html">關於簡媽媽</a>
-    </div>
+    <div style="font-weight:800;font-size:1.1rem;">台中簡媽媽狗園</div>
+    <nav><a href="index.html">首頁</a></nav>
   </div>
 </header>
 
 <main>
-  <button class="back-btn" onclick="history.back()">← 回上一頁</button>
-  <h1 id="title">我要領養</h1>
+  <h1 id="formTitle">我要領養</h1>
 
   <form id="adoptForm">
-    <div class="subCard">
-      <div class="sectionTitle">基本資料</div>
-      <div class="row">
-        <div class="field"><label>姓名</label><input name="姓名"></div>
-        <div class="field"><label>年齡</label><input name="年齡"></div>
-        <div class="field"><label>居住地</label><input name="居住地"></div>
-        <div class="field"><label>居住環境</label><input name="居住環境"></div>
-        <div class="field"><label>職業</label><input name="職業"></div>
-        <div class="field"><label>月收入</label><input name="月收入"></div>
-        <div class="field"><label>家庭成員</label><input name="家庭成員"></div>
-        <div class="field"><label>家庭成員總人數</label><input name="家庭成員總人數"></div>
-        <div class="field"><label>現居住狀況</label><input name="現居住狀況"></div>
-        <div class="field"><label>同居成員</label><input name="同居成員"></div>
-      </div>
+    <label>您的姓名</label>
+    <input id="name" placeholder="請輸入姓名">
+
+    <label>年齡</label>
+    <input id="age" placeholder="例如：28">
+
+    <label>居住地區</label>
+    <input id="location" placeholder="例如：台中市西屯區">
+
+    <label>聯絡電話</label>
+    <input id="phone" placeholder="請輸入電話">
+
+    <label>是否有養寵物經驗？</label>
+    <textarea id="experience" placeholder="可簡述過去的飼養經驗"></textarea>
+
+    <label>飼養動機與計畫</label>
+    <textarea id="reason" placeholder="為什麼想領養？打算如何照顧牠？"></textarea>
+
+    <div class="tip">
+      📸 請拍攝或錄製毛孩未來的生活區域（如客廳、陽台、院子等），
+      方便園方了解環境狀況。
     </div>
 
-    <div class="subCard">
-      <div class="sectionTitle">飼養寵物經驗</div>
-      <div class="row">
-        <div class="field"><label>是否曾經飼養過寵物？</label><input name="是否曾飼養過寵物"></div>
-        <div class="field"><label>飼養過什麼寵物？</label><input name="飼養過的寵物"></div>
-      </div>
-    </div>
-
-    <div class="subCard">
-      <div class="sectionTitle">現有寵物狀況</div>
-      <div class="field"><label>目前家中是否有寵物？</label><input name="目前是否有寵物"></div>
-      <div class="field"><label>若有，請提供寵物資訊：</label><textarea name="現有寵物資訊"></textarea></div>
-    </div>
-
-    <div class="subCard">
-      <div class="sectionTitle">認養動機</div>
-      <div class="field"><label>為什麼想認養這隻毛孩呢？</label><textarea name="認養動機"></textarea></div>
-    </div>
-
-    <div class="subCard">
-      <div class="sectionTitle">飼養方式</div>
-      <div class="field"><label>您會如何照顧這隻毛孩？</label><textarea name="飼養方式"></textarea></div>
-    </div>
-
-    <div class="subCard">
-      <div class="sectionTitle">飼養花費認知</div>
-      <div class="field"><label>您認為飼養寵物需要哪些支出？</label><textarea name="花費認知"></textarea></div>
-    </div>
-
-    <div class="subCard">
-      <div class="sectionTitle">環境參考</div>
-      <p>📷 請拍攝或錄製毛孩未來的生活區域，<br>聯絡小編後另行上傳，供我們審核參考～謝謝！</p>
-    </div>
+    <button type="button" class="copy-btn" id="copyBtn">📋 複製表單並聯絡小編</button>
   </form>
-
-  <button id="contactBtn">📋 複製表單並聯絡小編</button>
 </main>
 
-<div id="toast" class="toast"></div>
+<!-- ✅ 成功提示 Modal -->
+<div id="successModal">
+  <div class="box">
+    <div class="icon">✅</div>
+    <p><strong>表單已複製！</strong></p>
+    <p>即將跳轉至 Messenger…<span class="count">3</span></p>
+  </div>
+</div>
 
 <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
-<script type="module">
-const petId = new URLSearchParams(location.search).get('pet');
-const title = document.getElementById('title');
-let petName = petId || "（未指定）";
-title.innerHTML = `我要領養：<span>${petName}</span>`;
-
-const toast = document.getElementById("toast");
-function showToast(msg){
-  toast.textContent = msg;
-  toast.classList.add("show");
-  setTimeout(()=>toast.classList.remove("show"), 4000);
+<script>
+const params = new URLSearchParams(location.search);
+const petName = params.get("pet");
+if(petName){
+  document.getElementById("formTitle").textContent = "我要領養：" + petName;
 }
 
-document.getElementById("contactBtn").addEventListener("click", ()=>{
-  const form = document.getElementById("adoptForm");
-  const sections = [...form.querySelectorAll(".subCard")];
-  let msg = `📋 我要領養：${petName}\n\n`;
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  const name=document.getElementById("name").value.trim();
+  const age=document.getElementById("age").value.trim();
+  const location=document.getElementById("location").value.trim();
+  const phone=document.getElementById("phone").value.trim();
+  const experience=document.getElementById("experience").value.trim();
+  const reason=document.getElementById("reason").value.trim();
+  
+  let text=`【領養申請表】\n`;
+  if(petName) text+=`想領養：${petName}\n`;
+  text+=`姓名：${name}\n年齡：${age}\n居住地區：${location}\n聯絡電話：${phone}\n\n飼養經驗：${experience}\n\n飼養動機與計畫：${reason}\n`;
 
-  sections.forEach(sec=>{
-    const title = sec.querySelector(".sectionTitle")?.textContent.trim();
-    const inputs = sec.querySelectorAll("input, textarea");
-    let lines = [];
-    inputs.forEach(i=>{
-      if(i.value.trim()){
-        lines.push(`${i.previousElementSibling?.textContent || i.name}：${i.value.trim()}`);
-      }
-    });
-    if(lines.length > 0){
-      if(title === "基本資料"){
-        msg += `【${title}】\n${lines.join("\n\n")}\n\n`;
-      }else{
-        msg += `【${title}】\n${lines.join("\n")}\n\n`;
-      }
+  try{
+    await navigator.clipboard.writeText(text);
+  }catch(e){
+    alert("無法自動複製，請手動複製文字。");
+    return;
+  }
+
+  const modal=document.getElementById("successModal");
+  const countEl=modal.querySelector(".count");
+  modal.classList.add("open");
+  let c=3;
+  countEl.textContent=c;
+  const timer=setInterval(()=>{
+    c--;
+    countEl.textContent=c;
+    if(c===0){
+      clearInterval(timer);
+      modal.classList.remove("open");
+      window.open("https://m.me/61582634772771","_blank");
     }
-  });
-
-  const encodedMsg = encodeURIComponent(msg);
-  const messengerUrl = `https://m.me/61582634772771?text=${encodedMsg}`;
-
-  let count = 3;
-  toast.textContent = `✅ 表單已複製！即將跳轉頁面… ${count}`;
-  toast.classList.add("show");
-
-  navigator.clipboard.writeText(msg).then(()=>{
-    const timer = setInterval(()=>{
-      count--;
-      toast.textContent = `✅ 表單已複製！即將跳轉頁面… ${count}`;
-      if(count<=0){
-        clearInterval(timer);
-        toast.classList.remove("show");
-        window.open(messengerUrl, "_blank");
-      }
-    },1000);
-  }).catch(()=>{
-    toast.textContent = "⚠️ 複製失敗，請手動貼上";
-    setTimeout(()=>toast.classList.remove("show"), 4000);
-    window.open(messengerUrl, "_blank");
-  });
+  },1000);
 });
 </script>
 </body>
