@@ -15,7 +15,7 @@ header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08)
 .nav-left{ font-weight:800; font-size:1.1rem; }
 .nav-right{ display:flex; gap:.6rem; }
 .nav a{ text-decoration:none; }
-.nav .btn{ display:inline-block; background:var(--green); color:#fff; padding:.45rem .9rem; border-radius:999px; font-weight:700; border:2px solid rgba(0,0,0,.05); box-shadow:0 1px 3px rgba(0,0,0,.08); transition:background .2s; }
+.nav .btn{ display:inline-block; background:var(--green); color:#fff; padding:.45rem .9rem; border-radius:999px; font-weight:700; box-shadow:0 1px 3px rgba(0,0,0,.08); transition:background .2s; }
 .nav .btn:hover{ background:#3a6645; }
 
 /* Main */
@@ -29,57 +29,33 @@ h1 span{ color:#333; font-weight:600; margin-left:.4rem; }
 .sectionTitle{ color:var(--green); font-weight:700; font-size:1.1rem; margin:.2rem 0 1rem; }
 .row{ display:grid; grid-template-columns:repeat(2,1fr); gap:1rem 2rem; }
 @media(max-width:800px){ .row{ grid-template-columns:1fr; } }
-
 .field{ display:flex; flex-direction:column; }
 label{ font-weight:500; margin-bottom:.25rem; }
-input,textarea{
-  width:100%; padding:.6rem .7rem; border:1px solid #ccc;
-  border-radius:8px; font-size:.95rem; background:#fff;
-}
+input,textarea{ width:100%; padding:.6rem .7rem; border:1px solid #ccc; border-radius:8px; font-size:.95rem; background:#fff; }
 
-/* 按鈕 */
-.action-buttons{
-  display:flex; justify-content:center;
-  margin-top:1.5rem;
+/* 全寬按鈕 */
+button#contactBtn{
+  display:block; width:100%; background:var(--green);
+  color:#fff; border:0; border-radius:12px; padding:1rem 0;
+  font-size:1.1rem; font-weight:700; letter-spacing:.05em;
+  cursor:pointer; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.12);
+  transition:filter .2s, transform .1s; margin-top:1.5rem;
 }
-.action-buttons a{
-  display:inline-flex; align-items:center; justify-content:center;
-  gap:6px;
+button#contactBtn:hover{ filter:brightness(.95); transform:translateY(1px); }
+
+/* 中央下方氣泡提示 */
+.toast{
+  position:fixed; bottom:40px; left:50%;
+  transform:translateX(-50%) translateY(40px);
   background:var(--green); color:#fff;
   padding:.9rem 1.6rem; border-radius:999px;
-  font-weight:700; font-size:1rem;
-  text-decoration:none; cursor:pointer;
-  box-shadow:0 2px 8px rgba(0,0,0,.15);
-  transition:all .2s;
-}
-.action-buttons a:hover{
-  background:#3a6645; transform:translateY(-1px);
-}
-
-/* ✅ 彈出提示 */
-.toast{
-  position:fixed;
-  bottom:25px;
-  left:50%;
-  transform:translateX(-50%) translateY(40px);
-  background:var(--green);
-  color:#fff;
-  padding:.9rem 1.4rem;
-  border-radius:999px;
   box-shadow:0 3px 12px rgba(0,0,0,.2);
-  opacity:0;
-  font-weight:600;
-  transition:all .4s ease;
-  z-index:9999;
+  opacity:0; font-weight:600; transition:all .4s ease;
+  z-index:9999; text-align:center;
 }
-.toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
-}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
-/* Footer */
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
-@media(max-width:768px){ footer{ font-size:.9rem; } }
 </style>
 </head>
 <body>
@@ -98,7 +74,7 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
   <button class="back-btn" onclick="history.back()">← 回上一頁</button>
   <h1 id="title">我要領養</h1>
 
-  <form id="adoptForm" autocomplete="off" spellcheck="false">
+  <form id="adoptForm">
     <div class="subCard">
       <div class="sectionTitle">基本資料</div>
       <div class="row">
@@ -146,67 +122,34 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
 
     <div class="subCard">
       <div class="sectionTitle">環境參考</div>
-      <p style="font-size:1rem; line-height:1.6; color:#555; margin:0;">
-        📷 請拍攝或錄製毛孩未來的生活區域，<br>
-        聯絡小編後另行上傳，供我們審核參考～謝謝！
-      </p>
+      <p>📷 請拍攝或錄製毛孩未來的生活區域，<br>聯絡小編後另行上傳，供我們審核參考～謝謝！</p>
     </div>
   </form>
 
-  <div class="action-buttons">
-    <a id="contactBtn">🐶 聯絡小編</a>
-  </div>
+  <button id="contactBtn">📋 複製表單並聯絡小編</button>
 </main>
 
-<!-- ✅ 彈出提示 -->
-<div id="toast" class="toast">✅ 表單內容已複製！</div>
+<div id="toast" class="toast"></div>
 
 <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
-  authDomain: "pet-adoption-32294.firebaseapp.com",
-  projectId: "pet-adoption-32294",
-  storageBucket: "pet-adoption-32294.firebasestorage.app",
-  messagingSenderId: "102978803311",
-  appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-/* 顯示動物名稱 */
 const petId = new URLSearchParams(location.search).get('pet');
 const title = document.getElementById('title');
-let petName = "";
-if (petId) {
-  try {
-    const snap = await getDoc(doc(db, "pets", petId));
-    if (snap.exists()) {
-      petName = snap.data().name || "";
-      title.innerHTML = `我要領養：<span>${petName}</span>`;
-    }
-  } catch (e) {
-    console.error(e);
-  }
-}
+let petName = petId || "（未指定）";
+title.innerHTML = `我要領養：<span>${petName}</span>`;
 
-/* ✅ 顯示彈出提示 */
+const toast = document.getElementById("toast");
 function showToast(msg){
-  const toast = document.getElementById("toast");
   toast.textContent = msg;
   toast.classList.add("show");
-  setTimeout(()=>toast.classList.remove("show"), 2500);
+  setTimeout(()=>toast.classList.remove("show"), 4000);
 }
 
-/* 🐶 聯絡小編：複製表單 + 開啟 Messenger */
 document.getElementById("contactBtn").addEventListener("click", ()=>{
   const form = document.getElementById("adoptForm");
   const sections = [...form.querySelectorAll(".subCard")];
-  let msg = `📋 我要領養：${petName || "（未指定）"}\n\n`;
+  let msg = `📋 我要領養：${petName}\n\n`;
 
   sections.forEach(sec=>{
     const title = sec.querySelector(".sectionTitle")?.textContent.trim();
@@ -218,7 +161,6 @@ document.getElementById("contactBtn").addEventListener("click", ()=>{
       }
     });
     if(lines.length > 0){
-      // 🟢 若是基本資料區，項目間多空一行
       if(title === "基本資料"){
         msg += `【${title}】\n${lines.join("\n\n")}\n\n`;
       }else{
@@ -228,13 +170,25 @@ document.getElementById("contactBtn").addEventListener("click", ()=>{
   });
 
   const encodedMsg = encodeURIComponent(msg);
-  const messengerUrl = `https://m.me/873460069178476?text=${encodedMsg}`;
+  const messengerUrl = `https://m.me/61582634772771?text=${encodedMsg}`;
+
+  let count = 3;
+  toast.textContent = `✅ 表單已複製！即將跳轉頁面… ${count}`;
+  toast.classList.add("show");
 
   navigator.clipboard.writeText(msg).then(()=>{
-    showToast("✅ 表單內容已複製！");
-    setTimeout(()=>window.open(messengerUrl, "_blank"), 800);
+    const timer = setInterval(()=>{
+      count--;
+      toast.textContent = `✅ 表單已複製！即將跳轉頁面… ${count}`;
+      if(count<=0){
+        clearInterval(timer);
+        toast.classList.remove("show");
+        window.open(messengerUrl, "_blank");
+      }
+    },1000);
   }).catch(()=>{
-    showToast("⚠️ 複製失敗，請手動貼上");
+    toast.textContent = "⚠️ 複製失敗，請手動貼上";
+    setTimeout(()=>toast.classList.remove("show"), 4000);
     window.open(messengerUrl, "_blank");
   });
 });
