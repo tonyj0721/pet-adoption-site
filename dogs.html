@@ -236,7 +236,7 @@ function openModal(p){
     continueBtn.onclick=()=>{
       hint.classList.remove('open');
       const url=new URL('adopt.html',location.href);
-      url.searchParams.set('pet',p.id||'');
+      url.searchParams.set('pet',p.name||'');
       location.href=url.toString();
     };
   };
@@ -282,3 +282,4 @@ function applyFilters(){
 </script>
 </body>
 </html>
+
