@@ -15,7 +15,7 @@ header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08)
 .nav-left{ font-weight:800; font-size:1.1rem; }
 .nav-right{ display:flex; gap:.6rem; }
 .nav a{ text-decoration:none; }
-.nav .btn{ display:inline-block; background:var(--green); color:#fff; padding:.45rem .9rem; border-radius:999px; font-weight:700; box-shadow:0 1px 3px rgba(0,0,0,.08); transition:background .2s; }
+.nav .btn{ display:inline-block; background:var(--green); color:#fff; padding:.45rem .9rem; border-radius:999px; font-weight:700; border:2px solid rgba(0,0,0,.05); box-shadow:0 1px 3px rgba(0,0,0,.08); transition:background .2s; }
 .nav .btn:hover{ background:#3a6645; }
 
 /* Main */
@@ -29,21 +29,25 @@ h1 span{ color:#333; font-weight:600; margin-left:.4rem; }
 .sectionTitle{ color:var(--green); font-weight:700; font-size:1.1rem; margin:.2rem 0 1rem; }
 .row{ display:grid; grid-template-columns:repeat(2,1fr); gap:1rem 2rem; }
 @media(max-width:800px){ .row{ grid-template-columns:1fr; } }
+
 .field{ display:flex; flex-direction:column; }
 label{ font-weight:500; margin-bottom:.25rem; }
-input,textarea{ width:100%; padding:.6rem .7rem; border:1px solid #ccc; border-radius:8px; font-size:.95rem; background:#fff; }
-
-/* 全寬按鈕 */
-button#contactBtn{
-  display:block; width:100%; background:var(--green);
-  color:#fff; border:0; border-radius:12px; padding:1rem 0;
-  font-size:1.1rem; font-weight:700; letter-spacing:.05em;
-  cursor:pointer; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.12);
-  transition:filter .2s, transform .1s; margin-top:1.5rem;
+input,textarea{
+  width:100%; padding:.6rem .7rem; border:1px solid #ccc;
+  border-radius:8px; font-size:.95rem; background:#fff;
 }
-button#contactBtn:hover{ filter:brightness(.95); transform:translateY(1px); }
 
-/* Modal 提示 */
+/* 按鈕 */
+.action-buttons{ display:flex; justify-content:center; margin-top:1.5rem; }
+.action-buttons a{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  background:var(--green); color:#fff; padding:.9rem 1.6rem; border-radius:999px;
+  font-weight:700; font-size:1rem; text-decoration:none; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.15); transition:all .2s;
+}
+.action-buttons a:hover{ background:#3a6645; transform:translateY(-1px); }
+
+/* 倒數提示 Modal（中央） */
 #successModal{
   position:fixed; inset:0; background:rgba(0,0,0,.45);
   display:none; align-items:center; justify-content:center; z-index:9999;
@@ -51,13 +55,15 @@ button#contactBtn:hover{ filter:brightness(.95); transform:translateY(1px); }
 #successModal.open{ display:flex; }
 #successModal .box{
   background:#fff; border:3px solid var(--green);
-  border-radius:16px; padding:2rem 1.5rem; text-align:center;
-  box-shadow:0 4px 18px rgba(0,0,0,.2);
+  border-radius:16px; padding:2rem 1.8rem; text-align:center;
+  box-shadow:0 4px 18px rgba(0,0,0,.2); min-width:280px; max-width:420px;
 }
-#successModal .icon{ font-size:3rem; color:var(--green); margin-bottom:.5rem; }
-#successModal p{ margin:.3rem 0; font-weight:600; font-size:1.1rem; }
+#successModal .big{ font-size:2.4rem; color:var(--green); line-height:1; margin-bottom:.4rem; }
+#successModal p{ margin:.25rem 0; font-weight:700; font-size:1.1rem; }
 
+/* Footer */
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
+@media(max-width:768px){ footer{ font-size:.9rem; } }
 </style>
 </head>
 <body>
@@ -76,20 +82,20 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
   <button class="back-btn" onclick="history.back()">← 回上一頁</button>
   <h1 id="title">我要領養</h1>
 
-  <form id="adoptForm">
+  <form id="adoptForm" autocomplete="off" spellcheck="false">
     <div class="subCard">
       <div class="sectionTitle">基本資料</div>
       <div class="row">
         <div class="field"><label>姓名</label><input name="姓名"></div>
         <div class="field"><label>年齡</label><input name="年齡"></div>
         <div class="field"><label>居住地</label><input name="居住地"></div>
-        <div class="field"><label>居住環境（租屋或自宅／透天或公寓）</label><input name="居住環境"></div>
+        <div class="field"><label>居住環境</label><input name="居住環境"></div>
         <div class="field"><label>職業</label><input name="職業"></div>
-        <div class="field"><label>月收入（大約即可）</label><input name="月收入"></div>
+        <div class="field"><label>月收入</label><input name="月收入"></div>
         <div class="field"><label>家庭成員</label><input name="家庭成員"></div>
         <div class="field"><label>家庭成員總人數</label><input name="家庭成員總人數"></div>
-        <div class="field"><label>現居住狀況（與家人同住或獨居）</label><input name="現居住狀況"></div>
-        <div class="field"><label>同居成員（例如：伴侶、配偶、父母等）</label><input name="同居成員"></div>
+        <div class="field"><label>現居住狀況</label><input name="現居住狀況"></div>
+        <div class="field"><label>同居成員</label><input name="同居成員"></div>
       </div>
     </div>
 
@@ -97,14 +103,14 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
       <div class="sectionTitle">飼養寵物經驗</div>
       <div class="row">
         <div class="field"><label>是否曾經飼養過寵物？</label><input name="是否曾飼養過寵物"></div>
-        <div class="field"><label>若有，飼養過什麼寵物？</label><input name="飼養過的寵物"></div>
+        <div class="field"><label>飼養過什麼寵物？</label><input name="飼養過的寵物"></div>
       </div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">現有寵物狀況</div>
       <div class="field"><label>目前家中是否有寵物？</label><input name="目前是否有寵物"></div>
-      <div class="field"><label>若有，請提供寵物種類、是否已結紮、性別等資訊：</label><textarea name="現有寵物資訊"></textarea></div>
+      <div class="field"><label>若有，請提供寵物資訊：</label><textarea name="現有寵物資訊"></textarea></div>
     </div>
 
     <div class="subCard">
@@ -114,82 +120,116 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
 
     <div class="subCard">
       <div class="sectionTitle">飼養方式</div>
-      <div class="field"><label>您會如何照顧這隻毛孩？（例如：飲食安排、居住空間、教育方式等）</label><textarea name="飼養方式"></textarea></div>
+      <div class="field"><label>您會如何照顧這隻毛孩？</label><textarea name="飼養方式"></textarea></div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">飼養花費認知</div>
-      <div class="field"><label>您認為飼養寵物需要哪些支出？（請舉例說明）</label><textarea name="花費認知"></textarea></div>
+      <div class="field"><label>您認為飼養寵物需要哪些支出？</label><textarea name="花費認知"></textarea></div>
     </div>
 
     <div class="subCard">
       <div class="sectionTitle">環境參考</div>
-      <p>📷 請拍攝或錄製毛孩未來的生活區域，<br>聯絡小編後另行上傳，供我們審核參考～謝謝！</p>
+      <p style="font-size:1rem; line-height:1.6; color:#555; margin:0;">
+        📷 請拍攝或錄製毛孩未來的生活區域，<br>
+        聯絡小編後另行上傳，供我們審核參考～謝謝！
+      </p>
     </div>
   </form>
 
-  <button id="contactBtn">📋 複製表單並聯絡小編</button>
+  <div class="action-buttons">
+    <a id="contactBtn">🐶 聯絡小編</a>
+  </div>
 </main>
 
-<!-- ✅ 提示 Modal -->
-<div id="successModal">
+<!-- 中央倒數提示 -->
+<div id="successModal" aria-hidden="true">
   <div class="box">
-    <div class="icon">✅</div>
-    <p id="msgLine1">表單複製中</p>
-    <p id="msgLine2">即將開啟 Messenger...3</p>
+    <div class="big">✅</div>
+    <p id="msg1">表單複製中</p>
+    <p id="msg2">即將開啟 Messenger...3</p>
   </div>
 </div>
 
 <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
+  authDomain: "pet-adoption-32294.firebaseapp.com",
+  projectId: "pet-adoption-32294",
+  storageBucket: "pet-adoption-32294.firebasestorage.app",
+  messagingSenderId: "102978803311",
+  appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* 顯示動物名稱 */
 const petId = new URLSearchParams(location.search).get('pet');
 const title = document.getElementById('title');
-const modal = document.getElementById('successModal');
-let petName = petId || "（未指定）";
-title.innerHTML = `我要領養：<span>${petName}</span>`;
+let petName = "";
+if (petId) {
+  try {
+    const snap = await getDoc(doc(db, "pets", petId));
+    if (snap.exists()) {
+      petName = snap.data().name || "";
+      title.innerHTML = `我要領養：<span>${petName}</span>`;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
 
+/* 倒數 Modal 控制 */
+const modal = document.getElementById('successModal');
+const msg2 = document.getElementById('msg2');
+function openModal(){ modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); }
+function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); }
+
+/* 🐶 聯絡小編：整理表單、複製、倒數、導向 Messenger（同頁，不開空白分頁） */
 document.getElementById("contactBtn").addEventListener("click", ()=>{
   const form = document.getElementById("adoptForm");
   const sections = [...form.querySelectorAll(".subCard")];
-  let msg = `📋 我要領養：${petName}\n\n`;
+  let msg = `📋 我要領養：${petName || "（未指定）"}\n\n`;
 
   sections.forEach(sec=>{
-    const sectionTitle = sec.querySelector(".sectionTitle")?.textContent.trim();
+    const secTitle = sec.querySelector(".sectionTitle")?.textContent.trim();
     const inputs = sec.querySelectorAll("input, textarea");
-    let lines = [];
+    const lines = [];
     inputs.forEach(i=>{
-      const label = i.previousElementSibling?.textContent?.trim() || i.name;
-      const val = i.value.trim();
+      const label = i.previousElementSibling?.textContent || i.name;
+      const val = (i.value || '').trim();
       if(val) lines.push(`${label}：${val}`);
     });
-    if(lines.length > 0){
-      msg += `【${sectionTitle}】\n${lines.join("\n\n")}\n\n`;
+    if(lines.length){
+      // 基本資料：欄位間空一行；其他區塊正常換行
+      const joiner = (secTitle === "基本資料") ? "\n\n" : "\n";
+      msg += `【${secTitle}】\n${lines.join(joiner)}\n\n`;
     }
   });
 
-  const encoded = encodeURIComponent(msg);
-  const messengerUrl = `https://m.me/61582634772771?text=${encoded}`;
-
-  // 同步觸發 window.open，避免被阻擋
-  const win = window.open("about:blank");
-
-  // 顯示倒數動畫
-  modal.classList.add("open");
-  let count = 3;
-  const line2 = document.getElementById("msgLine2");
-  line2.textContent = `即將開啟 Messenger...${count}`;
-
+  // 先嘗試複製（不管成功與否都進行倒數與跳轉）
   navigator.clipboard.writeText(msg).catch(()=>{});
 
-  const timer = setInterval(()=>{
+  // 倒數 + 導向（同頁）
+  openModal();
+  let count = 3;
+  msg2.textContent = `即將開啟 Messenger...${count}`;
+  const messengerUrl = `https://m.me/100070289411620?text=${encodeURIComponent(msg)}`;
+
+  const t = setInterval(()=>{
     count--;
     if(count > 0){
-      line2.textContent = `即將開啟 Messenger...${count}`;
-    } else {
-      clearInterval(timer);
-      modal.classList.remove("open");
-      win.location.href = messengerUrl; // 實際跳轉
+      msg2.textContent = `即將開啟 Messenger...${count}`;
+    }else{
+      clearInterval(t);
+      closeModal();
+      // 同頁導向，避免彈出空白分頁
+      window.location.href = messengerUrl;
     }
   }, 1000);
 });
