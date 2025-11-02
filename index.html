@@ -15,8 +15,8 @@ header { background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08
 .nav a { text-decoration:none; }
 .nav .btn{
   display:inline-block;
-  background:var(--green);   /* 綠底 */
-  color:#fff;                /* 白字 */
+  background:var(--green);
+  color:#fff;
   padding:.45rem .9rem;
   border-radius:999px;
   font-weight:700;
@@ -24,9 +24,7 @@ header { background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08
   box-shadow:0 1px 3px rgba(0,0,0,.08);
   transition:background .2s;
 }
-.nav .btn:hover{
-  background:#3a6645;        /* hover 稍微加深 */
-}
+.nav .btn:hover{ background:#3a6645; }
 
 /* Hero */
 .hero{
@@ -60,10 +58,10 @@ h2.section{ color:var(--green); display:flex; align-items:center; justify-conten
 .card:hover{ transform:translateY(-2px); }
 .card img{ width:100%; height:220px; object-fit:contain; background:#f0f0f0; display:block; margin:auto; }
 .card .info{ padding:.8rem; background:#fff; flex-shrink:0; }
-.card .info div > div{ min-height:1.2em; } /* 讓每行高度一致 */
+.card .info div > div{ min-height:1.2em; }
 .pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem; margin-right:.4rem; }
 
-/* Modal */
+/* Modal (動物詳情) */
 .modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:1rem; z-index:50; }
 .modal.open{ display:flex; }
 .panel{ background:#fff; border-radius:12px; max-width:900px; width:100%; max-height:90vh; overflow:auto; }
@@ -77,6 +75,26 @@ h2.section{ color:var(--green); display:flex; align-items:center; justify-conten
 
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
 
+/* 🟢 新增：我要領養提示 Modal */
+#adoptHint{
+  position:fixed; inset:0; background:rgba(0,0,0,.55);
+  display:none; align-items:center; justify-content:center;
+  z-index:200;
+}
+#adoptHint.open{ display:flex; }
+#adoptHint .modal-box{
+  background:#fff; border-radius:12px; padding:1.5rem 2rem;
+  max-width:420px; width:90%; text-align:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.2);
+}
+#adoptHint .modal-box p{ margin-bottom:1.2rem; line-height:1.7; }
+#adoptHint .modal-box button{
+  background:var(--green); color:#fff; border:none;
+  border-radius:999px; padding:.8rem 2rem; font-weight:700;
+  cursor:pointer; font-size:1rem;
+}
+#adoptHint .modal-box button:hover{ background:#3a6645; }
+
 /* Mobile */
 @media (max-width: 768px){
   .nav{ flex-wrap:wrap; }
@@ -89,10 +107,7 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
   .grid{ grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); }
   .card img{ height:180px; }
   footer{ font-size:.9rem; }
-  .main-img{
-    height:260px;
-    object-fit:contain;
-  }
+  .main-img{ height:260px; object-fit:contain; }
 }
 @media (max-width: 480px){
   .hero{ padding:3.5rem .8rem 4.5rem; }
@@ -154,6 +169,14 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
         <button class="see-more" id="adoptBtn" type="button">我要領養</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- 🟢 新增：我要領養提示 Modal -->
+<div id="adoptHint" class="modal" aria-hidden="true">
+  <div class="modal-box">
+    <p>💡 填寫完表單後，按下「📋 複製表單並聯絡小編」<br>系統會自動複製填寫訊息並開啟 Messenger。</p>
+    <button id="continueBtn">繼續</button>
   </div>
 </div>
 
@@ -229,9 +252,15 @@ function openModal(p){
   main.addEventListener('click',()=>{ current=(current+1)%imgs.length; update(); });
 
   $('#adoptBtn').onclick = () => {
-    const url = new URL('adopt.html', location.href);
-    url.searchParams.set('pet', p.id || '');
-    window.location.assign(url.toString());
+    const hint = document.getElementById('adoptHint');
+    hint.classList.add('open');
+    const continueBtn = document.getElementById('continueBtn');
+    continueBtn.onclick = ()=>{
+      hint.classList.remove('open');
+      const url = new URL('adopt.html', location.href);
+      url.searchParams.set('pet', p.id || '');
+      window.location.assign(url.toString());
+    };
   };
 
   $('#detailModal').classList.add('open');
