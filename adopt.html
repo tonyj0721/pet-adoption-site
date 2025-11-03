@@ -185,7 +185,7 @@ footer{
 <!-- 提示視窗 -->
 <div id="popupOverlay">
   <div id="popupBox">
-    <p>表單已複製到剪貼簿，<br>開啟 Messenger 後將自動填入，<br>若未代入請自行貼上。<br><br>🔖因每日訊息量過多，小編可能無法逐一回覆每一位登記者審核結果，最終僅會通知最合適的認養人，以上若有不周敬請見諒🙏</p>
+    <p>表單已複製到剪貼簿<br>開啟 Messenger 後將自動填入<br>若未代入請自行貼上。<br><br>🔖因每日訊息量過多，小編可能無法逐一回覆每一位登記者審核結果，最終僅會通知最合適的認養人，以上若有不周敬請見諒🙏</p>
     <button id="continueBtn">繼續</button>
   </div>
 </div>
@@ -200,7 +200,7 @@ let encodedMsg = "";
 document.getElementById("sendBtn").addEventListener("click", async () => {
   const form = document.getElementById("adoptForm");
   const data = new FormData(form);
-  let msg = "📋【我要領養申請表】\n";
+  let msg = "📋【領養申請表】\n";
   if (petName) msg += `認養動物：${petName}\n\n`;
 
   for (const [k, v] of data.entries()) {
@@ -225,3 +225,4 @@ document.getElementById("continueBtn").addEventListener("click", () => {
 
 </body>
 </html>
+
