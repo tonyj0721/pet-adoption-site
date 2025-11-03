@@ -133,14 +133,42 @@ footer{
       <div class="row">
         <div class="field"><label>姓名</label><input name="姓名"></div>
         <div class="field"><label>年齡</label><input name="年齡"></div>
-        <div class="field"><label>居住地</label><input name="居住地"></div>
+        <div class="field"><label>居住地（縣市／區域）</label><input name="居住地" placeholder="例如：台中市龍井區"></div>
+        <div class="field"><label>居住環境（租屋或自宅／透天或公寓）</label><input name="居住環境" placeholder="例如：自宅透天"></div>
         <div class="field"><label>職業</label><input name="職業"></div>
+        <div class="field"><label>月收入（大約即可）</label><input name="月收入"></div>
+        <div class="field"><label>家庭成員</label><input name="家庭成員"></div>
+        <div class="field"><label>家庭成員總人數</label><input name="家庭成員總人數"></div>
+        <div class="field"><label>現居住狀況（與人同住或獨居）</label><input name="現居住狀況"></div>
+        <div class="field"><label>同居成員（例如：伴侶、配偶、父母等）</label><input name="同居成員"）"></div>
       </div>
     </div>
 
     <div class="subCard">
+      <div class="sectionTitle">飼養寵物經驗</div>
+      <div class="field"><label>是否曾經飼養過寵物？</label><input name="是否曾經飼養過寵物？"></div>
+      <div class="field"><label>若有，飼養過什麼寵物？</label><input name="若有，飼養過什麼寵物？"></div>
+    </div>
+
+    <div class="subCard">
+      <div class="sectionTitle">現有寵物狀況</div>
+      <div class="field"><label>目前家中是否有寵物？</label><input name="目前家中是否有寵物？"></div>
+      <div class="field"><label>若有，請提供寵物種類、性別、是否已結紮等資訊</label><textarea name="若有，請提供寵物種類、性別、是否已結紮等資訊"></textarea></div>
+    </div>
+    
+    <div class="subCard">
       <div class="sectionTitle">認養動機</div>
-      <div class="field"><label>為什麼想認養這隻毛孩呢？</label><textarea name="認養動機"></textarea></div>
+      <div class="field"><label>為什麼想認養這隻毛孩呢？</label><textarea name="為什麼想認養這隻毛孩呢？"></textarea></div>
+    </div>
+
+    <div class="subCard">
+      <div class="sectionTitle">飼養方式</div>
+      <div class="field"><label>您會如何照顧這隻毛孩？</label><textarea name="您會如何照顧這隻毛孩？" placeholder="例如：飲食安排、居住空間、教育方式等"></textarea></div>
+    </div>
+
+    <div class="subCard">
+      <div class="sectionTitle">飼養花費認知</div>
+      <div class="field"><label>您認為飼養寵物需要哪些支出？</label><textarea name="您認為飼養寵物需要哪些支出？" placeholder="請舉例說明"></textarea></div>
     </div>
 
     <div class="subCard">
@@ -157,7 +185,7 @@ footer{
 <!-- 提示視窗 -->
 <div id="popupOverlay">
   <div id="popupBox">
-    <p>表單已複製到剪貼簿，<br>開啟 Messenger 後將自動填入，<br>若未代入請自行貼上。</p>
+    <p>表單已複製到剪貼簿，<br>開啟 Messenger 後將自動填入，<br>若未代入請自行貼上。<br><br>🔖因每日訊息量過多，小編可能無法逐一回覆每一位登記者審核結果，最終僅會通知最合適的認養人，以上若有不周敬請見諒🙏</p>
     <button id="continueBtn">繼續</button>
   </div>
 </div>
@@ -173,10 +201,10 @@ document.getElementById("sendBtn").addEventListener("click", async () => {
   const form = document.getElementById("adoptForm");
   const data = new FormData(form);
   let msg = "📋【我要領養申請表】\n";
-  if (petName) msg += `認養動物：${petName}\n`;
-  msg += "\n";
+  if (petName) msg += `認養動物：${petName}\n\n`;
+
   for (const [k, v] of data.entries()) {
-    if (v.trim() !== "") msg += `${k}：${v}\n`;
+    if (v.trim() !== "") msg += `${k}：${v}\n\n`;
   }
   encodedMsg = encodeURIComponent(msg);
 
@@ -197,5 +225,3 @@ document.getElementById("continueBtn").addEventListener("click", () => {
 
 </body>
 </html>
-
-
