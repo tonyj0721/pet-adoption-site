@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -6,97 +5,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>後台管理｜台中簡媽媽狗園</title>
 <style>
-:root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; --danger:#b00020; }
-*{ box-sizing:border-box; }
-body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
-
-/* Header（與首頁一致） */
-header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
-.nav{
-  max-width:1100px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:1rem;
-}
-.nav-left{
-  font-weight:800;
-  font-size:1.1rem;
-}
-.nav-right{
-  display:flex;
-  gap:.6rem;
-}
-.nav a{ text-decoration:none; }
-.nav .btn{
-  display:inline-block;
-  background:var(--green);
-  color:#fff;
-  padding:.45rem .9rem;
-  border-radius:999px;
-  font-weight:700;
-  border:2px solid rgba(0,0,0,.05);
-  box-shadow:0 1px 3px rgba(0,0,0,.08);
-  transition:background .2s;
-}
-.nav .btn:hover{
-  background:#3a6645;
-}
-
-/* 主要內容樣式 */
-.wrap{ max-width:1300px; margin:1.2rem auto; padding:0 1rem; display:grid; grid-template-columns:360px 1fr; gap:1rem }
-@media (max-width:900px){ .wrap{ grid-template-columns:1fr } }
-.card{ background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.08); padding:1rem }
-.grid2{ display:grid; grid-template-columns:1fr; gap:.7rem }
-label{ display:block; margin:.2rem 0 .1rem; font-size:.92rem }
-input,select,textarea{ width:100%; padding:.55rem; border:1px solid #ccc; border-radius:8px; background:#f3f3f3; font-size:.95rem; }
-textarea{ min-height:100px; resize:vertical }
-input[type="file"]{ padding:.4rem; background:#fff; }
-.thumbs{ display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.5rem }
-.thumb{ width:70px; height:70px; border-radius:8px; overflow:hidden; position:relative; background:#f0f1f3 }
-.thumb img{ width:100%; height:100%; object-fit:cover }
-.thumb b{ position:absolute; top:2px; right:6px; background:rgba(0,0,0,.6); color:#fff; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer }
-.save{ background:var(--green); color:#fff; border:0; border-radius:8px; padding:.6rem .9rem; cursor:pointer; margin-top:.8rem; width:100%; font-size:1rem; }
-.save[disabled]{ opacity:.6; cursor:not-allowed }
-.topbar{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin-bottom:.6rem }
-.search{ max-width:280px; width:100% }
-table{ width:100%; border-collapse:collapse; table-layout:auto; white-space:nowrap; overflow-x:auto; display:block;}
-th,td{ border-bottom:1px solid #eee; padding:.6rem 1rem; text-align:left; vertical-align:middle }
-.danger{ background:var(--danger); color:#fff; border:0; border-radius:8px; padding:.35rem .6rem; cursor:pointer }
-.toast{ display:none; margin-top:.6rem; background:#eef6ef; color:#2d5b39; padding:.6rem .8rem; border-radius:8px; text-align:center }
-
-/* Footer（與首頁一致） */
-footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
-@media(max-width:768px){ footer{ font-size:.9rem; } }
-
-.modal{ position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; align-items:center; justify-content:center; z-index:99; padding:1rem }
-.modal.open{ display:flex }
-.panel{ background:#fff; border-radius:12px; padding:1rem 1.2rem; width:100%; max-width:420px }
-.panel h4{ margin:.2rem 0 1rem; color:#333 }
-.rowbtn{ display:flex; gap:.6rem; justify-content:flex-end }
-.btn{ padding:.45rem .8rem; border-radius:8px; border:1px solid #ccc; background:#fff; cursor:pointer }
-.btn.danger{ background:var(--danger); color:#fff; border:0 }
-.spinner{ display:inline-block; width:1em; height:1em; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite; vertical-align:middle; margin-left:.4rem }
-@keyframes spin { to{ transform:rotate(360deg) } }
+  :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; --danger:#b00020; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
+  header{ background:var(--mint); color:#fff }
+  .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
+  .nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
+  .wrap{ max-width:1300px; margin:1.2rem auto; padding:0 1rem; display:grid; grid-template-columns:360px 1fr; gap:1rem }
+  @media (max-width:900px){ .wrap{ grid-template-columns:1fr } }
+  .card{ background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.08); padding:1rem }
+  .grid2{ display:grid; grid-template-columns:1fr; gap:.7rem }
+  label{ display:block; margin:.2rem 0 .1rem; font-size:.92rem }
+  input,select,textarea{ width:100%; padding:.55rem; border:1px solid #ccc; border-radius:8px; background:#f3f3f3; font-size:.95rem; }
+  textarea{ min-height:100px; resize:vertical }
+  input[type="file"]{ padding:.4rem; background:#fff; }
+  .thumbs{ display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.5rem }
+  .thumb{ width:70px; height:70px; border-radius:8px; overflow:hidden; position:relative; background:#f0f1f3 }
+  .thumb img{ width:100%; height:100%; object-fit:cover }
+  .thumb b{ position:absolute; top:2px; right:6px; background:rgba(0,0,0,.6); color:#fff; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer }
+  .save{ background:var(--green); color:#fff; border:0; border-radius:8px; padding:.6rem .9rem; cursor:pointer; margin-top:.8rem; width:100%; font-size:1rem; }
+  .save[disabled]{ opacity:.6; cursor:not-allowed }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin-bottom:.6rem }
+  .search{ max-width:280px; width:100% }
+  table{ width:100%; border-collapse:collapse; table-layout:auto; white-space:nowrap; overflow-x:auto; display:block;}
+  th,td{ border-bottom:1px solid #eee; padding:.6rem 1rem; text-align:left; vertical-align:middle }
+  .danger{ background:var(--danger); color:#fff; border:0; border-radius:8px; padding:.35rem .6rem; cursor:pointer }
+  .toast{ display:none; margin-top:.6rem; background:#eef6ef; color:#2d5b39; padding:.6rem .8rem; border-radius:8px; text-align:center }
+  footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
+  .modal{ position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; align-items:center; justify-content:center; z-index:99; padding:1rem }
+  .modal.open{ display:flex }
+  .panel{ background:#fff; border-radius:12px; padding:1rem 1.2rem; width:100%; max-width:420px }
+  .panel h4{ margin:.2rem 0 1rem; color:#333 }
+  .rowbtn{ display:flex; gap:.6rem; justify-content:flex-end }
+  .btn{ padding:.45rem .8rem; border-radius:8px; border:1px solid #ccc; background:#fff; cursor:pointer }
+  .btn.danger{ background:var(--danger); color:#fff; border:0 }
+  .spinner{ display:inline-block; width:1em; height:1em; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite; vertical-align:middle; margin-left:.4rem }
+  @keyframes spin { to{ transform:rotate(360deg) } }
 </style>
-
-<script>
-if (window.innerWidth <= 768) {
-  window.location.href = "admin-mobile.html";
-}
-</script>
-
 </head>
 <body>
-
 <header>
   <div class="nav">
-    <div class="nav-left" id="brand">台中簡媽媽狗園</div>
-    <div class="nav-right">
-      <a class="btn" href="index.html">首頁</a>
-      <a class="btn" href="#" id="logoutBtn">登出</a>
-    </div>
+    <div style="font-weight:800">台中簡媽媽狗園</div>
+    <nav>
+      <a href="index.html">首頁</a>
+      <a href="#" id="logoutBtn" style="font-weight:600;text-decoration:underline;">登出</a>
+    </nav>
   </div>
 </header>
 
@@ -126,7 +80,7 @@ if (window.innerWidth <= 768) {
   </section>
 </main>
 
-<footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
+<footer>© 2025 台中簡媽媽狗園</footer>
 
 <!-- 刪除與重複警示 Modal -->
 <div id="confirmModal" class="modal"><div class="panel"><h4>確定要刪除這筆動物資料嗎？</h4><div class="rowbtn"><button class="btn" id="cancelDel">取消</button><button class="btn danger" id="okDel">刪除</button></div></div></div>
@@ -144,66 +98,16 @@ if (window.innerWidth <= 768) {
 </div>
 
 <script>
-// 只負責開/關登出視窗（真正登出在下方 Firebase 模組處理）
-window.addEventListener('DOMContentLoaded', ()=>{
-  const logoutBtn = document.getElementById('logoutBtn');
-  const logoutModal = document.getElementById('logoutModal');
-  const logoutCancel = document.getElementById('logoutCancel');
+// ✅ 登入檢查
+if(sessionStorage.getItem('loggedIn')!=='1'){ location.href='login.html'; }
 
-  logoutBtn.addEventListener('click', ()=>logoutModal.classList.add('open'));
-  logoutCancel.addEventListener('click', ()=>logoutModal.classList.remove('open'));
-});
-</script>
-
-<script type="module">
-// ===== Firebase 初始化與 Auth 保護 =====
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, updateDoc, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
-
-const firebaseConfig={apiKey:"AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",authDomain:"pet-adoption-32294.firebaseapp.com",projectId:"pet-adoption-32294",storageBucket:"pet-adoption-32294.firebasestorage.app",messagingSenderId:"102978803311",appId:"1:102978803311:web:a7d890096b2b23cad15f9a"};
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
-const storage=getStorage(app);
-
-// 白名單（允許的 Google 帳號）
-const ALLOWED_EMAILS = ["tonyj0721@gmail.com"];
-
-// 登入狀態檢查
-onAuthStateChanged(auth, user => {
-  if (!user) {
-    alert("請先登入帳號");
-    location.href = "login.html";
-    return;
-  }
-  if (!ALLOWED_EMAILS.includes(user.email)) {
-    alert("此帳號沒有後台權限");
-    signOut(auth);
-    return;
-  }
-  // 在導覽列顯示登入者 Email
-  const brand = document.getElementById('brand');
-  if (brand && !brand.textContent.includes(user.email)) {
-    brand.textContent = brand.textContent + "｜" + user.email;
-  }
-});
-
-// 登出（含確認 modal 關閉）
-document.getElementById('logoutConfirm').addEventListener('click', async () => {
-  await signOut(auth);
-  document.getElementById('logoutModal').classList.remove('open');
-  location.href = "login.html";
-});
-
-// 自動登出（10 分鐘無操作）
+// ✅ 自動登出功能
 let logoutTimer;
 const AUTO_LOGOUT_MS = 10 * 60 * 1000;
 function resetLogoutTimer(){
   clearTimeout(logoutTimer);
-  logoutTimer = setTimeout(async()=>{
-    try{ await signOut(auth); }catch(e){}
+  logoutTimer = setTimeout(()=>{
+    sessionStorage.removeItem('loggedIn');
     alert("已超過 10 分鐘未操作，自動登出。");
     location.href='login.html';
   }, AUTO_LOGOUT_MS);
@@ -213,11 +117,37 @@ function resetLogoutTimer(){
 });
 resetLogoutTimer();
 
-// ===== 以下維持你原本的後台功能 =====
+// ✅ 手動登出 Modal 綁定（確保 DOM 載入後再執行）
+window.addEventListener('DOMContentLoaded', ()=>{
+  const logoutBtn = document.getElementById('logoutBtn');
+  const logoutModal = document.getElementById('logoutModal');
+  const logoutCancel = document.getElementById('logoutCancel');
+  const logoutConfirm = document.getElementById('logoutConfirm');
+
+  logoutBtn.addEventListener('click', ()=>logoutModal.classList.add('open'));
+  logoutCancel.addEventListener('click', ()=>logoutModal.classList.remove('open'));
+  logoutConfirm.addEventListener('click', ()=>{
+    sessionStorage.removeItem('loggedIn');
+    logoutModal.classList.remove('open');
+    location.href='login.html';
+  });
+});
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, updateDoc, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
+
+const firebaseConfig={apiKey:"AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",authDomain:"pet-adoption-32294.firebaseapp.com",projectId:"pet-adoption-32294",storageBucket:"pet-adoption-32294.firebasestorage.app",messagingSenderId:"102978803311",appId:"1:102978803311:web:a7d890096b2b23cad15f9a"};
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const storage=getStorage(app);
+
 const $=s=>document.querySelector(s);
 let selectedFiles=[],allPets=[],deleteTargetId=null,dupProceed=false;
 const listEl=$('#list'),emptyEl=$('#empty'),saveBtn=$('#saveBtn'),toast=$('#toast'),photos=$('#photos'),previews=$('#previews'),dupModal=$('#dupModal'),dupYes=$('#dupYes'),dupNo=$('#dupNo');
-const breedSets={cat:{pure:["美短","英短","藍貓","暹羅貓","波斯貓","布偶貓","曼赤肯"],mix:["橘貓","黑貓","虎斑貓","白底虎斑貓","賓士貓","三花貓","玳瑁貓","白貓"]},dog:{pure:["博美","貴賓","吉娃娃","馬爾濟斯","柯基","柴犬","狐狸犬","哈士奇","高山犬","黃金獵犬"],mix:["黑色","白色","黃色","棕色","虎斑","花花"]}};
+const breedSets={cat:{pure:["美短","英短","藍貓","暹羅貓","波斯貓","布偶貓"],mix:["橘貓","黑貓","虎斑貓","白底虎斑貓","賓士貓","三花貓","玳瑁貓","白貓"]},dog:{pure:["博美","貴賓","吉娃娃","馬爾濟斯","柯基","柴犬","狐狸犬","哈士奇","高山犬","黃金獵犬"],mix:["黑色","白色","黃色","棕色","虎斑","花花"]}};
 
 function updateSubGroup(){const group=$('#group').value,sub=$('#subGroup');sub.innerHTML='';if(group==='cat'){sub.innerHTML='<option value="pure">品種貓</option><option value="mix">米克斯</option>';}else{sub.innerHTML='<option value="pure">品種犬</option><option value="mix">米克斯</option>';}updateBreed();}
 function updateBreed(){const g=$('#group').value,s=$('#subGroup').value,b=$('#breed');b.innerHTML='';breedSets[g][s].forEach(name=>{const o=document.createElement('option');o.textContent=name;b.appendChild(o);});}

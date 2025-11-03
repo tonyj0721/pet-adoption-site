@@ -10,22 +10,34 @@
 body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
 header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08) }
 .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
-.nav a{ color:#fff; text-decoration:none; background:var(--green); padding:.45rem .9rem; border-radius:8px; font-weight:600; transition:.2s }
-.nav a:hover{ background:#3a6645 }
-
+.nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
+.nav a:hover{ text-decoration:underline }
 .container{ max-width:1100px; margin:2rem auto; padding:0 1rem }
 h1{ text-align:center; color:var(--green); margin-bottom:1rem }
-
-/* 篩選列 */
 .filters{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:0 auto 1.2rem }
 select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; background:#fff; min-width:150px }
 
-/* 卡片排列 */
-.grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.2rem; }
-@media (max-width:768px){ .grid{ grid-template-columns:repeat(2,1fr); gap:0.8rem; } }
-
-.card{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; cursor:pointer; display:flex; flex-direction:column; justify-content:space-between; transition:transform .15s ease; }
-.card img{ width:100%; height:220px; object-fit:contain; background:#f0f0f0; display:block; margin:auto; }
+/* ✅ 卡片樣式：圖片置中、不裁切、文字固定底部 */
+.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem }
+.card{
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  overflow:hidden;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:transform .15s ease;
+}
+.card img{
+  width:100%;
+  height:220px;
+  object-fit:contain;
+  background:#f0f0f0;
+  display:block;
+  margin:auto;
+}
 .card .info{ padding:.8rem; background:#fff; flex-shrink:0 }
 .pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem }
 
@@ -36,45 +48,24 @@ select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; backgrou
 .head{ display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; border-bottom:1px solid #eee }
 .close{ background:transparent; border:0; font-size:1.5rem; cursor:pointer }
 .body{ display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem }
-.main-img{ width:100%; height:320px; object-fit:contain; background:#f0f0f0; border-radius:8px; display:block; margin:0 auto; }
+.main-img{
+  width:100%; height:auto; max-height:65vh; object-fit:contain;
+  background:#f0f0f0; border-radius:8px; display:block; margin:0 auto;
+}
 .thumbs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem }
 .thumbs img{ width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent }
 .thumbs img.active{ border-color:var(--mint) }
-
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
-
-/* 🟢 新增：我要領養提示 Modal */
-#adoptHint{
-  position:fixed; inset:0; background:rgba(0,0,0,.55);
-  display:none; align-items:center; justify-content:center;
-  z-index:200;
-}
-#adoptHint.open{ display:flex; }
-#adoptHint .modal-box{
-  background:#fff; border-radius:12px; padding:1.5rem 2rem;
-  max-width:420px; width:90%; text-align:center;
-  box-shadow:0 4px 14px rgba(0,0,0,.2);
-}
-#adoptHint .modal-box p{ margin-bottom:1.2rem; line-height:1.7; }
-#adoptHint .modal-box button{
-  background:var(--green); color:#fff; border:none;
-  border-radius:999px; padding:.8rem 2rem; font-weight:700;
-  cursor:pointer; font-size:1rem;
-}
-#adoptHint .modal-box button:hover{ background:#3a6645; }
-
-@media (max-width:768px){
-  footer{ font-size:.9rem; }
-  .body{ grid-template-columns:1fr; }
-  .main-img{ height:260px; }
-}
 </style>
 </head>
 <body>
 <header>
   <div class="nav">
-    <div style="font-weight:800;font-size:1.1rem;">台中簡媽媽狗園</div>
-    <nav><a href="index.html">首頁</a></nav>
+    <div style="font-weight:800">台中簡媽媽狗園</div>
+    <nav>
+      <a href="index.html">首頁</a>
+      <a href="dogs.html">我想看狗狗 👀</a>
+    </nav>
   </div>
 </header>
 
@@ -93,9 +84,8 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
     </select>
     <select id="age">
       <option value="">不限年齡</option>
-      <option>1歲以下</option>
-      <option>1~5歲</option>
-      <option>6~10歲</option>
+      <option>1歲以下</option><option>1</option><option>2</option><option>3</option><option>4</option>
+      <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
       <option>10歲以上</option>
     </select>
     <select id="gender">
@@ -128,14 +118,6 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
         <button class="pill" id="adoptBtn" style="background:#497f54;color:#fff;border:0;padding:.5rem .8rem;border-radius:8px;cursor:pointer">我要領養</button>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- 🟢 我要領養提示 Modal -->
-<div id="adoptHint" class="modal" aria-hidden="true">
-  <div class="modal-box">
-    <p>💡 填寫完表單後，按下<br>「📋 複製表單並聯絡小編」<br>系統會自動複製填寫訊息<br>並開啟 Messenger。</p>
-    <button id="continueBtn">繼續</button>
   </div>
 </div>
 
@@ -198,10 +180,9 @@ function card(p){
         <strong>${p.name||''}</strong>
         <span class="pill">貓咪</span>
       </div>
-      <div style="font-size:.92rem;margin-top:.25rem;line-height:1.4;">
+      <div style="font-size:.92rem;margin-top:.25rem">
         <div>品種：${p.breed||'—'}</div>
-        <div>年齡：${p.age||'—'}</div>
-        <div>性別：${p.gender||'—'}</div>
+        <div>年齡：${p.age||'—'}　性別：${p.gender||'—'}</div>
       </div>
     </div>`;
   el.addEventListener('click',()=>openModal(p));
@@ -223,20 +204,7 @@ function openModal(p){
   function update(){main.src=imgs[current];[...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active',idx===current));}
   update();
   main.addEventListener('click',()=>{current=(current+1)%imgs.length;update();});
-
-  // 🟢 點擊我要領養 → 先顯示提示 Modal
-  $('#adoptBtn').onclick=()=>{
-    const hint=document.getElementById('adoptHint');
-    hint.classList.add('open');
-    const continueBtn=document.getElementById('continueBtn');
-    continueBtn.onclick=()=>{
-      hint.classList.remove('open');
-      const url=new URL('adopt.html',location.href);
-      url.searchParams.set('pet',p.name||'');
-      location.href=url.toString();
-    };
-  };
-
+  $('#adoptBtn').onclick=()=>{const url=new URL('adopt.html',location.href);url.searchParams.set('pet',p.id||'');location.href=url.toString();};
   $('#detailModal').classList.add('open');
 }
 $('#closeBtn').addEventListener('click',()=>$('#detailModal').classList.remove('open'));
@@ -245,16 +213,11 @@ $('#detailModal').addEventListener('click',e=>{if(e.target.id==='detailModal')$(
 let allCats=[],allCatsNorm=[];
 function matchAge(val,sel){
   if(!sel)return true;
-  const str=String(val||'');
-  const numMatch=str.match(/\d+/);
-  const ageNum=numMatch?parseInt(numMatch[0],10):0;
-  if(sel==='1歲以下') return str.includes('月') || ageNum===0;
-  if(sel==='1~5歲') return ageNum>=1 && ageNum<=5;
-  if(sel==='6~10歲') return ageNum>=6 && ageNum<=10;
-  if(sel==='10歲以上') return ageNum>10;
-  return true;
+  const a=String(val||'');
+  if(sel==='1歲以下')return/個月|月|0/.test(a);
+  if(sel==='10歲以上'){const m=a.match(/\d+/);return m?(parseInt(m[0],10)>=10):false;}
+  const m=a.match(/\d+/);return m?(parseInt(m[0],10)===parseInt(sel,10)):a.includes(sel);
 }
-
 function applyFilters(){
   const type=catType.value,sub=subType.disabled?'':subType.value,age=$('#age').value,gen=$('#gender').value;
   let list=allCatsNorm.slice();
@@ -265,7 +228,6 @@ function applyFilters(){
   if(gen)list=list.filter(x=>(x.gender||'').includes(gen));
   render(list);
 }
-
 (async()=>{
   const ref=collection(db,'pets');
   const snap=await getDocs(query(ref,orderBy('createdAt','desc')));
@@ -277,5 +239,3 @@ function applyFilters(){
 </script>
 </body>
 </html>
-
-
