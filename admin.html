@@ -80,6 +80,13 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
 .spinner{ display:inline-block; width:1em; height:1em; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite; vertical-align:middle; margin-left:.4rem }
 @keyframes spin { to{ transform:rotate(360deg) } }
 </style>
+
+<script>
+if (window.innerWidth <= 768) {
+  window.location.href = "admin-mobile.html";
+}
+</script>
+
 </head>
 <body>
 
