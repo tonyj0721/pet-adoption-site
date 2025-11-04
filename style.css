@@ -648,3 +648,49 @@ h2.section .see-more{
   background:none !important;
   margin:0 !important;
 }
+
+
+
+/* ===== Overrides (2025-11-05, second pass) ===== */
+
+/* 1) Section header equal heights */
+h2.section{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.75rem;
+  padding:.25rem 0;
+  min-height:44px;  /* keep both headings same height */
+  line-height:1.2;
+}
+h2.section .see-more{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:36px;
+  padding:0 .9rem;
+  line-height:1;
+}
+
+/* 2) Revert list photos to original non-cropping style */
+.card img{
+  width:100% !important;
+  height:220px !important;
+  aspect-ratio:auto !important;
+  object-fit:contain !important; /* don't crop */
+  background:#f0f0f0 !important;
+  border-radius:12px !important;
+  display:block !important;
+  margin:auto !important;
+}
+
+/* 3) Keep breed on one line (avoid wrapping like 黃金獵犬 -> 2 lines) */
+.card .info > div:nth-of-type(2) > div:first-child{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Make grid children stretch in height so buttons/lines align */
+.grid{ align-items:stretch; }
+.grid > *{ height:100%; }
