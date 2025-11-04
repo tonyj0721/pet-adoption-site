@@ -1,182 +1,293 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>台中簡媽媽狗園</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>台中簡媽媽狗園</title>
+<style>
+:root { --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
 
-  <!-- 共用樣式 -->
-  <link rel="stylesheet" href="style.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+/* Header */
+header { background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
+.nav { max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:center; gap:.6rem; padding:.8rem 1rem; }
+.nav a { text-decoration:none; }
+.nav .btn{
+  display:inline-block;
+  background:var(--green);
+  color:#fff;
+  padding:.45rem .9rem;
+  border-radius:999px;
+  font-weight:700;
+  border:2px solid rgba(0,0,0,.05);
+  box-shadow:0 1px 3px rgba(0,0,0,.08);
+  transition:background .2s;
+}
+.nav .btn:hover{ background:#3a6645; }
 
-  <!-- 保留原本內嵌樣式 -->
-  <style>
-    /* 這裡假設是使用者原本的 CSS（完整保留） */
-    body { margin: 0; font-family: "Noto Sans TC", sans-serif; background-color: #fdfdfd; color: #333; }
-    header { background-color: #4d7358; color: white; padding: 0.6rem 1rem; }
-    h1 { text-align: center; margin: 0; padding: 1rem; }
-    .hero { text-align: center; color: white; padding: 5rem 1rem; background: rgba(0,0,0,0.3); }
-    .container { padding: 2rem; max-width: 1200px; margin: auto; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
-    .card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .card img { width: 100%; height: 240px; object-fit: cover; }
-    .info { padding: 0.8rem 1rem; }
-    footer { background: #4d7358; color: white; text-align: center; padding: 0.5rem; margin-top: 2rem; }
-    .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:1000; }
-    .modal.open { display: flex; }
-    .modal-panel { background:white; border-radius:12px; max-width:700px; width:90%; overflow:hidden; }
-    .m-hero { background:#6b8f71; color:white; display:flex; justify-content:space-between; align-items:center; padding:1rem; }
-    .m-body { display:grid; grid-template-columns:1fr 1fr; gap:1rem; padding:1rem; }
-    .m-main-img { width:100%; border-radius:8px; }
-    .m-thumbs { display:flex; gap:0.5rem; margin-top:0.5rem; }
-    .m-thumbs img { width:60px; height:60px; object-fit:cover; border-radius:6px; cursor:pointer; opacity:0.7; }
-    .m-thumbs img.active { opacity:1; border:2px solid #4d7358; }
-    .btn { background:#4d7358; color:white; padding:0.5rem 1rem; border:none; border-radius:30px; cursor:pointer; }
-  </style>
+/* Hero */
+.hero{
+  background:url('images/hero-bg.jpg') center/cover no-repeat;
+  color:#fff; text-align:center; padding:6rem 1rem 7rem; position:relative;
+}
+.hero::after{ content:""; position:absolute; inset:0; background:rgba(0,0,0,.18); }
+.hero-inner{ position:relative; z-index:1; }
+.site-title{
+  font-size:2.6rem; font-weight:900; margin:0;
+  text-shadow:0 3px 8px rgba(0,0,0,.6);
+}
+.tagline{
+  margin:.55rem 0 0; font-size:1.1rem; font-weight:600;
+  text-shadow:0 3px 8px rgba(0,0,0,.6);
+}
+.fund-code{
+  position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+  background:rgba(0,0,0,.45); color:#fff; font-size:1rem;
+  padding:.3rem .8rem; border-radius:6px; z-index:2; white-space:nowrap;
+}
+
+/* Main */
+.container{ max-width:1100px; margin:2rem auto; padding:0 1rem; }
+h2.section{ color:var(--green); display:flex; align-items:center; justify-content:space-between; margin:1.5rem 0 .8rem; font-size:1.5rem; }
+.see-more{ border:0; background:var(--green); color:#fff; padding:.5rem .8rem; border-radius:8px; cursor:pointer; font-size:1rem; text-decoration:none; }
+.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
+
+/* Cards */
+.card{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; cursor:pointer; transition:transform .15s ease; display:flex; flex-direction:column; justify-content:space-between; }
+.card:hover{ transform:translateY(-2px); }
+.card img{ width:100%; height:220px; object-fit:contain; background:#f0f0f0; display:block; margin:auto; }
+.card .info{ padding:.8rem; background:#fff; flex-shrink:0; }
+.card .info div > div{ min-height:1.2em; }
+.pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem; margin-right:.4rem; }
+
+/* Modal (動物詳情) */
+.modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:1rem; z-index:50; }
+.modal.open{ display:flex; }
+.panel{ background:#fff; border-radius:12px; max-width:900px; width:100%; max-height:90vh; overflow:auto; }
+.head{ display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; border-bottom:1px solid #eee; }
+.close{ background:transparent; border:0; font-size:1.5rem; cursor:pointer; }
+.body{ display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem; }
+.main-img{ width:100%; height:320px; object-fit:contain; background:#f0f0f0; border-radius:8px; display:block; margin:0 auto; }
+.thumbs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem; }
+.thumbs img{ width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent; }
+.thumbs img.active{ border-color:var(--mint); }
+
+footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem; }
+
+/* 🟢 新增：我要領養提示 Modal */
+#adoptHint{
+  position:fixed; inset:0; background:rgba(0,0,0,.55);
+  display:none; align-items:center; justify-content:center;
+  z-index:200;
+}
+#adoptHint.open{ display:flex; }
+#adoptHint .modal-box{
+  background:#fff; border-radius:12px; padding:1.5rem 2rem;
+  max-width:420px; width:90%; text-align:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.2);
+}
+#adoptHint .modal-box p{ margin-bottom:1.2rem; line-height:1.7; }
+#adoptHint .modal-box button{
+  background:var(--green); color:#fff; border:none;
+  border-radius:999px; padding:.8rem 2rem; font-weight:700;
+  cursor:pointer; font-size:1rem;
+}
+#adoptHint .modal-box button:hover{ background:#3a6645; }
+
+/* Mobile */
+@media (max-width: 768px){
+  .nav{ flex-wrap:wrap; }
+  .nav .btn{ flex:1 1 auto; text-align:center; min-width:30%; }
+  .hero{ padding:4rem 1rem 5rem; }
+  .site-title{ font-size:2rem; }
+  .tagline{ font-size:1rem; }
+  .fund-code{ font-size:.9rem; padding:.2rem .6rem; }
+  .body{ grid-template-columns:1fr; }
+  .grid{ grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); }
+  .card img{ height:180px; }
+  footer{ font-size:.9rem; }
+  .main-img{ height:260px; object-fit:contain; }
+}
+@media (max-width: 480px){
+  .hero{ padding:3.5rem .8rem 4.5rem; }
+  .site-title{ font-size:1.7rem; }
+  .fund-code{ font-size:.8rem; }
+}
+</style>
 </head>
-
 <body>
 
-  <!-- 導覽列 -->
-  <header>
-    <div class="nav" style="position:relative;">
-      <div class="nav-left" style="font-weight:800;font-size:1.1rem;">台中簡媽媽狗園</div>
+<header>
+  <nav class="nav">
+    <a class="btn" href="adoptlist.html">待認養</a>
+    <a class="btn" href="about.html">關於簡媽媽</a>
+    <a class="btn" href="login.html">管理員登入</a>
+  </nav>
+</header>
 
-      <!-- 桌機版導覽列 -->
-      <div class="menu desktop-menu">
-        <a class="btn" href="cats.html">我想養貓咪</a>
-        <a class="btn" href="dogs.html">我想養狗狗</a>
-        <a class="btn" href="about.html">關於簡媽媽</a>
-        <a class="btn btn-ghost" href="login.html">管理員登入</a>
-      </div>
+<section class="hero">
+  <div class="hero-inner">
+    <h1 class="site-title">台中簡媽媽狗園</h1>
+    <p class="tagline">給牠一個溫暖的家&nbsp;&nbsp;&nbsp;&nbsp;用領養&nbsp;&nbsp;&nbsp;&nbsp;改變一條生命的軌跡</p>
+  </div>
+  <div class="fund-code">勸募字號 中市社團字第1140036732號</div>
+</section>
 
-      <!-- 手機版漢堡按鈕 -->
-      <div class="hamburger" id="menuToggle">
-        <i class="fa-solid fa-bars"></i>
-      </div>
-
-      <!-- 手機版下拉選單 -->
-      <div class="dropdown" id="dropdownMenu">
-        <a href="cats.html">我想養貓咪</a>
-        <a href="dogs.html">我想養狗狗</a>
-        <a href="about.html">關於簡媽媽</a>
-        <a href="login.html">管理員登入</a>
-      </div>
-    </div>
-  </header>
-
-  <!-- Hero 區 -->
-  <section class="hero" style="background-image:url('images/hero-bg.jpg');background-size:cover;background-position:center;">
-    <h1>給牠一個溫暖的家　用領養　改變一條生命的軌跡</h1>
+<main class="container">
+  <section id="cats">
+    <h2 class="section">貓咪 <a class="see-more" href="cats.html">查看全部</a></h2>
+    <div id="catGrid" class="grid"></div>
   </section>
 
-  <!-- 主內容 -->
-  <main class="container">
-    <h2 class="section-title">待領養的毛孩</h2>
-    <div id="animalList" class="grid"></div>
-  </main>
+  <section id="dogs">
+    <h2 class="section">狗狗 <a class="see-more" href="dogs.html">查看全部</a></h2>
+    <div id="dogGrid" class="grid"></div>
+  </section>
+</main>
 
-  <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
-
-  <!-- Modal -->
-  <div id="animalModal" class="modal" aria-hidden="true">
-    <div class="modal-backdrop"></div>
-    <div class="modal-panel">
-      <div class="m-hero">
-        <button class="icon-btn m-close" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
-        <div class="m-title" id="mName">動物資料</div>
+<!-- 詳細視窗 Modal -->
+<div id="detailModal" class="modal" aria-hidden="true">
+  <div class="panel">
+    <div class="head">
+      <strong id="mTitle">動物資料</strong>
+      <button class="close" aria-label="關閉" id="closeBtn">✕</button>
+    </div>
+    <div class="body">
+      <div>
+        <img id="mMain" class="main-img" src="" alt="">
+        <div id="mThumbs" class="thumbs"></div>
       </div>
-      <div class="m-body">
-        <div>
-          <img id="mMain" class="m-main-img" src="" alt="">
-          <div id="mThumbs" class="m-thumbs"></div>
-        </div>
-        <div>
+      <div>
+        <div class="meta">
+          <p><span class="pill" id="mSpecies"></span></p>
           <p>品種：<span id="mBreed"></span></p>
           <p>年齡：<span id="mAge"></span></p>
           <p>性別：<span id="mGender"></span></p>
           <p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p>
-          <button class="btn" style="width:100%;margin-top:.8rem;" id="adoptBtn">我要領養</button>
         </div>
+        <button class="see-more" id="adoptBtn" type="button">我要領養</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Firebase 程式（保持原樣） -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+<!-- 🟢 新增：我要領養提示 Modal -->
+<div id="adoptHint" class="modal" aria-hidden="true">
+  <div class="modal-box">
+    <div style="font-size:3rem; line-height:1; margin-bottom:0.5rem;">💡</div>
+    <p>填寫完表單後，按下<br><br>『📋 複製表單並聯絡小編』<br><br>系統會自動複製填寫訊息<br>並開啟 Messenger。</p>
+    <button id="continueBtn">繼續</button>
+  </div>
+</div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4W6I3jc",
-      authDomain: "janmama.firebaseapp.com",
-      projectId: "janmama",
-      storageBucket: "janmama.appspot.com",
-      messagingSenderId: "343934823495",
-      appId: "1:343934823495:web:ab23b5a33b1c915bb30e5e"
+<footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
+  authDomain: "pet-adoption-32294.firebaseapp.com",
+  projectId: "pet-adoption-32294",
+  storageBucket: "pet-adoption-32294.firebasestorage.app",
+  messagingSenderId: "102978803311",
+  appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const $ = (s,el=document)=>el.querySelector(s);
+
+function card(pet){
+  const el = document.createElement('div');
+  el.className = 'card';
+  const cover = pet.images?.[0]?.url || 'https://placehold.co/800x500?text=No+Image';
+  const breedText = pet.breed || '—';
+  el.innerHTML = `
+    <img src="${cover}" alt="${pet.name||''}">
+    <div class="info">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <strong>${pet.name||''}</strong>
+        <span class="pill">${pet.species==='cat'?'貓咪':'狗狗'}</span>
+      </div>
+      <div style="font-size:.92rem;margin-top:.25rem;line-height:1.5">
+        <div>品種：${breedText}</div>
+        <div>年齡：${pet.age || '—'}</div>
+        <div>性別：${pet.gender || '—'}</div>
+      </div>
+    </div>`;
+  el.addEventListener('click',()=>openModal(pet));
+  return el;
+}
+
+function openModal(p){
+  $('#mTitle').textContent = p.name || '動物資料';
+  $('#mSpecies').textContent = p.species==='cat'?'貓咪':'狗狗';
+  $('#mBreed').textContent = p.breed || '—';
+  $('#mAge').textContent = p.age || '—';
+  $('#mGender').textContent = p.gender || '—';
+  $('#mIntro').textContent = p.intro || '';
+
+  const imgs = (p.images?.length) ? p.images.map(x=>x.url) : ['https://placehold.co/1200x800?text=No+Image'];
+  let current = 0;
+  const main = $('#mMain');
+  const thumbs = $('#mThumbs');
+  thumbs.innerHTML = '';
+  main.src = imgs[0];
+
+  imgs.forEach((src,i)=>{
+    const im = new Image();
+    im.src = src; im.alt = 'thumb';
+    im.addEventListener('click',()=>{ current=i; update(); });
+    thumbs.appendChild(im);
+  });
+
+  function update(){
+    main.src = imgs[current];
+    [...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active', idx===current));
+  }
+  update();
+
+  main.addEventListener('click',()=>{ current=(current+1)%imgs.length; update(); });
+
+  $('#adoptBtn').onclick = () => {
+    const hint = document.getElementById('adoptHint');
+    hint.classList.add('open');
+    const continueBtn = document.getElementById('continueBtn');
+    continueBtn.onclick = ()=>{
+      hint.classList.remove('open');
+      const url = new URL('adopt.html', location.href);
+      url.searchParams.set('pet', p.name || '');
+      window.location.assign(url.toString());
     };
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  $('#detailModal').classList.add('open');
+  $('#detailModal').setAttribute('aria-hidden','false');
+}
 
-    async function loadAnimals() {
-      const q = query(collection(db, "animals"), orderBy("createdAt", "desc"));
-      const querySnapshot = await getDocs(q);
-      const list = document.getElementById("animalList");
-      list.innerHTML = "";
-      querySnapshot.forEach((doc) => {
-        const c = doc.data();
-        const card = document.createElement("div");
-        card.className = "card";
-        const img = c.images?.[0]?.url || c.image || c.photo || "https://placehold.co/400x300?text=No+Image";
-        card.innerHTML = `<img src="${img}" alt="${c.name}"><div class='info'><h3>${c.name}</h3><p>${c.breed || ""}</p></div>`;
-        card.onclick = () => openModal(c);
-        list.appendChild(card);
-      });
-    }
+function closeModal(){
+  $('#detailModal').classList.remove('open');
+  $('#detailModal').setAttribute('aria-hidden','true');
+}
+$('#closeBtn').addEventListener('click', closeModal);
+$('#detailModal').addEventListener('click', e=>{ if(e.target.id==='detailModal') closeModal(); });
 
-    function openModal(c){
-      document.getElementById("mName").textContent = c.name || "未命名";
-      document.getElementById("mBreed").textContent = c.breed || "";
-      document.getElementById("mAge").textContent = c.age || "";
-      document.getElementById("mGender").textContent = c.gender || "";
-      document.getElementById("mIntro").textContent = c.intro || "";
-      const mainImg = document.getElementById("mMain");
-      const imgs = (c.images?.length ? c.images.map(i=>i.url) : [c.image, c.photo].filter(Boolean));
-      const safeImgs = imgs.length ? imgs : ["https://placehold.co/1200x800?text=No+Image"];
-      mainImg.src = safeImgs[0];
-      const thumbs = document.getElementById("mThumbs");
-      thumbs.innerHTML = "";
-      safeImgs.forEach((src,i)=>{
-        const t = document.createElement("img");
-        t.src = src;
-        if(i===0) t.classList.add("active");
-        t.onclick = ()=>{
-          mainImg.src = src;
-          thumbs.querySelectorAll("img").forEach(im=>im.classList.remove("active"));
-          t.classList.add("active");
-        };
-        thumbs.appendChild(t);
-      });
-      document.getElementById("animalModal").classList.add("open");
-    }
+function render4(species, list){
+  const grid = $(species==='cat'?'#catGrid':'#dogGrid');
+  grid.innerHTML='';
+  list.filter(p=>p.species===species).slice(0,4).forEach(p=>grid.appendChild(card(p)));
+}
 
-    document.getElementById("closeModal").onclick = ()=>{
-      document.getElementById("animalModal").classList.remove("open");
-    };
-
-    loadAnimals();
-  </script>
-
-  <!-- 手機選單控制 -->
-  <script>
-    const toggle = document.getElementById("menuToggle");
-    const dropdown = document.getElementById("dropdownMenu");
-    toggle.addEventListener("click",()=> dropdown.classList.toggle("open"));
-    document.addEventListener("click",(e)=>{
-      if(!e.target.closest(".nav")) dropdown.classList.remove("open");
-    });
-  </script>
+(async ()=>{
+  const ref = collection(db, 'pets');
+  const qs = await getDocs(query(ref, orderBy('createdAt','desc')));
+  const list = qs.docs.map(d=>({ id:d.id, ...d.data() }));
+  render4('cat', list);
+  render4('dog', list);
+})();
+</script>
 </body>
 </html>
