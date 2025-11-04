@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>
+  // 📱 若使用手機或平板開啟 → 導向 admin-mobile.html
+  if (window.innerWidth <= 768) {
+    window.location.href = "admin-mobile.html";
+  }
+</script>
 <title>後台管理｜台中簡媽媽狗園</title>
 <style>
 :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; --danger:#b00020; }
