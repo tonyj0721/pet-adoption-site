@@ -5,154 +5,178 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>台中簡媽媽狗園</title>
+
+  <!-- 共用樣式 -->
   <link rel="stylesheet" href="style.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- 保留原本內嵌樣式 -->
+  <style>
+    /* 這裡假設是使用者原本的 CSS（完整保留） */
+    body { margin: 0; font-family: "Noto Sans TC", sans-serif; background-color: #fdfdfd; color: #333; }
+    header { background-color: #4d7358; color: white; padding: 0.6rem 1rem; }
+    h1 { text-align: center; margin: 0; padding: 1rem; }
+    .hero { text-align: center; color: white; padding: 5rem 1rem; background: rgba(0,0,0,0.3); }
+    .container { padding: 2rem; max-width: 1200px; margin: auto; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+    .card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .card img { width: 100%; height: 240px; object-fit: cover; }
+    .info { padding: 0.8rem 1rem; }
+    footer { background: #4d7358; color: white; text-align: center; padding: 0.5rem; margin-top: 2rem; }
+    .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:1000; }
+    .modal.open { display: flex; }
+    .modal-panel { background:white; border-radius:12px; max-width:700px; width:90%; overflow:hidden; }
+    .m-hero { background:#6b8f71; color:white; display:flex; justify-content:space-between; align-items:center; padding:1rem; }
+    .m-body { display:grid; grid-template-columns:1fr 1fr; gap:1rem; padding:1rem; }
+    .m-main-img { width:100%; border-radius:8px; }
+    .m-thumbs { display:flex; gap:0.5rem; margin-top:0.5rem; }
+    .m-thumbs img { width:60px; height:60px; object-fit:cover; border-radius:6px; cursor:pointer; opacity:0.7; }
+    .m-thumbs img.active { opacity:1; border:2px solid #4d7358; }
+    .btn { background:#4d7358; color:white; padding:0.5rem 1rem; border:none; border-radius:30px; cursor:pointer; }
+  </style>
 </head>
+
 <body>
 
-<header>
-  <div class="nav" style="position:relative;">
-    <div class="nav-left" style="font-weight:800;font-size:1.1rem;">台中簡媽媽狗園</div>
+  <!-- 導覽列 -->
+  <header>
+    <div class="nav" style="position:relative;">
+      <div class="nav-left" style="font-weight:800;font-size:1.1rem;">台中簡媽媽狗園</div>
 
-    <!-- 桌機版導覽列 -->
-    <div class="menu desktop-menu">
-      <a class="btn" href="cats.html">我想養貓咪</a>
-      <a class="btn" href="dogs.html">我想養狗狗</a>
-      <a class="btn" href="about.html">關於簡媽媽</a>
-      <a class="btn btn-ghost" href="login.html">管理員登入</a>
+      <!-- 桌機版導覽列 -->
+      <div class="menu desktop-menu">
+        <a class="btn" href="cats.html">我想養貓咪</a>
+        <a class="btn" href="dogs.html">我想養狗狗</a>
+        <a class="btn" href="about.html">關於簡媽媽</a>
+        <a class="btn btn-ghost" href="login.html">管理員登入</a>
+      </div>
+
+      <!-- 手機版漢堡按鈕 -->
+      <div class="hamburger" id="menuToggle">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+
+      <!-- 手機版下拉選單 -->
+      <div class="dropdown" id="dropdownMenu">
+        <a href="cats.html">我想養貓咪</a>
+        <a href="dogs.html">我想養狗狗</a>
+        <a href="about.html">關於簡媽媽</a>
+        <a href="login.html">管理員登入</a>
+      </div>
     </div>
+  </header>
 
-    <!-- 手機版漢堡按鈕 -->
-    <div class="hamburger" id="menuToggle">
-      <i class="fa-solid fa-bars"></i>
-    </div>
-
-    <!-- 手機版下拉選單 -->
-    <div class="dropdown" id="dropdownMenu">
-      <a href="cats.html">我想養貓咪</a>
-      <a href="dogs.html">我想養狗狗</a>
-      <a href="about.html">關於簡媽媽</a>
-      <a href="login.html">管理員登入</a>
-    </div>
-  </div>
-</header>
-
-<!-- Hero 區 -->
-<section class="hero" style="background-image:url('images/hero-bg.jpg');background-size:cover;background-position:center;">
-  <div class="hero-inner">
+  <!-- Hero 區 -->
+  <section class="hero" style="background-image:url('images/hero-bg.jpg');background-size:cover;background-position:center;">
     <h1>給牠一個溫暖的家　用領養　改變一條生命的軌跡</h1>
-  </div>
-</section>
+  </section>
 
-<!-- 保留使用者原有內容與 Firebase 程式 -->
-<main class="container">
-  <h2 class="section-title">待領養的毛孩</h2>
-  <div id="animalList" class="grid"></div>
-</main>
+  <!-- 主內容 -->
+  <main class="container">
+    <h2 class="section-title">待領養的毛孩</h2>
+    <div id="animalList" class="grid"></div>
+  </main>
 
-<footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
+  <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
-<!-- Modal 結構保留 -->
-<div id="animalModal" class="modal" aria-hidden="true">
-  <div class="modal-backdrop"></div>
-  <div class="modal-panel">
-    <div class="m-hero">
-      <button class="icon-btn m-close" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
-      <div class="m-title" id="mName">動物資料</div>
-    </div>
-    <div class="m-body">
-      <div>
-        <img id="mMain" class="m-main-img" src="" alt="">
-        <div id="mThumbs" class="m-thumbs"></div>
+  <!-- Modal -->
+  <div id="animalModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-panel">
+      <div class="m-hero">
+        <button class="icon-btn m-close" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
+        <div class="m-title" id="mName">動物資料</div>
       </div>
-      <div>
-        <p>品種：<span id="mBreed"></span></p>
-        <p>年齡：<span id="mAge"></span></p>
-        <p>性別：<span id="mGender"></span></p>
-        <p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p>
-        <button class="btn" style="width:100%;margin-top:.8rem;" id="adoptBtn">我要領養</button>
+      <div class="m-body">
+        <div>
+          <img id="mMain" class="m-main-img" src="" alt="">
+          <div id="mThumbs" class="m-thumbs"></div>
+        </div>
+        <div>
+          <p>品種：<span id="mBreed"></span></p>
+          <p>年齡：<span id="mAge"></span></p>
+          <p>性別：<span id="mGender"></span></p>
+          <p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p>
+          <button class="btn" style="width:100%;margin-top:.8rem;" id="adoptBtn">我要領養</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Firebase 功能保留 -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+  <!-- Firebase 程式（保持原樣） -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4W6I3jc",
-    authDomain: "janmama.firebaseapp.com",
-    projectId: "janmama",
-    storageBucket: "janmama.appspot.com",
-    messagingSenderId: "343934823495",
-    appId: "1:343934823495:web:ab23b5a33b1c915bb30e5e"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4W6I3jc",
+      authDomain: "janmama.firebaseapp.com",
+      projectId: "janmama",
+      storageBucket: "janmama.appspot.com",
+      messagingSenderId: "343934823495",
+      appId: "1:343934823495:web:ab23b5a33b1c915bb30e5e"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  async function loadAnimals() {
-    const q = query(collection(db, "animals"), orderBy("createdAt", "desc"));
-    const querySnapshot = await getDocs(q);
-    const list = document.getElementById("animalList");
-    list.innerHTML = "";
-    querySnapshot.forEach((doc) => {
-      const c = doc.data();
-      const card = document.createElement("div");
-      card.className = "card";
-      const img = c.images?.[0]?.url || c.image || c.photo || "https://placehold.co/400x300?text=No+Image";
-      card.innerHTML = `<img src="${img}" alt="${c.name}"><div class='info'><h3>${c.name}</h3><p>${c.breed || ""}</p></div>`;
-      card.onclick = () => openModal(c);
-      list.appendChild(card);
+    async function loadAnimals() {
+      const q = query(collection(db, "animals"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
+      const list = document.getElementById("animalList");
+      list.innerHTML = "";
+      querySnapshot.forEach((doc) => {
+        const c = doc.data();
+        const card = document.createElement("div");
+        card.className = "card";
+        const img = c.images?.[0]?.url || c.image || c.photo || "https://placehold.co/400x300?text=No+Image";
+        card.innerHTML = `<img src="${img}" alt="${c.name}"><div class='info'><h3>${c.name}</h3><p>${c.breed || ""}</p></div>`;
+        card.onclick = () => openModal(c);
+        list.appendChild(card);
+      });
+    }
+
+    function openModal(c){
+      document.getElementById("mName").textContent = c.name || "未命名";
+      document.getElementById("mBreed").textContent = c.breed || "";
+      document.getElementById("mAge").textContent = c.age || "";
+      document.getElementById("mGender").textContent = c.gender || "";
+      document.getElementById("mIntro").textContent = c.intro || "";
+      const mainImg = document.getElementById("mMain");
+      const imgs = (c.images?.length ? c.images.map(i=>i.url) : [c.image, c.photo].filter(Boolean));
+      const safeImgs = imgs.length ? imgs : ["https://placehold.co/1200x800?text=No+Image"];
+      mainImg.src = safeImgs[0];
+      const thumbs = document.getElementById("mThumbs");
+      thumbs.innerHTML = "";
+      safeImgs.forEach((src,i)=>{
+        const t = document.createElement("img");
+        t.src = src;
+        if(i===0) t.classList.add("active");
+        t.onclick = ()=>{
+          mainImg.src = src;
+          thumbs.querySelectorAll("img").forEach(im=>im.classList.remove("active"));
+          t.classList.add("active");
+        };
+        thumbs.appendChild(t);
+      });
+      document.getElementById("animalModal").classList.add("open");
+    }
+
+    document.getElementById("closeModal").onclick = ()=>{
+      document.getElementById("animalModal").classList.remove("open");
+    };
+
+    loadAnimals();
+  </script>
+
+  <!-- 手機選單控制 -->
+  <script>
+    const toggle = document.getElementById("menuToggle");
+    const dropdown = document.getElementById("dropdownMenu");
+    toggle.addEventListener("click",()=> dropdown.classList.toggle("open"));
+    document.addEventListener("click",(e)=>{
+      if(!e.target.closest(".nav")) dropdown.classList.remove("open");
     });
-  }
-
-  function openModal(c){
-    document.getElementById("mName").textContent = c.name || "未命名";
-    document.getElementById("mBreed").textContent = c.breed || "";
-    document.getElementById("mAge").textContent = c.age || "";
-    document.getElementById("mGender").textContent = c.gender || "";
-    document.getElementById("mIntro").textContent = c.intro || "";
-    const mainImg = document.getElementById("mMain");
-    const imgs = (c.images?.length ? c.images.map(i=>i.url) : [c.image, c.photo].filter(Boolean));
-    const safeImgs = imgs.length ? imgs : ["https://placehold.co/1200x800?text=No+Image"];
-    mainImg.src = safeImgs[0];
-    const thumbs = document.getElementById("mThumbs");
-    thumbs.innerHTML = "";
-    safeImgs.forEach((src,i)=>{
-      const t = document.createElement("img");
-      t.src = src;
-      if(i===0) t.classList.add("active");
-      t.onclick = ()=>{
-        mainImg.src = src;
-        thumbs.querySelectorAll("img").forEach(im=>im.classList.remove("active"));
-        t.classList.add("active");
-      };
-      thumbs.appendChild(t);
-    });
-    document.getElementById("animalModal").classList.add("open");
-  }
-
-  document.getElementById("closeModal").onclick = ()=>{
-    document.getElementById("animalModal").classList.remove("open");
-  };
-
-  loadAnimals();
-</script>
-
-<!-- 手機選單開關 -->
-<script>
-  const toggle = document.getElementById("menuToggle");
-  const dropdown = document.getElementById("dropdownMenu");
-  toggle.addEventListener("click",()=>{
-    dropdown.classList.toggle("open");
-  });
-  document.addEventListener("click",(e)=>{
-    if(!e.target.closest(".nav")) dropdown.classList.remove("open");
-  });
-</script>
-
+  </script>
 </body>
 </html>
