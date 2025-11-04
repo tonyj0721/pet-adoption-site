@@ -1,117 +1,151 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>台中簡媽媽狗園｜首頁</title>
-
-  <!-- 共用樣式 -->
-  <link rel="stylesheet" href="style.css">
+  <title>台中簡媽媽狗園</title>
+  <link rel="stylesheet" href="style.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-  <style>
-  /* ===== 導覽列響應式補強 ===== */
-  .nav .menu { display:flex; align-items:center; gap:.6rem; }
-  .nav .hamburger { display:none; font-size:1.4rem; cursor:pointer; color:#fff; }
-  .dropdown {
-    display:none; position:absolute; top:100%; left:0; width:100%;
-    background:#fff; box-shadow:0 4px 12px rgba(0,0,0,.15);
-    border-radius:0 0 12px 12px; overflow:hidden; z-index:99;
-  }
-  .dropdown a {
-    display:block; padding:1rem; color:var(--text);
-    text-decoration:none; font-weight:600; border-bottom:1px solid #eee;
-  }
-  .dropdown a:hover { background:#f4f8f4; color:var(--green); }
-
-  @media (max-width:768px){
-    .nav .menu{ display:none; }       /* 隱藏右側按鈕 */
-    .nav .hamburger{ display:block; } /* 顯示漢堡圖示 */
-  }
-  </style>
 </head>
-
 <body>
 
-<header>
-  <div class="nav" style="position:relative;">
-    <div class="hamburger" id="menuToggle">
-      <i class="fa-solid fa-bars"></i>
-    </div>
-    <div class="nav-left" style="font-weight:800;font-size:1.1rem;">台中簡媽媽狗園</div>
-
-    <div class="menu">
-      <a class="btn" href="cats.html">我想養貓咪</a>
-      <a class="btn" href="dogs.html">我想養狗狗</a>
-      <a class="btn" href="about.html">關於簡媽媽</a>
-      <a class="btn btn-ghost" href="login.html">管理員登入</a>
-    </div>
-
-    <!-- 手機下拉選單 -->
-    <div class="dropdown" id="dropdownMenu">
-      <a href="cats.html">我想養貓咪</a>
-      <a href="dogs.html">我想養狗狗</a>
-      <a href="about.html">關於簡媽媽</a>
-      <a href="login.html">管理員登入</a>
-    </div>
-  </div>
-</header>
-
-<!-- Hero 區保留 -->
-<section class="hero">
-  <div class="hero-inner">
-    <h1 class="site-title">台中簡媽媽狗園</h1>
-    <p class="tagline">用愛，為浪浪找到家</p>
-    <div class="fund-code">捐款帳號：004 台灣銀行 123-456-789012</div>
-  </div>
-</section>
-
-<!-- 主內容：可依原設計維持 -->
-<main class="container">
-  <h2 class="section-title">最新消息</h2>
-  <p>這裡可放公告、領養活動或募款訊息。</p>
-
-  <div class="grid">
-    <div class="card">
-      <img src="images/cat1.jpg" alt="貓咪">
-      <div class="info">
-        <h3>小橘</h3>
-        <p>活潑又親人，等一個家。</p>
+  <!-- 導覽列 -->
+  <header>
+    <div class="nav" style="position:relative;">
+      <div class="hamburger" id="menuToggle"><i class="fa-solid fa-bars"></i></div>
+      <div class="nav-left" style="font-weight:800;font-size:1.1rem;">台中簡媽媽狗園</div>
+      <div class="menu">
+        <a class="btn" href="cats.html">我想養貓咪</a>
+        <a class="btn" href="dogs.html">我想養狗狗</a>
+        <a class="btn" href="about.html">關於簡媽媽</a>
+        <a class="btn btn-ghost" href="login.html">管理員登入</a>
+      </div>
+      <div class="dropdown" id="dropdownMenu">
+        <a href="cats.html">我想養貓咪</a>
+        <a href="dogs.html">我想養狗狗</a>
+        <a href="about.html">關於簡媽媽</a>
+        <a href="login.html">管理員登入</a>
       </div>
     </div>
+  </header>
 
-    <div class="card">
-      <img src="images/dog1.jpg" alt="狗狗">
-      <div class="info">
-        <h3>旺旺</h3>
-        <p>忠心又溫柔的小男孩。</p>
+  <!-- Hero 區（背景圖保留） -->
+  <section class="hero" style="background-image:url('images/hero-bg.jpg');background-size:cover;background-position:center;">
+    <div class="hero-inner">
+      <!-- 保留原始 index.html 的文字與內容 -->
+      <h1>台中簡媽媽狗園</h1>
+      <p>守護毛孩，用愛延續生命</p>
+    </div>
+  </section>
+
+  <!-- 主內容（保留原始 Firebase 讀取與卡片區） -->
+  <main class="container">
+    <h2 class="section-title">待領養的毛孩</h2>
+    <div id="animalList" class="grid"></div>
+  </main>
+
+  <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
+
+  <!-- Modal（保留原功能） -->
+  <div id="animalModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-panel">
+      <div class="m-hero">
+        <button class="icon-btn m-close" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
+        <div class="m-title" id="mName">動物資料</div>
+      </div>
+      <div class="m-body">
+        <div>
+          <img id="mMain" class="m-main-img" src="" alt="">
+          <div id="mThumbs" class="m-thumbs"></div>
+        </div>
+        <div>
+          <p>品種：<span id="mBreed"></span></p>
+          <p>年齡：<span id="mAge"></span></p>
+          <p>性別：<span id="mGender"></span></p>
+          <p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p>
+          <button class="btn" style="width:100%;margin-top:.8rem;" id="adoptBtn">我要領養</button>
+        </div>
       </div>
     </div>
   </div>
-</main>
 
-<footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
+  <!-- Firebase JS（保留原程式） -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4W6I3jc",
+      authDomain: "janmama.firebaseapp.com",
+      projectId: "janmama",
+      storageBucket: "janmama.appspot.com",
+      messagingSenderId: "343934823495",
+      appId: "1:343934823495:web:ab23b5a33b1c915bb30e5e"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-<script>
-const menuToggle=document.getElementById('menuToggle');
-const dropdownMenu=document.getElementById('dropdownMenu');
+    async function loadAnimals() {
+      const q = query(collection(db, "animals"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
+      const list = document.getElementById("animalList");
+      list.innerHTML = "";
+      querySnapshot.forEach((doc) => {
+        const c = doc.data();
+        const card = document.createElement("div");
+        card.className = "card";
+        const img = c.images?.[0]?.url || c.image || c.photo || "https://placehold.co/400x300?text=No+Image";
+        card.innerHTML = `<img src="${img}" alt="${c.name}"><div class='info'><h3>${c.name}</h3><p>${c.breed || ""}</p></div>`;
+        card.onclick = () => openModal(c);
+        list.appendChild(card);
+      });
+    }
 
-menuToggle.addEventListener('click', e=>{
-  dropdownMenu.style.display = dropdownMenu.style.display==='block' ? 'none' : 'block';
-  e.stopPropagation();
-});
+    function openModal(c){
+      document.getElementById("mName").textContent = c.name || "未命名";
+      document.getElementById("mBreed").textContent = c.breed || "";
+      document.getElementById("mAge").textContent = c.age || "";
+      document.getElementById("mGender").textContent = c.gender || "";
+      document.getElementById("mIntro").textContent = c.intro || "";
+      const mainImg = document.getElementById("mMain");
+      const imgs = (c.images?.length ? c.images.map(i=>i.url) : [c.image, c.photo].filter(Boolean));
+      const safeImgs = imgs.length ? imgs : ["https://placehold.co/1200x800?text=No+Image"];
+      mainImg.src = safeImgs[0];
+      const thumbs = document.getElementById("mThumbs");
+      thumbs.innerHTML = "";
+      safeImgs.forEach((src,i)=>{
+        const t = document.createElement("img");
+        t.src = src;
+        if(i===0) t.classList.add("active");
+        t.onclick = ()=>{
+          mainImg.src = src;
+          thumbs.querySelectorAll("img").forEach(im=>im.classList.remove("active"));
+          t.classList.add("active");
+        };
+        thumbs.appendChild(t);
+      });
+      document.getElementById("animalModal").classList.add("open");
+    }
 
-document.addEventListener('click', e=>{
-  if(!dropdownMenu.contains(e.target) && e.target!==menuToggle){
-    dropdownMenu.style.display='none';
-  }
-});
+    document.getElementById("closeModal").onclick = ()=>{
+      document.getElementById("animalModal").classList.remove("open");
+    };
 
-// 點擊選單自動收起
-dropdownMenu.querySelectorAll('a').forEach(a=>{
-  a.addEventListener('click',()=>{ dropdownMenu.style.display='none'; });
-});
-</script>
+    loadAnimals();
+  </script>
+
+  <!-- 手機選單控制 -->
+  <script>
+    const toggle = document.getElementById("menuToggle");
+    const dropdown = document.getElementById("dropdownMenu");
+    toggle.addEventListener("click",()=>{
+      dropdown.classList.toggle("open");
+    });
+    document.addEventListener("click",(e)=>{
+      if(!e.target.closest(".nav")) dropdown.classList.remove("open");
+    });
+  </script>
 
 </body>
 </html>
