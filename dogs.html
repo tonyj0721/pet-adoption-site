@@ -10,34 +10,22 @@
 body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
 header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08) }
 .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
-.nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
-.nav a:hover{ text-decoration:underline }
+.nav a{ color:#fff; text-decoration:none; background:var(--green); padding:.45rem .9rem; border-radius:8px; font-weight:600; transition:.2s }
+.nav a:hover{ background:#3a6645 }
+
 .container{ max-width:1100px; margin:2rem auto; padding:0 1rem }
 h1{ text-align:center; color:var(--green); margin-bottom:1rem }
+
+/* 篩選列 */
 .filters{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:0 auto 1.2rem }
 select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; background:#fff; min-width:150px }
 
-/* ✅ 卡片圖片置中、不裁切、文字固定底部 */
-.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem }
-.card{
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
-  overflow:hidden;
-  cursor:pointer;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  transition:transform .15s ease;
-}
-.card img{
-  width:100%;
-  height:220px;
-  object-fit:contain;
-  background:#f0f0f0;
-  display:block;
-  margin:auto;
-}
+/* 卡片排列 */
+.grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1.2rem; }
+@media(max-width:768px){ .grid{ grid-template-columns:repeat(2,1fr); gap:0.8rem; } }
+
+.card{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; cursor:pointer; display:flex; flex-direction:column; justify-content:space-between; transition:transform .15s ease; }
+.card img{ width:100%; height:220px; object-fit:contain; background:#f0f0f0; display:block; margin:auto; }
 .card .info{ padding:.8rem; background:#fff; flex-shrink:0 }
 .pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem }
 
@@ -48,25 +36,46 @@ select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; backgrou
 .head{ display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; border-bottom:1px solid #eee }
 .close{ background:transparent; border:0; font-size:1.5rem; cursor:pointer }
 .body{ display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem }
-.main-img{
-  width:100%; height:auto; max-height:65vh; object-fit:contain;
-  background:#f0f0f0; border-radius:8px; display:block; margin:0 auto;
-}
+
+.main-img{ width:100%; height:320px; object-fit:contain; background:#f0f0f0; border-radius:8px; display:block; margin:0 auto; }
 .thumbs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem }
 .thumbs img{ width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent }
 .thumbs img.active{ border-color:var(--mint) }
 
 footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
+
+/* 🟢 新增：我要領養提示 Modal */
+#adoptHint{
+  position:fixed; inset:0; background:rgba(0,0,0,.55);
+  display:none; align-items:center; justify-content:center;
+  z-index:200;
+}
+#adoptHint.open{ display:flex; }
+#adoptHint .modal-box{
+  background:#fff; border-radius:12px; padding:1.5rem 2rem;
+  max-width:420px; width:90%; text-align:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.2);
+}
+#adoptHint .modal-box p{ margin-bottom:1.2rem; line-height:1.7; }
+#adoptHint .modal-box button{
+  background:var(--green); color:#fff; border:none;
+  border-radius:999px; padding:.8rem 2rem; font-weight:700;
+  cursor:pointer; font-size:1rem;
+}
+#adoptHint .modal-box button:hover{ background:#3a6645; }
+
+@media(max-width:768px){
+  footer{ font-size:.9rem; }
+  .body{ grid-template-columns:1fr; }
+  .main-img{ height:260px; }
+}
 </style>
 </head>
 <body>
 <header>
   <div class="nav">
-    <div style="font-weight:800">台中簡媽媽狗園</div>
-    <nav>
-      <a href="index.html">首頁</a>
-      <a href="cats.html">我想看貓咪 👀</a>
-    </nav>
+    <div style="font-weight:800;font-size:1.1rem;">台中簡媽媽狗園</div>
+    <nav><a href="index.html">首頁</a></nav>
   </div>
 </header>
 
@@ -86,8 +95,9 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
 
     <select id="age">
       <option value="">不限年齡</option>
-      <option>1歲以下</option><option>1</option><option>2</option><option>3</option><option>4</option>
-      <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+      <option>1歲以下</option>
+      <option>1~5歲</option>
+      <option>6~10歲</option>
       <option>10歲以上</option>
     </select>
 
@@ -125,6 +135,14 @@ footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; ma
   </div>
 </div>
 
+<!-- 🟢 我要領養提示 Modal -->
+<div id="adoptHint" class="modal" aria-hidden="true">
+  <div class="modal-box">
+    <p>💡 填寫完表單後，按下<br>「📋 複製表單並聯絡小編」<br>系統會自動複製填寫訊息<br>並開啟 Messenger。</p>
+    <button id="continueBtn">繼續</button>
+  </div>
+</div>
+
 <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
 <script type="module">
@@ -139,7 +157,6 @@ const firebaseConfig = {
   messagingSenderId: "102978803311",
   appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -150,116 +167,100 @@ const PEDIGREE = ["博美","貴賓","吉娃娃","馬爾濟斯","柯基","柴犬"
 const MIX = ["黑狗","白狗","黃狗","虎斑","花花","棕色"];
 
 function normalizeBreed(breedRaw=""){
-  const b = String(breedRaw).trim();
-  if (b.startsWith('米克斯/')) {
-    const sub = b.split('/')[1] || '';
-    return { cat:'mix', sub };
-  }
-  if (PEDIGREE.includes(b)) return { cat:'pedigree', sub:b };
-  if (MIX.includes(b)) return { cat:'mix', sub:b };
-  return { cat:'pedigree', sub:b };
+  const b=String(breedRaw).trim();
+  if(b.startsWith('米克斯/')){const sub=b.split('/')[1]||'';return{cat:'mix',sub};}
+  if(PEDIGREE.includes(b))return{cat:'pedigree',sub:b};
+  if(MIX.includes(b))return{cat:'mix',sub:b};
+  return{cat:'pedigree',sub:b};
 }
 
-/* ---- 下拉控制 ---- */
-const dogType = $('#dogType');
-const subType = $('#subType');
-
+/* 下拉選單控制 */
+const dogType=$('#dogType');
+const subType=$('#subType');
 function fillSubOptions(){
-  const type = dogType.value;
-  subType.innerHTML = '';
-  subType.disabled = false;
-
-  if (!type) {
-    subType.disabled = true;
-    subType.innerHTML = `<option value="">請先選類別</option>`;
-    return;
-  }
-
-  if (type === 'pedigree') {
-    subType.append(new Option('不限品種', ''));
-    PEDIGREE.forEach(x=>subType.append(new Option(x, x)));
-  } else {
-    subType.append(new Option('不限毛色', ''));
-    MIX.forEach(x=>subType.append(new Option(x, x)));
-  }
+  const type=dogType.value;
+  subType.innerHTML=''; subType.disabled=false;
+  if(!type){subType.disabled=true;subType.innerHTML='<option value="">請先選類別</option>';return;}
+  if(type==='pedigree'){subType.append(new Option('不限品種',''));PEDIGREE.forEach(x=>subType.append(new Option(x,x)));}
+  else{subType.append(new Option('不限毛色',''));MIX.forEach(x=>subType.append(new Option(x,x)));}
 }
-dogType.addEventListener('change', ()=>{ fillSubOptions(); applyFilters(); });
-subType.addEventListener('change', applyFilters);
+dogType.addEventListener('change',()=>{fillSubOptions();applyFilters();});
+subType.addEventListener('change',applyFilters);
+$('#age').addEventListener('change',applyFilters);
+$('#gender').addEventListener('change',applyFilters);
 
-const ageSel = $('#age');
-const genderSel = $('#gender');
-ageSel.addEventListener('change', applyFilters);
-genderSel.addEventListener('change', applyFilters);
-
-/* ---- 渲染卡片 ---- */
+/* 卡片顯示 */
 function card(p){
   const el=document.createElement('div');
   el.className='card';
-  const cover = p.images?.[0]?.url || 'https://placehold.co/600x400?text=No+Image';
-  el.innerHTML = `
+  const cover=p.images?.[0]?.url||'https://placehold.co/600x400?text=No+Image';
+  el.innerHTML=`
     <img src="${cover}" alt="${p.name||''}">
     <div class="info">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <strong>${p.name||''}</strong>
         <span class="pill">狗狗</span>
       </div>
-      <div style="font-size:.92rem;margin-top:.25rem">
+      <div style="font-size:.92rem;margin-top:.25rem;line-height:1.4;">
         <div>品種：${p.breed||'—'}</div>
-        <div>年齡：${p.age||'—'}　性別：${p.gender||'—'}</div>
+        <div>年齡：${p.age||'—'}</div>
+        <div>性別：${p.gender||'—'}</div>
       </div>
     </div>`;
-  el.addEventListener('click', ()=>openModal(p));
+  el.addEventListener('click',()=>openModal(p));
   return el;
 }
-function render(list){ grid.innerHTML=''; list.forEach(p=>grid.appendChild(card(p))); }
+function render(list){grid.innerHTML='';list.forEach(p=>grid.appendChild(card(p)));}
 
-/* ---- Modal ---- */
+/* 詳細視窗 */
 function openModal(p){
-  $('#mTitle').textContent = p.name || '動物資料';
-  $('#mSpecies').textContent = '狗狗';
-  $('#mBreed').textContent = p.breed || '—';
-  $('#mAge').textContent = p.age || '—';
-  $('#mGender').textContent = p.gender || '—';
-  $('#mIntro').textContent = p.intro || '';
-
-  const imgs = (p.images?.length)? p.images.map(x=>x.url):['https://placehold.co/800x500?text=No+Image'];
-  let current = 0;
-  const main=$('#mMain'), thumbs=$('#mThumbs'); thumbs.innerHTML='';
-  main.src = imgs[0];
-  imgs.forEach((src,i)=>{
-    const im=new Image(); im.src=src; im.alt='thumb';
-    im.addEventListener('click',()=>{current=i;update();});
-    thumbs.appendChild(im);
-  });
-  function update(){
-    main.src = imgs[current];
-    [...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active',idx===current));
-  }
+  $('#mTitle').textContent=p.name||'動物資料';
+  $('#mSpecies').textContent='狗狗';
+  $('#mBreed').textContent=p.breed||'—';
+  $('#mAge').textContent=p.age||'—';
+  $('#mGender').textContent=p.gender||'—';
+  $('#mIntro').textContent=p.intro||'';
+  const imgs=(p.images?.length)?p.images.map(x=>x.url):['https://placehold.co/800x500?text=No+Image'];
+  let current=0;const main=$('#mMain'),thumbs=$('#mThumbs');thumbs.innerHTML='';
+  main.src=imgs[0];
+  imgs.forEach((src,i)=>{const im=new Image();im.src=src;im.addEventListener('click',()=>{current=i;update();});thumbs.appendChild(im);});
+  function update(){main.src=imgs[current];[...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active',idx===current));}
   update();
   main.addEventListener('click',()=>{current=(current+1)%imgs.length;update();});
 
+  // 🟢 點擊我要領養 → 顯示提示 Modal
   $('#adoptBtn').onclick=()=>{
-    const url=new URL('adopt.html',location.href);
-    url.searchParams.set('pet',p.id||'');
-    location.href=url.toString();
+    const hint=document.getElementById('adoptHint');
+    hint.classList.add('open');
+    const continueBtn=document.getElementById('continueBtn');
+    continueBtn.onclick=()=>{
+      hint.classList.remove('open');
+      const url=new URL('adopt.html',location.href);
+      url.searchParams.set('pet',p.name||'');
+      location.href=url.toString();
+    };
   };
+
   $('#detailModal').classList.add('open');
 }
 $('#closeBtn').addEventListener('click',()=>$('#detailModal').classList.remove('open'));
 $('#detailModal').addEventListener('click',e=>{if(e.target.id==='detailModal')$('#detailModal').classList.remove('open');});
 
-/* ---- 篩選 ---- */
-let allDogs=[], allDogsNorm=[];
+/* 篩選邏輯 */
+let allDogs=[],allDogsNorm=[];
 function matchAge(val,sel){
   if(!sel)return true;
-  const a=String(val||'');
-  if(sel==='1歲以下')return /個月|月|0/.test(a);
-  if(sel==='10歲以上'){const m=a.match(/\d+/);return m?(parseInt(m[0],10)>=10):false;}
-  const m=a.match(/\d+/);return m?(parseInt(m[0],10)===parseInt(sel,10)):a.includes(sel);
+  const str=String(val||'');
+  const numMatch=str.match(/\d+/);
+  const ageNum=numMatch?parseInt(numMatch[0],10):0;
+  if(sel==='1歲以下') return str.includes('月') || ageNum===0;
+  if(sel==='1~5歲') return ageNum>=1 && ageNum<=5;
+  if(sel==='6~10歲') return ageNum>=6 && ageNum<=10;
+  if(sel==='10歲以上') return ageNum>10;
+  return true;
 }
 function applyFilters(){
-  const type=dogType.value, sub=subType.disabled?'':subType.value;
-  const age=ageSel.value, gen=genderSel.value;
+  const type=dogType.value,sub=subType.disabled?'':subType.value,age=$('#age').value,gen=$('#gender').value;
   let list=allDogsNorm.slice();
   if(type)list=list.filter(x=>x._cat===type);
   if(type==='pedigree'&&sub)list=list.filter(x=>x._sub===sub);
@@ -269,18 +270,17 @@ function applyFilters(){
   render(list);
 }
 
-/* ---- 載入 ---- */
+/* 載入資料 */
 (async()=>{
   const ref=collection(db,'pets');
   const snap=await getDocs(query(ref,orderBy('createdAt','desc')));
   allDogs=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.species==='dog');
-  allDogsNorm=allDogs.map(p=>{
-    const n=normalizeBreed(p.breed||'');
-    return {...p,_cat:n.cat,_sub:n.sub};
-  });
+  allDogsNorm=allDogs.map(p=>{const n=normalizeBreed(p.breed||'');return{...p,_cat:n.cat,_sub:n.sub};});
   fillSubOptions();
   render(allDogsNorm);
 })();
 </script>
 </body>
 </html>
+
+

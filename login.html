@@ -5,28 +5,97 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>管理員登入｜台中簡媽媽狗園</title>
 <style>
-  :root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
-  body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; display:flex; flex-direction:column; min-height:100vh }
-  header{ background:var(--mint); color:#fff }
-  .nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
-  .nav a{ color:#fff; text-decoration:none; margin-left:1rem; font-weight:600 }
-  main{ flex:1; display:flex; align-items:center; justify-content:center; padding:2rem 1rem }
-  .card{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); padding:2rem; width:100%; max-width:380px; }
-  h2{ text-align:center; color:var(--green); margin-top:0; margin-bottom:1.2rem }
-  label{ display:block; font-size:.95rem; margin-bottom:.3rem }
-  input{ width:100%; padding:.7rem; border:1px solid #ccc; border-radius:8px; margin-bottom:1rem; box-sizing:border-box; }
-  button{ width:100%; background:var(--green); color:#fff; border:0; border-radius:8px; padding:.8rem; font-size:1rem; cursor:pointer }
-  button:hover{ background:#3d6f49 }
-  footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:auto }
+:root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; display:flex; flex-direction:column; min-height:100vh; }
+
+/* Header（與首頁一致） */
+header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
+.nav{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:1rem;
+}
+.nav-left{
+  font-weight:800;
+  font-size:1.1rem;
+}
+.nav-right{
+  display:flex;
+  gap:.6rem;
+}
+.nav a{ text-decoration:none; }
+.nav .btn{
+  display:inline-block;
+  background:var(--green);
+  color:#fff;
+  padding:.45rem .9rem;
+  border-radius:999px;
+  font-weight:700;
+  border:2px solid rgba(0,0,0,.05);
+  box-shadow:0 1px 3px rgba(0,0,0,.08);
+  transition:background .2s;
+}
+.nav .btn:hover{
+  background:#3a6645;
+}
+
+/* Main */
+main{ flex:1; display:flex; align-items:center; justify-content:center; padding:2rem 1rem; }
+.card{
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  padding:2rem;
+  width:100%;
+  max-width:380px;
+}
+h2{ text-align:center; color:var(--green); margin-top:0; margin-bottom:1.2rem; }
+label{ display:block; font-size:.95rem; margin-bottom:.3rem; }
+input{
+  width:100%;
+  padding:.7rem;
+  border:1px solid #ccc;
+  border-radius:8px;
+  margin-bottom:1rem;
+  box-sizing:border-box;
+}
+button{
+  width:100%;
+  background:var(--green);
+  color:#fff;
+  border:0;
+  border-radius:8px;
+  padding:.8rem;
+  font-size:1rem;
+  cursor:pointer;
+}
+button:hover{ background:#3d6f49; }
+
+/* Footer（與首頁一致） */
+footer{
+  background:var(--green);
+  color:#fff;
+  text-align:center;
+  padding:1rem;
+  margin-top:auto;
+}
+@media(max-width:768px){
+  footer{ font-size:.9rem; }
+}
 </style>
 </head>
 <body>
+
 <header>
   <div class="nav">
-    <div style="font-weight:800">台中簡媽媽狗園</div>
-    <nav>
-      <a href="index.html">首頁</a>
-    </nav>
+    <div class="nav-left">台中簡媽媽狗園</div>
+    <div class="nav-right">
+      <a class="btn" href="index.html">首頁</a>
+      <a class="btn" href="adoptlist.html">待認養</a>
+    </div>
   </div>
 </header>
 
@@ -45,25 +114,25 @@
   </div>
 </main>
 
-<footer>© 2025 台中簡媽媽狗園</footer>
+<footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
 <script>
-  const acc = document.getElementById('account');
-  const pw = document.getElementById('password');
-  const btn = document.getElementById('loginBtn');
+const acc = document.getElementById('account');
+const pw = document.getElementById('password');
+const btn = document.getElementById('loginBtn');
 
-  function login() {
-    if (acc.value === 'chienma' && pw.value === '1234') {
-      sessionStorage.setItem('loggedIn', '1');
-      location.href = 'admin.html';
-    } else {
-      alert('帳號或密碼錯誤');
-    }
+function login() {
+  if (acc.value === 'chienma' && pw.value === '1234') {
+    sessionStorage.setItem('loggedIn', '1');
+    location.href = 'admin.html';
+  } else {
+    alert('帳號或密碼錯誤');
   }
+}
 
-  btn.addEventListener('click', login);
-  acc.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
-  pw.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+btn.addEventListener('click', login);
+acc.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+pw.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
 </script>
 </body>
 </html>
