@@ -606,3 +606,45 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 400px){
   .container{ padding-left: 12px; padding-right: 12px; }
 }
+
+
+
+/* ===== Overrides (2025-11-05) to address mobile alignments & photo shape ===== */
+
+/* Align section heading and "see more" button consistently */
+h2.section{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.75rem;
+  margin:1rem 0 .6rem;
+  line-height:1.2;
+}
+h2.section .see-more{
+  line-height:1;
+  padding:.45rem .9rem;
+}
+
+/* Equal card heights in grid */
+.grid{ align-items:stretch; }
+.grid > *{ height:100%; }
+
+.card{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.card .body, .card .info{
+  flex:1 1 auto;
+}
+
+/* Make list photos square (not circle/oval) */
+.card img{
+  width:100% !important;
+  aspect-ratio:1 / 1;
+  height:auto !important;
+  object-fit:cover !important;
+  border-radius:0 !important;
+  background:none !important;
+  margin:0 !important;
+}
