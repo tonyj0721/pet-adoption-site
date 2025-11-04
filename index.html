@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <link rel="stylesheet" href="style.css?v=1105b">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>台中簡媽媽狗園</title>
+
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a class="btn" href="adoptlist.html">待認養</a>
+    <a class="btn" href="about.html">關於簡媽媽</a>
+    <a class="btn" href="login.html">管理員登入</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1 class="site-title">台中簡媽媽狗園</h1>
+    <p class="tagline">給牠一個溫暖的家&nbsp;&nbsp;&nbsp;&nbsp;用領養&nbsp;&nbsp;&nbsp;&nbsp;改變一條生命的軌跡</p>
+  </div>
+  <div class="fund-code">勸募字號 中市社團字第1140036732號</div>
+</section>
+
+<main class="container">
+  <section id="cats">
+    <h2 class="section">貓咪 <a class="see-more" href="cats.html">查看全部</a></h2>
+    <div id="catGrid" class="grid"></div>
+  </section>
+
+  <section id="dogs">
+    <h2 class="section">狗狗 <a class="see-more" href="dogs.html">查看全部</a></h2>
+    <div id="dogGrid" class="grid"></div>
+  </section>
+</main>
+
+<!-- 詳細視窗 Modal -->
+<div id="detailModal" class="modal" aria-hidden="true">
+  <div class="panel">
+    <div class="head">
+      <strong id="mTitle">動物資料</strong>
+      <button class="close" aria-label="關閉" id="closeBtn">✕</button>
+    </div>
+    <div class="body">
+      <div>
+        <img id="mMain" class="main-img" src="" alt="">
+        <div id="mThumbs" class="thumbs"></div>
+      </div>
+      <div>
+        <div class="meta">
+          <p><span class="pill" id="mSpecies"></span></p>
+          <p>品種：<span id="mBreed"></span></p>
+          <p>年齡：<span id="mAge"></span></p>
+          <p>性別：<span id="mGender"></span></p>
+          <p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p>
+        </div>
+        <button class="see-more" id="adoptBtn" type="button">我要領養</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 🟢 新增：我要領養提示 Modal -->
+<div id="adoptHint" class="modal" aria-hidden="true">
+  <div class="modal-box">
+    <div style="font-size:3rem; line-height:1; margin-bottom:0.5rem;">💡</div>
+    <p>填寫完表單後，按下<br><br>『📋 複製表單並聯絡小編』<br><br>系統會自動複製填寫訊息<br>並開啟 Messenger。</p>
+    <button id="continueBtn">繼續</button>
+  </div>
+</div>
+
+<footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
+  authDomain: "pet-adoption-32294.firebaseapp.com",
+  projectId: "pet-adoption-32294",
+  storageBucket: "pet-adoption-32294.firebasestorage.app",
+  messagingSenderId: "102978803311",
+  appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const $ = (s,el=document)=>el.querySelector(s);
+
+function card(pet){
+  const el = document.createElement('div');
+  el.className = 'card';
+  const cover = pet.images?.[0]?.url || 'https://placehold.co/800x500?text=No+Image';
+  const breedText = pet.breed || '—';
+  el.innerHTML = `
+    <img src="${cover}" alt="${pet.name||''}">
+    <div class="info">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <strong>${pet.name||''}</strong>
+        <span class="pill">${pet.species==='cat'?'貓咪':'狗狗'}</span>
+      </div>
+      <div style="font-size:.92rem;margin-top:.25rem;line-height:1.5">
+        <div>品種：${breedText}</div>
+        <div>年齡：${pet.age || '—'}</div>
+        <div>性別：${pet.gender || '—'}</div>
+      </div>
+    </div>`;
+  el.addEventListener('click',()=>openModal(pet));
+  return el;
+}
+
+function openModal(p){
+  $('#mTitle').textContent = p.name || '動物資料';
+  $('#mSpecies').textContent = p.species==='cat'?'貓咪':'狗狗';
+  $('#mBreed').textContent = p.breed || '—';
+  $('#mAge').textContent = p.age || '—';
+  $('#mGender').textContent = p.gender || '—';
+  $('#mIntro').textContent = p.intro || '';
+
+  const imgs = (p.images?.length) ? p.images.map(x=>x.url) : ['https://placehold.co/1200x800?text=No+Image'];
+  let current = 0;
+  const main = $('#mMain');
+  const thumbs = $('#mThumbs');
+  thumbs.innerHTML = '';
+  main.src = imgs[0];
+
+  imgs.forEach((src,i)=>{
+    const im = new Image();
+    im.src = src; im.alt = 'thumb';
+    im.addEventListener('click',()=>{ current=i; update(); });
+    thumbs.appendChild(im);
+  });
+
+  function update(){
+    main.src = imgs[current];
+    [...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active', idx===current));
+  }
+  update();
+
+  main.addEventListener('click',()=>{ current=(current+1)%imgs.length; update(); });
+
+  $('#adoptBtn').onclick = () => {
+    const hint = document.getElementById('adoptHint');
+    hint.classList.add('open');
+    const continueBtn = document.getElementById('continueBtn');
+    continueBtn.onclick = ()=>{
+      hint.classList.remove('open');
+      const url = new URL('adopt.html', location.href);
+      url.searchParams.set('pet', p.name || '');
+      window.location.assign(url.toString());
+    };
+  };
+
+  $('#detailModal').classList.add('open');
+  $('#detailModal').setAttribute('aria-hidden','false');
+}
+
+function closeModal(){
+  $('#detailModal').classList.remove('open');
+  $('#detailModal').setAttribute('aria-hidden','true');
+}
+$('#closeBtn').addEventListener('click', closeModal);
+$('#detailModal').addEventListener('click', e=>{ if(e.target.id==='detailModal') closeModal(); });
+
+function render4(species, list){
+  const grid = $(species==='cat'?'#catGrid':'#dogGrid');
+  grid.innerHTML='';
+  list.filter(p=>p.species===species).slice(0,4).forEach(p=>grid.appendChild(card(p)));
+}
+
+(async ()=>{
+  const ref = collection(db, 'pets');
+  const qs = await getDocs(query(ref, orderBy('createdAt','desc')));
+  const list = qs.docs.map(d=>({ id:d.id, ...d.data() }));
+  render4('cat', list);
+  render4('dog', list);
+})();
+</script>
+</body>
+</html>
