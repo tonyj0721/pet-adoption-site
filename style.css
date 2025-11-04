@@ -223,3 +223,37 @@ footer {
   padding: 1rem;
   margin-top: 2rem;
 }
+
+/* === 導覽列響應式修正 === */
+.hamburger {
+  display: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.dropdown {
+  display: none;
+  flex-direction: column;
+  background: #4d7358;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.dropdown.open {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .menu {
+    display: none; /* 手機時隱藏桌機版導覽列 */
+  }
+  .hamburger {
+    display: block; /* 手機時顯示漢堡選單 */
+  }
+}
+
+
