@@ -1,281 +1,149 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>我想看貓咪 👀 | 台中簡媽媽狗園</title>
-<style>
-:root { --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
-*{ box-sizing:border-box }
-body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333 }
-header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08) }
-.nav{ max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem }
-.nav a{ color:#fff; text-decoration:none; background:var(--green); padding:.45rem .9rem; border-radius:8px; font-weight:600; transition:.2s }
-.nav a:hover{ background:#3a6645 }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我想養貓咪｜台中簡媽媽狗園</title>
 
-.container{ max-width:1100px; margin:2rem auto; padding:0 1rem }
-h1{ text-align:center; color:var(--green); margin-bottom:1rem }
-
-/* 篩選列 */
-.filters{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:0 auto 1.2rem }
-select{ padding:.45rem .6rem; border:1px solid #ccc; border-radius:8px; background:#fff; min-width:150px }
-
-/* 卡片排列 */
-.grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.2rem; }
-@media (max-width:768px){ .grid{ grid-template-columns:repeat(2,1fr); gap:0.8rem; } }
-
-.card{ background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden; cursor:pointer; display:flex; flex-direction:column; justify-content:space-between; transition:transform .15s ease; }
-.card img{ width:100%; height:220px; object-fit:contain; background:#f0f0f0; display:block; margin:auto; }
-.card .info{ padding:.8rem; background:#fff; flex-shrink:0 }
-.pill{ display:inline-block; background:#eef6ef; color:#2d5b39; padding:.16rem .5rem; border-radius:999px; font-size:.8rem }
-
-/* Modal */
-.modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:1rem; z-index:50 }
-.modal.open{ display:flex }
-.panel{ background:#fff; border-radius:12px; max-width:900px; width:100%; max-height:90vh; overflow:auto }
-.head{ display:flex; justify-content:space-between; align-items:center; padding:1rem 1.2rem; border-bottom:1px solid #eee }
-.close{ background:transparent; border:0; font-size:1.5rem; cursor:pointer }
-.body{ display:grid; grid-template-columns:1fr 300px; gap:1rem; padding:1rem }
-.main-img{ width:100%; height:320px; object-fit:contain; background:#f0f0f0; border-radius:8px; display:block; margin:0 auto; }
-.thumbs{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem }
-.thumbs img{ width:64px; height:64px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent }
-.thumbs img.active{ border-color:var(--mint) }
-
-footer{ background:var(--green); color:#fff; text-align:center; padding:1rem; margin-top:2rem }
-
-/* 🟢 新增：我要領養提示 Modal */
-#adoptHint{
-  position:fixed; inset:0; background:rgba(0,0,0,.55);
-  display:none; align-items:center; justify-content:center;
-  z-index:200;
-}
-#adoptHint.open{ display:flex; }
-#adoptHint .modal-box{
-  background:#fff; border-radius:12px; padding:1.5rem 2rem;
-  max-width:420px; width:90%; text-align:center;
-  box-shadow:0 4px 14px rgba(0,0,0,.2);
-}
-#adoptHint .modal-box p{ margin-bottom:1.2rem; line-height:1.7; }
-#adoptHint .modal-box button{
-  background:var(--green); color:#fff; border:none;
-  border-radius:999px; padding:.8rem 2rem; font-weight:700;
-  cursor:pointer; font-size:1rem;
-}
-#adoptHint .modal-box button:hover{ background:#3a6645; }
-
-@media (max-width:768px){
-  footer{ font-size:.9rem; }
-  .body{ grid-template-columns:1fr; }
-  .main-img{ height:260px; }
-}
-</style>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
-<header>
-  <div class="nav">
-    <div style="font-weight:800;font-size:1.1rem;">台中簡媽媽狗園</div>
-    <nav><a href="index.html">首頁</a></nav>
-  </div>
-</header>
-
-<main class="container">
-  <h1>我想看貓咪 👀</h1>
-
-  <!-- 篩選列 -->
-  <div class="filters">
-    <select id="catType">
-      <option value="">不限類別</option>
-      <option value="pedigree">品種貓</option>
-      <option value="mix">米克斯</option>
-    </select>
-    <select id="subType" disabled>
-      <option value="">請先選類別</option>
-    </select>
-    <select id="age">
-      <option value="">不限年齡</option>
-      <option>1歲以下</option>
-      <option>1~5歲</option>
-      <option>6~10歲</option>
-      <option>10歲以上</option>
-    </select>
-    <select id="gender">
-      <option value="">不限性別</option>
-      <option>男生</option><option>女生</option>
-    </select>
-  </div>
-
-  <div id="catGrid" class="grid"></div>
-</main>
-
-<!-- 詳細視窗 -->
-<div id="detailModal" class="modal" aria-hidden="true">
-  <div class="panel">
-    <div class="head">
-      <strong id="mTitle">動物資料</strong>
-      <button class="close" id="closeBtn" aria-label="關閉">✕</button>
-    </div>
-    <div class="body">
+  <header>
+    <div class="nav">
+      <div style="font-weight:800;font-size:1.1rem;">台中簡媽媽狗園</div>
       <div>
-        <img id="mMain" class="main-img" src="" alt="">
-        <div id="mThumbs" class="thumbs"></div>
+        <a class="btn btn-ghost" href="index.html">首頁</a>
       </div>
-      <div>
-        <p><span class="pill" id="mSpecies"></span></p>
-        <p>品種：<span id="mBreed"></span></p>
-        <p>年齡：<span id="mAge"></span></p>
-        <p>性別：<span id="mGender"></span></p>
-        <p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p>
-        <button class="pill" id="adoptBtn" style="background:#497f54;color:#fff;border:0;padding:.5rem .8rem;border-radius:8px;cursor:pointer">我要領養</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2 class="section-title">待領養的貓咪</h2>
+    <div id="catList" class="grid"></div>
+  </main>
+
+  <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
+
+  <!-- 貓咪詳細資料 Modal -->
+  <div id="catModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-panel">
+      <div class="m-hero">
+        <button class="icon-btn m-close" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
+        <div class="m-title" id="mName">貓咪資料</div>
+        <div class="m-icon"><i class="fa-solid fa-cat"></i></div>
+      </div>
+
+      <div class="m-body">
+        <div>
+          <img id="mMain" class="m-main-img" src="" alt="">
+          <div id="mThumbs" class="m-thumbs"></div>
+        </div>
+        <div>
+          <div class="meta">
+            <p><span class="pill" id="mSpecies">貓咪</span></p>
+            <p>品種：<span id="mBreed"></span></p>
+            <p>年齡：<span id="mAge"></span></p>
+            <p>性別：<span id="mGender"></span></p>
+            <p style="margin-top:.6rem;white-space:pre-wrap">介紹：<span id="mIntro"></span></p>
+          </div>
+          <button class="btn" style="width:100%;margin-top:.8rem;" id="adoptBtn">我要領養</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- 🟢 我要領養提示 Modal -->
-<div id="adoptHint" class="modal" aria-hidden="true">
-  <div class="modal-box">
-    <p>💡 填寫完表單後，按下<br>「📋 複製表單並聯絡小編」<br>系統會自動複製填寫訊息<br>並開啟 Messenger。</p>
-    <button id="continueBtn">繼續</button>
-  </div>
-</div>
+  <!-- Firebase 腳本 -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-<footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
-  authDomain: "pet-adoption-32294.firebaseapp.com",
-  projectId: "pet-adoption-32294",
-  storageBucket: "pet-adoption-32294.firebasestorage.app",
-  messagingSenderId: "102978803311",
-  appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const $=(s,el=document)=>el.querySelector(s);
-const grid=$('#catGrid');
-
-const PEDIGREE=["美短","英短","藍貓","暹羅貓","波斯貓","布偶貓"];
-const MIX=["橘貓","黑貓","虎斑貓","白底虎斑貓","三花貓","玳瑁貓","白貓"];
-
-function normalizeBreed(breedRaw=""){
-  const b=String(breedRaw).trim();
-  if(b.startsWith('米克斯/')){
-    const sub=b.split('/')[1]||'';
-    return{cat:'mix',sub};
-  }
-  if(PEDIGREE.includes(b))return{cat:'pedigree',sub:b};
-  if(MIX.includes(b))return{cat:'mix',sub:b};
-  return{cat:'pedigree',sub:b};
-}
-
-const catType=$('#catType');
-const subType=$('#subType');
-function fillSubOptions(){
-  const type=catType.value;
-  subType.innerHTML=''; subType.disabled=false;
-  if(!type){subType.disabled=true;subType.innerHTML='<option>請先選類別</option>';return;}
-  if(type==='pedigree'){subType.append(new Option('不限品種',''));PEDIGREE.forEach(x=>subType.append(new Option(x,x)));}
-  else{subType.append(new Option('不限毛色',''));MIX.forEach(x=>subType.append(new Option(x,x)));}
-}
-catType.addEventListener('change',()=>{fillSubOptions();applyFilters();});
-subType.addEventListener('change',applyFilters);
-$('#age').addEventListener('change',applyFilters);
-$('#gender').addEventListener('change',applyFilters);
-
-function card(p){
-  const el=document.createElement('div');
-  el.className='card';
-  const cover=p.images?.[0]?.url||'https://placehold.co/600x400?text=No+Image';
-  el.innerHTML=`
-    <img src="${cover}" alt="${p.name||''}">
-    <div class="info">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <strong>${p.name||''}</strong>
-        <span class="pill">貓咪</span>
-      </div>
-      <div style="font-size:.92rem;margin-top:.25rem;line-height:1.4;">
-        <div>品種：${p.breed||'—'}</div>
-        <div>年齡：${p.age||'—'}</div>
-        <div>性別：${p.gender||'—'}</div>
-      </div>
-    </div>`;
-  el.addEventListener('click',()=>openModal(p));
-  return el;
-}
-function render(list){grid.innerHTML='';list.forEach(p=>grid.appendChild(card(p)));}
-
-function openModal(p){
-  $('#mTitle').textContent=p.name||'動物資料';
-  $('#mSpecies').textContent='貓咪';
-  $('#mBreed').textContent=p.breed||'—';
-  $('#mAge').textContent=p.age||'—';
-  $('#mGender').textContent=p.gender||'—';
-  $('#mIntro').textContent=p.intro||'';
-  const imgs=(p.images?.length)?p.images.map(x=>x.url):['https://placehold.co/800x500?text=No+Image'];
-  let current=0;const main=$('#mMain'),thumbs=$('#mThumbs');thumbs.innerHTML='';
-  main.src=imgs[0];
-  imgs.forEach((src,i)=>{const im=new Image();im.src=src;im.addEventListener('click',()=>{current=i;update();});thumbs.appendChild(im);});
-  function update(){main.src=imgs[current];[...thumbs.querySelectorAll('img')].forEach((t,idx)=>t.classList.toggle('active',idx===current));}
-  update();
-  main.addEventListener('click',()=>{current=(current+1)%imgs.length;update();});
-
-  // 🟢 點擊我要領養 → 先顯示提示 Modal
-  $('#adoptBtn').onclick=()=>{
-    const hint=document.getElementById('adoptHint');
-    hint.classList.add('open');
-    const continueBtn=document.getElementById('continueBtn');
-    continueBtn.onclick=()=>{
-      hint.classList.remove('open');
-      const url=new URL('adopt.html',location.href);
-      url.searchParams.set('pet',p.name||'');
-      location.href=url.toString();
+    const firebaseConfig = {
+      apiKey: "AIzaSyADseNNkszDTbwEk4F03_rC0fo4Rnk0iBM",
+      authDomain: "pet-adoption-32294.firebaseapp.com",
+      projectId: "pet-adoption-32294",
+      storageBucket: "pet-adoption-32294.firebasestorage.app",
+      messagingSenderId: "102978803311",
+      appId: "1:102978803311:web:a7d890096b2b23cad15f9a"
     };
-  };
 
-  $('#detailModal').classList.add('open');
-}
-$('#closeBtn').addEventListener('click',()=>$('#detailModal').classList.remove('open'));
-$('#detailModal').addEventListener('click',e=>{if(e.target.id==='detailModal')$('#detailModal').classList.remove('open');});
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-let allCats=[],allCatsNorm=[];
-function matchAge(val,sel){
-  if(!sel)return true;
-  const str=String(val||'');
-  const numMatch=str.match(/\d+/);
-  const ageNum=numMatch?parseInt(numMatch[0],10):0;
-  if(sel==='1歲以下') return str.includes('月') || ageNum===0;
-  if(sel==='1~5歲') return ageNum>=1 && ageNum<=5;
-  if(sel==='6~10歲') return ageNum>=6 && ageNum<=10;
-  if(sel==='10歲以上') return ageNum>10;
-  return true;
-}
+    const catList = document.getElementById("catList");
+    const catModal = document.getElementById("catModal");
+    const mName = document.getElementById("mName");
+    const mMain = document.getElementById("mMain");
+    const mThumbs = document.getElementById("mThumbs");
+    const mBreed = document.getElementById("mBreed");
+    const mAge = document.getElementById("mAge");
+    const mGender = document.getElementById("mGender");
+    const mIntro = document.getElementById("mIntro");
+    const closeModal = document.getElementById("closeModal");
 
-function applyFilters(){
-  const type=catType.value,sub=subType.disabled?'':subType.value,age=$('#age').value,gen=$('#gender').value;
-  let list=allCatsNorm.slice();
-  if(type)list=list.filter(x=>x._cat===type);
-  if(type==='pedigree'&&sub)list=list.filter(x=>x._cat==='pedigree'&&x._sub===sub);
-  if(type==='mix'&&sub)list=list.filter(x=>x._cat==='mix'&&x._sub===sub);
-  if(age)list=list.filter(x=>matchAge(x.age,age));
-  if(gen)list=list.filter(x=>(x.gender||'').includes(gen));
-  render(list);
-}
+    // 關閉 Modal
+    closeModal.addEventListener("click", () => catModal.classList.remove("open"));
+    catModal.addEventListener("click", (e) => {
+      if (e.target.classList.contains("modal-backdrop")) catModal.classList.remove("open");
+    });
 
-(async()=>{
-  const ref=collection(db,'pets');
-  const snap=await getDocs(query(ref,orderBy('createdAt','desc')));
-  allCats=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.species==='cat');
-  allCatsNorm=allCats.map(p=>{const n=normalizeBreed(p.breed||'');return{...p,_cat:n.cat,_sub:n.sub};});
-  fillSubOptions();
-  render(allCatsNorm);
-})();
-</script>
+    // 取得資料
+    async function loadCats() {
+      const ref = collection(db, "pets");
+      const qs = await getDocs(query(ref, where("species", "==", "cat"), orderBy("createdAt", "desc")));
+      const cats = qs.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderCats(cats);
+    }
+
+    // 顯示卡片
+    function renderCats(data) {
+      catList.innerHTML = "";
+      data.forEach(c => {
+        const div = document.createElement("div");
+        div.className = "card";
+        const img = c.images?.[0]?.url || "https://placehold.co/400x300?text=No+Image";
+        div.innerHTML = `
+          <img src="${img}" alt="${c.name}">
+          <div class="info">
+            <h3>${c.name || "未命名"}</h3>
+            <p>${c.breed || ""}</p>
+          </div>`;
+        div.addEventListener("click", () => openModal(c));
+        catList.appendChild(div);
+      });
+    }
+
+    // 開啟 Modal
+    function openModal(c) {
+      mName.textContent = c.name;
+      mBreed.textContent = c.breed || "-";
+      mAge.textContent = c.age || "-";
+      mGender.textContent = c.gender || "-";
+      mIntro.textContent = c.intro || "";
+      const imgs = (c.images?.length) ? c.images.map(i => i.url) : ["https://placehold.co/1200x800?text=No+Image"];
+      let current = 0;
+      mMain.src = imgs[0];
+      mThumbs.innerHTML = "";
+      imgs.forEach((src, i) => {
+        const im = new Image();
+        im.src = src;
+        im.addEventListener("click", () => {
+          current = i;
+          mMain.src = imgs[current];
+          highlight();
+        });
+        mThumbs.appendChild(im);
+      });
+      function highlight() {
+        [...mThumbs.querySelectorAll("img")].forEach((img, idx) => img.classList.toggle("active", idx === current));
+      }
+      highlight();
+      catModal.classList.add("open");
+    }
+
+    loadCats();
+  </script>
 </body>
 </html>
-
-

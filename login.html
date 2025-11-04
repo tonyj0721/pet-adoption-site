@@ -1,138 +1,59 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>管理員登入｜台中簡媽媽狗園</title>
-<style>
-:root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
-body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; display:flex; flex-direction:column; min-height:100vh; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理員登入｜台中簡媽媽狗園</title>
 
-/* Header（與首頁一致） */
-header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
-.nav{
-  max-width:1100px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:1rem;
-}
-.nav-left{
-  font-weight:800;
-  font-size:1.1rem;
-}
-.nav-right{
-  display:flex;
-  gap:.6rem;
-}
-.nav a{ text-decoration:none; }
-.nav .btn{
-  display:inline-block;
-  background:var(--green);
-  color:#fff;
-  padding:.45rem .9rem;
-  border-radius:999px;
-  font-weight:700;
-  border:2px solid rgba(0,0,0,.05);
-  box-shadow:0 1px 3px rgba(0,0,0,.08);
-  transition:background .2s;
-}
-.nav .btn:hover{
-  background:#3a6645;
-}
-
-/* Main */
-main{ flex:1; display:flex; align-items:center; justify-content:center; padding:2rem 1rem; }
-.card{
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
-  padding:2rem;
-  width:100%;
-  max-width:380px;
-}
-h2{ text-align:center; color:var(--green); margin-top:0; margin-bottom:1.2rem; }
-label{ display:block; font-size:.95rem; margin-bottom:.3rem; }
-input{
-  width:100%;
-  padding:.7rem;
-  border:1px solid #ccc;
-  border-radius:8px;
-  margin-bottom:1rem;
-  box-sizing:border-box;
-}
-button{
-  width:100%;
-  background:var(--green);
-  color:#fff;
-  border:0;
-  border-radius:8px;
-  padding:.8rem;
-  font-size:1rem;
-  cursor:pointer;
-}
-button:hover{ background:#3d6f49; }
-
-/* Footer（與首頁一致） */
-footer{
-  background:var(--green);
-  color:#fff;
-  text-align:center;
-  padding:1rem;
-  margin-top:auto;
-}
-@media(max-width:768px){
-  footer{ font-size:.9rem; }
-}
-</style>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
-
-<header>
-  <div class="nav">
-    <div class="nav-left">台中簡媽媽狗園</div>
-    <div class="nav-right">
-      <a class="btn" href="index.html">首頁</a>
-      <a class="btn" href="adoptlist.html">待認養</a>
+  <header>
+    <div class="nav">
+      <div style="font-weight:800;font-size:1.1rem;">台中簡媽媽狗園</div>
+      <div>
+        <a class="btn btn-ghost" href="index.html">首頁</a>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main>
-  <div class="card">
-    <h2>管理員登入</h2>
-    <form id="loginForm" autocomplete="off" spellcheck="false">
-      <label>帳號</label>
-      <input id="account" type="text" placeholder="請輸入帳號"
-             autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
-      <label>密碼</label>
-      <input id="password" type="password" placeholder="請輸入密碼"
-             autocomplete="new-password" autocapitalize="off" autocorrect="off" spellcheck="false">
-      <button id="loginBtn" type="button">登入</button>
+  <main class="container" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;">
+    <h2 class="section-title">管理員登入</h2>
+    <form id="loginForm" style="max-width:360px;width:100%;margin-top:1rem;">
+      <div style="margin-bottom:1rem;">
+        <label>帳號</label>
+        <input type="text" id="username" required>
+      </div>
+      <div style="margin-bottom:1rem;">
+        <label>密碼</label>
+        <input type="password" id="password" required>
+      </div>
+      <button type="submit" class="btn" style="width:100%;">登入</button>
     </form>
-  </div>
-</main>
 
-<footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
+    <p id="loginMsg" style="margin-top:1rem;color:red;display:none;">帳號或密碼錯誤，請再試一次。</p>
+  </main>
 
-<script>
-const acc = document.getElementById('account');
-const pw = document.getElementById('password');
-const btn = document.getElementById('loginBtn');
+  <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
 
-function login() {
-  if (acc.value === 'chienma' && pw.value === '1234') {
-    sessionStorage.setItem('loggedIn', '1');
-    location.href = 'admin.html';
-  } else {
-    alert('帳號或密碼錯誤');
-  }
-}
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const loginMsg = document.getElementById('loginMsg');
 
-btn.addEventListener('click', login);
-acc.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
-pw.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
-</script>
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+
+      // 🔑 假登入驗證 (可改為 Firebase Auth)
+      if (user === "admin" && pass === "1234") {
+        window.location.href = "admin.html";
+      } else {
+        loginMsg.style.display = 'block';
+      }
+    });
+  </script>
 </body>
 </html>

@@ -1,106 +1,88 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>關於簡媽媽｜台中簡媽媽狗園</title>
-<style>
-:root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
-body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>關於簡媽媽｜台中簡媽媽狗園</title>
 
-/* Header（與首頁一致） */
-header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
-.nav{
-  max-width:1100px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:1rem;
-}
-.nav-left{
-  font-weight:800;
-  font-size:1.1rem;
-}
-.nav-right{
-  display:flex;
-  gap:.6rem;
-}
-.nav a{
-  text-decoration:none;
-}
-.nav .btn{
-  display:inline-block;
-  background:var(--green);
-  color:#fff;
-  padding:.45rem .9rem;
-  border-radius:999px;
-  font-weight:700;
-  border:2px solid rgba(0,0,0,.05);
-  box-shadow:0 1px 3px rgba(0,0,0,.08);
-  transition:background .2s;
-}
-.nav .btn:hover{
-  background:#3a6645;
-}
-
-/* Main */
-.wrap{ max-width:900px; margin:2rem auto; padding:0 1rem; }
-.card{
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
-  overflow:hidden;
-  text-align:center;
-}
-.card img{
-  width:160px;
-  height:160px;
-  border-radius:50%;
-  object-fit:cover;
-  display:block;
-  margin:1.2rem auto;
-}
-.card .body{
-  padding:0 1.2rem 1.5rem;
-  line-height:1.9;
-}
-
-/* Footer（與首頁一致） */
-footer{
-  background:var(--green);
-  color:#fff;
-  text-align:center;
-  padding:1rem;
-  margin-top:2rem;
-}
-@media(max-width:768px){
-  footer{ font-size:.9rem; }
-}
-</style>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
-
-<header>
-  <div class="nav">
-    <div class="nav-left">台中簡媽媽狗園</div>
-    <div class="nav-right">
-      <a class="btn" href="index.html">首頁</a>
-      <a class="btn" href="adoptlist.html">待認養</a>
+  <header>
+    <div class="nav">
+      <div style="font-weight:800;font-size:1.1rem;">台中簡媽媽狗園</div>
+      <div class="menu">
+        <a class="btn" href="cats.html">我想養貓咪</a>
+        <a class="btn" href="dogs.html">我想養狗狗</a>
+        <a class="btn btn-ghost" href="index.html">首頁</a>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="wrap">
-  <div class="card">
-    <img src="images/jan-mama.jpg" alt="簡媽媽">
-    <div class="body">
-      <h2 style="color:#497f54">關於簡媽媽</h2>
-      <p>簡媽媽長期致力於流浪犬貓救援與送養，盼望每一個孩子都能遇見牠的家人。此站作為園區對外窗口，提供透明、即時的送養資訊。</p>
+  <main class="container">
+    <h2 class="section-title">關於簡媽媽</h2>
+
+    <div class="about-section">
+      <p>
+        「台中簡媽媽狗園」由簡媽媽於 2012 年創立，  
+        初衷是為了照顧被遺棄、受傷或流浪的狗狗與貓咪。  
+        經過多年的努力，狗園現已收容數百隻毛孩，  
+        並以「領養代替購買」為宗旨，幫助牠們找到溫暖的家。
+      </p>
+
+      <p>
+        狗園並非大型機構，而是由志工與愛心人士自發維持運作，  
+        每一份捐款、物資與志工服務，都是讓毛孩們持續生活的動力。  
+        我們致力於：
+      </p>
+
+      <ul>
+        <li>為流浪動物提供醫療照護與庇護所</li>
+        <li>推廣「領養代替購買」理念</li>
+        <li>教育飼主責任與動物保護觀念</li>
+        <li>協助走失動物與原飼主團聚</li>
+      </ul>
+
+      <p>
+        若您願意加入志工行列或捐款支持，  
+        請透過下方聯絡方式或社群平台與我們聯繫。  
+        您的一點心意，將改變牠們的一生 ❤️
+      </p>
+
+      <div class="donate-box">
+        <h3>🐾 捐款帳號</h3>
+        <p>台灣銀行（004）<br>帳號：123-456-789012<br>戶名：簡媽媽狗園</p>
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 
-<footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
+  <footer>© 2025 台中簡媽媽狗園｜讓愛延續每一個生命</footer>
+
+  <style>
+    .about-section {
+      max-width: 800px;
+      margin: 1.5rem auto;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+    .about-section ul {
+      list-style: disc;
+      margin: 0.5rem 0 1rem 1.5rem;
+    }
+    .donate-box {
+      background: #f4f8f4;
+      border-left: 6px solid var(--green);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      margin-top: 1.2rem;
+    }
+    @media(max-width:768px){
+      .about-section{padding:0 1rem;}
+      .menu{flex-wrap:wrap;gap:.4rem;}
+      .btn{flex:1;}
+    }
+  </style>
 </body>
 </html>
