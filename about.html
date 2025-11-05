@@ -1,11 +1,83 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <link rel="stylesheet" href="style.css?v=1105b">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>關於簡媽媽｜台中簡媽媽狗園</title>
+<style>
+:root{ --green:#497f54; --mint:#9ed2a3; --bg:#f8f9f7; }
+body{ margin:0; font-family:'Noto Sans TC',system-ui; background:var(--bg); color:#333; }
 
+/* Header（與首頁一致） */
+header{ background:var(--mint); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.08); }
+.nav{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:1rem;
+}
+.nav-left{
+  font-weight:800;
+  font-size:1.1rem;
+}
+.nav-right{
+  display:flex;
+  gap:.6rem;
+}
+.nav a{
+  text-decoration:none;
+}
+.nav .btn{
+  display:inline-block;
+  background:var(--green);
+  color:#fff;
+  padding:.45rem .9rem;
+  border-radius:999px;
+  font-weight:700;
+  border:2px solid rgba(0,0,0,.05);
+  box-shadow:0 1px 3px rgba(0,0,0,.08);
+  transition:background .2s;
+}
+.nav .btn:hover{
+  background:#3a6645;
+}
+
+/* Main */
+.wrap{ max-width:900px; margin:2rem auto; padding:0 1rem; }
+.card{
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  overflow:hidden;
+  text-align:center;
+}
+.card img{
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  object-fit:cover;
+  display:block;
+  margin:1.2rem auto;
+}
+.card .body{
+  padding:0 1.2rem 1.5rem;
+  line-height:1.9;
+}
+
+/* Footer（與首頁一致） */
+footer{
+  background:var(--green);
+  color:#fff;
+  text-align:center;
+  padding:1rem;
+  margin-top:2rem;
+}
+@media(max-width:768px){
+  footer{ font-size:.9rem; }
+}
+</style>
 </head>
 <body>
 
